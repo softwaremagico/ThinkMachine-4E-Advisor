@@ -119,4 +119,6 @@ dependencies {
     implementation libs.android.pdf.viewer
     implementation libs.cardview
     implementation libs.recyclerview
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
 }
