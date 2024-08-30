@@ -1,0 +1,122 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.softwaremagico.tm'
+    compileSdk 34
+
+    signingConfigs {
+        File keystoreFileConfig = rootProject.file('../../Documentos/Android Keys/keystore.config')
+        release {
+            Properties keystoreProps = new Properties()
+            if (keystoreFileConfig.exists()) {
+                keystoreProps.load(new FileInputStream(keystoreFileConfig))
+
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+                storePassword keystoreProps['storePassword']
+                storeFile file('../../../Documentos/Android Keys/AndroidKeyStore.jks')
+            }
+        }
+        beta {
+            Properties keystoreProps = new Properties()
+            if (keystoreFileConfig.exists()) {
+                keystoreProps.load(new FileInputStream(file(keystoreFileConfig)))
+
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+                storePassword keystoreProps['storePassword']
+                storeFile file('../../../Documentos/Android Keys/AndroidKeyStore.jks')
+            }
+        }
+        alpha {
+            Properties keystoreProps = new Properties()
+            if (keystoreFileConfig.exists()) {
+                keystoreProps.load(new FileInputStream(file(keystoreFileConfig)))
+
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+                storePassword keystoreProps['storePassword']
+                storeFile file('../../../Documentos/Android Keys/AndroidKeyStore.jks')
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.softwaremagico.tm"
+        minSdk 31
+        targetSdk 34
+        versionCode 1
+        versionName "0.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
+        }
+
+        beta {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix "-beta"
+            signingConfig signingConfigs.beta
+        }
+
+        alpha {
+            minifyEnabled false
+            versionNameSuffix "-alpha"
+            signingConfig signingConfigs.alpha
+        }
+
+        debug {
+            minifyEnabled false
+            versionNameSuffix "-debug"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+task checkstyle(type: Checkstyle) {
+    description 'Check code standards'
+    group 'verification'
+    configFile file('checkstyle.xml')
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
+    ignoreFailures = false
+}
+
+task pmd(type: Pmd) {
+    ruleSetFiles = files("pmd-rules.xml")
+    ignoreFailures = false
+    ruleSets = []
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    implementation libs.think.machine.pdf
+    implementation libs.android.pdf.viewer
+    implementation libs.cardview
+    implementation libs.recyclerview
+}
