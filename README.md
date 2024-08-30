@@ -22,4 +22,3 @@ application. If you are only interested on the use of this application as a stan
 download
 from  [Google Play](https://play.google.com/store/apps/details?id=com.softwaremagico.tm.advisor).
 
-Some examples of the application:
