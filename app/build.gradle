@@ -115,6 +115,8 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     implementation libs.think.machine.pdf
     implementation libs.android.pdf.viewer
     implementation libs.cardview

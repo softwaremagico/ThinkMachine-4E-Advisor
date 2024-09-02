@@ -1,0 +1,11 @@
+<resources>
+    <attr name="colorWarning" format="color" />
+    <attr name="colorOnWarning" format="color" />
+    <attr name="colorWarningContainer" format="color" />
+    <attr name="colorOnWarningContainer" format="color" />
+    <attr name="colorInfo" format="color" />
+    <attr name="colorOnInfo" format="color" />
+    <attr name="colorInfoContainer" format="color" />
+    <attr name="colorOnInfoContainer" format="color" />
+    <attr name="md_theme_primaryContainer" format="color" />
+</resources>
