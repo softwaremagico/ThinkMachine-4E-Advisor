@@ -7,5 +7,4 @@
     <attr name="colorOnInfo" format="color" />
     <attr name="colorInfoContainer" format="color" />
     <attr name="colorOnInfoContainer" format="color" />
-    <attr name="md_theme_primaryContainer" format="color" />
 </resources>
