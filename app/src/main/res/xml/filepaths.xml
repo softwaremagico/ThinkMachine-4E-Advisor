@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2024 Softwaremagico
   ~
   ~  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
@@ -11,9 +10,7 @@
   ~  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
   -->
 
-<font-family xmlns:android="http://schemas.android.com/apk/res/android">
-    <font
-        android:fontStyle="normal"
-        android:fontWeight="400"
-        android:font="@font/roman_antique" />
-</font-family>
+<paths>
+    <cache-path name="shared_pdfs" path="pdf/"/>
+    <cache-path name="jsons" path="export/" />
+</paths>

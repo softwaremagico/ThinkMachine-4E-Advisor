@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2020 Softwaremagico
+ *  Copyright (C) 2024 Softwaremagico
  *
  *  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
  *
@@ -34,6 +34,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import androidx.core.splashscreen.SplashScreen;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.core.FileUtils;
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_ThinkMachine4EAdvisor);
         Translator.setLanguage(Locale.getDefault().getLanguage());
+
+        // Handle the splash screen transition.
+        SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
 
