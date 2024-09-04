@@ -72,19 +72,19 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.activity_main);
-//
-//        SettingsHandler.setSettingsEntity(this.getBaseContext());
-//
-//        final BottomNavigationView navView = findViewById(R.id.nav_view);
-//        // Passing each menu ID as a set of Ids because each
-//        // menu should be considered as top level destinations.
-//        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home, R.id.navigation_sheet)
-//                .build();
-//        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(navView, navController);
+        setContentView(R.layout.activity_main);
+
+        SettingsHandler.setSettingsEntity(this.getBaseContext());
+
+        final BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_sheet)
+                .build();
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
     }
 
     @Override
@@ -100,34 +100,34 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         final View parentLayout = findViewById(android.R.id.content);
         switch (menuItem.getItemId()) {
-//            case R.id.settings_load:
-//                showDialog();
-//                return true;
-//            case R.id.settings_save:
-//                saveCurrentCharacter(parentLayout);
-//                return true;
-//            case R.id.settings_new:
-//                newCharacter();
-//                return true;
-//            case R.id.settings_global_settings:
-//                globalSettings();
-//                return true;
-//            case R.id.settings_export_file:
-//                try {
-//                    exportJson(parentLayout);
-//                } catch (IOException e) {
-//                    AdvisorLog.errorMessage(this.getClass().getName(), e);
-//                }
-//                return true;
-//            case R.id.settings_import_file:
-//                importJson();
-//                return true;
-//            case R.id.settings_remove_character:
-//                removeSelectedCharacter(parentLayout);
-//                return true;
-//            case R.id.settings_about:
+            case R.id.settings_load:
+                showDialog();
+                return true;
+            case R.id.settings_save:
+                saveCurrentCharacter(parentLayout);
+                return true;
+            case R.id.settings_new:
+                newCharacter();
+                return true;
+            case R.id.settings_global_settings:
+                globalSettings();
+                return true;
+            case R.id.settings_export_file:
+                try {
+                    exportJson(parentLayout);
+                } catch (IOException e) {
+                    AdvisorLog.errorMessage(this.getClass().getName(), e);
+                }
+                return true;
+            case R.id.settings_import_file:
+                importJson();
+                return true;
+            case R.id.settings_remove_character:
+                removeSelectedCharacter(parentLayout);
+                return true;
+            case R.id.settings_about:
 //                new AboutWindow().show(getSupportFragmentManager(), "");
-//                return super.onOptionsItemSelected(menuItem);
+                return super.onOptionsItemSelected(menuItem);
             default:
                 //Select an existing character
                 if (menuItem.getItemId() >= CHARACTERS_INDEX) {
@@ -269,8 +269,8 @@ public class MainActivity extends AppCompatActivity {
 //                    .addToBackStack(null).commit();
 //        }
     }
-//
-//    private void globalSettings() {
+
+    private void globalSettings() {
 //        new SettingsWindow().show(getSupportFragmentManager(), "");
-//    }
+    }
 }

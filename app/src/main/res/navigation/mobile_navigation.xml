@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2020 Softwaremagico
+  ~
+  ~  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it under  the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:startDestination="@+id/navigation_home">
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_home"-->
+<!--        android:name="com.softwaremagico.tm.advisor.ui.character.TabCharacterCreationFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:layout="@layout/character_creation_fragment" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_random"-->
+<!--        android:name="com.softwaremagico.tm.advisor.ui.random.TabRandomCreationFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:layout="@layout/character_creation_fragment" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_sheet"-->
+<!--        android:name="com.softwaremagico.tm.advisor.ui.visualization.TabSheetVisualizationFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:layout="@layout/character_visualization_fragment" />-->
+</navigation>
