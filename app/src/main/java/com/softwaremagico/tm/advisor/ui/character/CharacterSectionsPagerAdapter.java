@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.ui.character.info.CharacterInfoFragmentCharacter;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -42,9 +43,9 @@ public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-//        if (position == 0) {
-//            return CharacterInfoFragmentCharacter.newInstance(position + 1);
-//        }
+        if (position == 0) {
+            return CharacterInfoFragmentCharacter.newInstance(position + 1);
+        }
 //
 //        if (position == 1) {
 //            return CharacterDescriptionFragmentCharacter.newInstance(position + 1);

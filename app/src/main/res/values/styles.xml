@@ -14,4 +14,126 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="CharacterInfo" parent="@android:style/Widget.TextView">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextSubtitleLayout">
+        <item name="android:padding">15sp</item>
+    </style>
+
+    <style name="TextSubtitle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15sp</item>
+    </style>
+
+    <style name="InputData">
+        <item name="android:fontFamily">@font/selection</item>
+    </style>
+
+    <style name="Theme.App.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.App.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ToolbarCard" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorPrimary">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:textColorPrimary">@color/md_theme_secondaryContainer</item>
+    </style>
+
+    <style name="SmallToolbarCard" parent="ToolbarCard">
+        <item name="colorPrimary">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
+    <style name="Card.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Card.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/md_theme_onSecondaryContainer</item>
+    </style>
+
+    <style name="LayoutPadding">
+        <item name="android:padding">15sp</item>
+    </style>
+
+    <style name="SettingsTitle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:paddingBottom">15sp</item>
+    </style>
+
+    <style name="CheckboxData">
+        <item name="android:fontFamily">@font/selection</item>
+    </style>
+
+    <style name="RadioButtonData">
+        <item name="android:fontFamily">@font/selection</item>
+    </style>
+
+    <style name="NumberPicker">
+        <!-- <item name="android:fontFamily">@font/selection</item> -->
+    </style>
+
+    <style name="Counter">
+        <item name="android:fontFamily">@font/selection</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="CounterTag">
+        <item name="android:fontFamily">@font/selection</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">@color/md_theme_secondaryContainer</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:background">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="Divider.Horizontal" parent="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
+    <style name="Divider.Vertical" parent="Divider">
+        <item name="android:layout_width">2dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="CloseButton">
+        <item name="android:text">@string/close</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textColor">@color/md_theme_secondaryContainer</item>
+        <item name="android:background">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColor">@color/md_theme_secondaryContainer</item>
+        <item name="android:editTextColor">@color/md_theme_secondaryContainer</item>
+        <item name="android:textColorHint">@color/md_theme_secondaryContainer</item>
+        <item name="android:textColorSecondary">@color/md_theme_secondaryContainer</item>
+        <item name="android:background">@color/md_theme_onPrimaryContainer</item>
+        <item name="android:queryBackground">@color/md_theme_onPrimaryContainer</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/md_theme_secondaryContainer</item>
+        <item name="android:background">@color/md_theme_onPrimaryContainer</item>
+    </style>
+
 </resources>

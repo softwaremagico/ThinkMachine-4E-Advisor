@@ -165,4 +165,12 @@
     <color name="colorOnInfo_highContrast">#FFFFFF</color>
     <color name="colorInfoContainer_highContrast">#6E3026</color>
     <color name="colorOnInfoContainer_highContrast">#FFFFFF</color>
+
+    <color name="colorNormal">@color/md_theme_onPrimaryContainer</color>
+    <color name="colorError">#d5100a</color>
+    <color name="colorDisabled">#ffaaaaaa</color>
+    <color name="restricted">@color/md_theme_onErrorContainer</color>
+    <color name="unofficialElement">@color/colorWarning</color>
+    <color name="insufficientMoney">@color/colorWarning</color>
+    <color name="unaffordableMoney">@color/colorError</color>
 </resources>
