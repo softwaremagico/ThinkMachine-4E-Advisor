@@ -18,12 +18,12 @@
     android:layout_height="match_parent"
     app:startDestination="@+id/navigation_home">
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_home"-->
-<!--        android:name="com.softwaremagico.tm.advisor.ui.character.TabCharacterCreationFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:layout="@layout/character_creation_fragment" />-->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.softwaremagico.tm.advisor.ui.character.TabCharacterCreationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/character_creation_fragment" />
 
 <!--    <fragment-->
 <!--        android:id="@+id/navigation_random"-->

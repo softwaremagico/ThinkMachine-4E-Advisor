@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_sheet)
-                .build();
+                R.id.navigation_home, R.id.navigation_sheet).build();
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.settings_menu, menu);
+        inflater.inflate(R.menu.settings_menu, menu);
         MenuCompat.setGroupDividerEnabled(menu, true);
         return true;
     }
