@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~  Copyright (C) 2020 Softwaremagico
+  ~  Copyright (C) 2024 Softwaremagico
   ~
   ~  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
   ~
@@ -32,10 +32,10 @@
 <!--        android:layout_height="match_parent"-->
 <!--        tools:layout="@layout/character_creation_fragment" />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_sheet"-->
-<!--        android:name="com.softwaremagico.tm.advisor.ui.visualization.TabSheetVisualizationFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:layout="@layout/character_visualization_fragment" />-->
+    <fragment
+        android:id="@+id/navigation_sheet"
+        android:name="com.softwaremagico.tm.advisor.ui.visualization.TabSheetVisualizationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/character_visualization_fragment" />
 </navigation>

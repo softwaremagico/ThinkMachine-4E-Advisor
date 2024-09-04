@@ -1,4 +1,5 @@
 <resources>
+
     <style name="Theme.App" parent="@android:style/Theme.DeviceDefault" />
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -10,4 +11,7 @@
         <!-- Set the theme of the Activity that follows your splash screen. -->
         <item name="postSplashScreenTheme">@style/Theme.ThinkMachine4EAdvisor</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 </resources>
