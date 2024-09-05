@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.ui.character.description.CharacterDescriptionFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.info.CharacterInfoFragmentCharacter;
 
 /**
@@ -31,9 +32,7 @@ public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
 
     @StringRes
     //public static final int[] TAB_TITLES = new int[]{R.string.tab_character_info, R.string.tab_character_description, R.string.tab_character_characteristics, R.string.tab_character_skills, R.string.tab_character_traits, R.string.tab_character_cybernetics, R.string.tab_character_occultism, R.string.tab_character_equipment};
-    public static final int[] TAB_TITLES = new int[]{R.string.tab_character_info};
-
-    private final SparseArray<Fragment> fragments = new SparseArray<>();
+    public static final int[] TAB_TITLES = new int[]{R.string.tab_character_info, R.string.tab_character_description};
 
     CharacterSectionsPagerAdapter(FragmentActivity fa) {
         super(fa);
@@ -47,11 +46,11 @@ public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
         if (position == 0) {
             return CharacterInfoFragmentCharacter.newInstance(position + 1);
         }
-//
-//        if (position == 1) {
-//            return CharacterDescriptionFragmentCharacter.newInstance(position + 1);
-//        }
-//
+
+        if (position == 1) {
+            return CharacterDescriptionFragmentCharacter.newInstance(position + 1);
+        }
+
 //        if (position == 2) {
 //            return CharacteristicsFragmentCharacter.newInstance(position + 1);
 //        }

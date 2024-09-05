@@ -212,8 +212,8 @@
     <string name="selectFaction">Choose a faction first!</string>
     <string name="selectFactionAndMore">Choose a faction, planet and gender first!</string>
     <string name="invalidFactionAndRace">Invalid combination between race and faction.</string>
-    <string name="invalidCalling">Invalid calling.</string>
-    <string name="invalidUpbringing">Invalid upbringing.</string>
+    <string name="invalidCalling">Invalid calling. Requirements are not met.</string>
+    <string name="invalidUpbringing">Invalid upbringing. Requirements are not met.</string>
     <string name="incompatibility">Incompatibility</string>
     <string name="points">Points</string>
     <string name="profiles">Profiles</string>
