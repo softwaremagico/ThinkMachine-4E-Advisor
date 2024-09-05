@@ -15,10 +15,12 @@ package com.softwaremagico.tm.advisor.ui.session;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.Gender;
+import com.softwaremagico.tm.character.callings.Calling;
 import com.softwaremagico.tm.character.characteristics.CharacteristicName;
 import com.softwaremagico.tm.character.factions.Faction;
 import com.softwaremagico.tm.character.planets.Planet;
 import com.softwaremagico.tm.character.specie.Specie;
+import com.softwaremagico.tm.character.upbringing.Upbringing;
 import com.softwaremagico.tm.exceptions.InvalidFactionException;
 import com.softwaremagico.tm.exceptions.InvalidSpecieException;
 import com.softwaremagico.tm.exceptions.RestrictedElementException;
@@ -38,6 +40,8 @@ public final class CharacterManager {
     private static final Set<CharacterAgeUpdatedListener> characterAgeUpdatedListener = new HashSet<>();
     private static final Set<CharacterPlanetUpdatedListener> characterPlanetUpdatedListener = new HashSet<>();
     private static final Set<CharacterFactionUpdatedListener> characterFactionUpdatedListener = new HashSet<>();
+    private static final Set<CharacterCallingUpdatedListener> characterCallingUpdatedListener = new HashSet<>();
+    private static final Set<CharacterUpbringingUpdatedListener> characterUpbringingUpdatedListener = new HashSet<>();
     private static final Set<CharacterCharacteristicUpdatedListener> characterCharacteristicUpdatedListener = new HashSet<>();
     private static final Set<CharacterSettingsUpdatedListener> characterSettingsUpdatedListeners = new HashSet<>();
     private static final Set<CyberneticDeviceUpdatedListener> cyberneticDeviceUpdatedListeners = new HashSet<>();
@@ -64,6 +68,14 @@ public final class CharacterManager {
     }
 
     public interface CharacterFactionUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
+    public interface CharacterCallingUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
+    public interface CharacterUpbringingUpdatedListener {
         void updated(CharacterPlayer characterPlayer);
     }
 
@@ -138,6 +150,22 @@ public final class CharacterManager {
     public static void launchCharacterFactionUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
             for (final CharacterFactionUpdatedListener listener : characterFactionUpdatedListener) {
+                listener.updated(characterPlayer);
+            }
+        }
+    }
+
+    public static void launchCharacterCallingsUpdatedListeners(CharacterPlayer characterPlayer) {
+        if (!updatingCharacter) {
+            for (final CharacterCallingUpdatedListener listener : characterCallingUpdatedListener) {
+                listener.updated(characterPlayer);
+            }
+        }
+    }
+
+    public static void launchCharacterUpbringingsUpdatedListeners(CharacterPlayer characterPlayer) {
+        if (!updatingCharacter) {
+            for (final CharacterUpbringingUpdatedListener listener : characterUpbringingUpdatedListener) {
                 listener.updated(characterPlayer);
             }
         }
@@ -270,6 +298,24 @@ public final class CharacterManager {
             getSelectedCharacter().setFaction((String) null);
         }
         launchCharacterFactionUpdatedListeners(getSelectedCharacter());
+    }
+
+    public static void setCalling(Calling calling) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
+        if (calling != null) {
+            getSelectedCharacter().setCalling(calling.getId());
+        } else {
+            getSelectedCharacter().setCalling((String) null);
+        }
+        launchCharacterCallingsUpdatedListeners(getSelectedCharacter());
+    }
+
+    public static void setUpbringing(Upbringing upbringing) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
+        if (upbringing != null) {
+            getSelectedCharacter().setUpbringing(upbringing.getId());
+        } else {
+            getSelectedCharacter().setUpbringing((String) null);
+        }
+        launchCharacterUpbringingsUpdatedListeners(getSelectedCharacter());
     }
 
 }

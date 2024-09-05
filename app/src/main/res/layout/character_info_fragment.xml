@@ -95,11 +95,25 @@
             custom:translation="specie" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/character_upbringing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            custom:translation="upbringing" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_faction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             custom:translation="faction" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/character_calling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            custom:translation="calling" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_planet"

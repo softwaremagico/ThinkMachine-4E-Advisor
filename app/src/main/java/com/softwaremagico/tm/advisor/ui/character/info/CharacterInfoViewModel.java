@@ -16,12 +16,16 @@ import androidx.lifecycle.ViewModel;
 
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.character.Gender;
+import com.softwaremagico.tm.character.callings.Calling;
+import com.softwaremagico.tm.character.callings.CallingFactory;
 import com.softwaremagico.tm.character.factions.Faction;
 import com.softwaremagico.tm.character.factions.FactionFactory;
 import com.softwaremagico.tm.character.planets.Planet;
 import com.softwaremagico.tm.character.planets.PlanetFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
+import com.softwaremagico.tm.character.upbringing.Upbringing;
+import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.log.MachineLog;
 
@@ -72,6 +76,36 @@ public class CharacterInfoViewModel extends ViewModel {
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 return SpecieFactory.getInstance().getElements()
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+            }
+        } catch (InvalidXmlElementException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Calling> getAvailableCallings(boolean nonOfficial) {
+        try {
+            if (nonOfficial) {
+                return CallingFactory.getInstance().getElements()
+                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                return CallingFactory.getInstance().getElements()
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+            }
+        } catch (InvalidXmlElementException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Upbringing> getAvailableUpbringings(boolean nonOfficial) {
+        try {
+            if (nonOfficial) {
+                return UpbringingFactory.getInstance().getElements()
+                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                return UpbringingFactory.getInstance().getElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
