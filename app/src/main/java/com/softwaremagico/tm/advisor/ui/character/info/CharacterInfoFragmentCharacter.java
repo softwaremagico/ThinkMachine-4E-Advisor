@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,17 +30,23 @@ import com.softwaremagico.tm.advisor.ui.components.CharacterCustomFragment;
 import com.softwaremagico.tm.advisor.ui.components.ElementSpinner;
 import com.softwaremagico.tm.advisor.ui.components.EnumSpinner;
 import com.softwaremagico.tm.advisor.ui.components.TranslatedEditText;
+import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.EnumAdapter;
 import com.softwaremagico.tm.advisor.ui.main.SnackbarGenerator;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.Gender;
-import com.softwaremagico.tm.character.Surname;
 import com.softwaremagico.tm.character.factions.Faction;
 import com.softwaremagico.tm.character.factions.FactionFactory;
 import com.softwaremagico.tm.character.planets.Planet;
+import com.softwaremagico.tm.character.planets.PlanetFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
+import com.softwaremagico.tm.exceptions.InvalidFactionException;
+import com.softwaremagico.tm.exceptions.InvalidSpecieException;
+import com.softwaremagico.tm.exceptions.RestrictedElementException;
+import com.softwaremagico.tm.exceptions.UnofficialCharacterException;
+import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +98,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         });
         createGenderSpinner(root);
-        createRaceSpinner(true);
+        createSpecieSpinner(true);
         createFactionSpinner(true);
         createPlanetSpinner(true);
 
@@ -119,7 +124,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 //                updatingCharacter = false;
 //            });
 //        }
-
+//
 //        ImageView randomSurnameButton = root.findViewById(R.id.button_random_surname);
 //        if (randomSurnameButton != null) {
 //            randomSurnameButton.setOnClickListener(v -> {
@@ -146,37 +151,37 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 //        }
 
 
-//        nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            if (!isChecked) {
-//                try {
-//                    CharacterManager.getSelectedCharacter().checkIsOfficial();
-//                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
-//                    CharacterManager.updateSettings();
-//                } catch (UnofficialCharacterException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_unofficial_not_changed).show();
-//                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(false);
-//                    nonOfficialEnabled.setChecked(true);
-//                }
-//            } else {
-//                CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
-//            }
-//        });
+        nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked) {
+                try {
+                    CharacterManager.getSelectedCharacter().checkIsOfficial();
+                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
+                    CharacterManager.updateSettings();
+                } catch (UnofficialCharacterException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_unofficial_not_changed).show();
+                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(false);
+                    nonOfficialEnabled.setChecked(true);
+                }
+            } else {
+                CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
+            }
+        });
 
-//        restrictionsIgnored.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            if (!isChecked) {
-//                try {
-//                    CharacterManager.getSelectedCharacter().checkIsNotRestricted();
-//                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
-//                    CharacterManager.updateSettings();
-//                } catch (RestrictedElementException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_restriction_not_changed).show();
-//                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(false);
-//                    restrictionsIgnored.setChecked(true);
-//                }
-//            } else {
-//                CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
-//            }
-//        });
+        restrictionsIgnored.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked) {
+                try {
+                    CharacterManager.getSelectedCharacter().checkIsNotRestricted();
+                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
+                    CharacterManager.updateSettings();
+                } catch (RestrictedElementException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_restriction_not_changed).show();
+                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(false);
+                    restrictionsIgnored.setChecked(true);
+                }
+            } else {
+                CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
+            }
+        });
     }
 
     @Override
@@ -189,8 +194,8 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         factionsSelector = root.findViewById(R.id.character_faction);
         planetSelector = root.findViewById(R.id.character_planet);
 
-//        nonOfficialEnabled = root.findViewById(R.id.official_selector);
-//        restrictionsIgnored = root.findViewById(R.id.restricted_selector);
+        nonOfficialEnabled = root.findViewById(R.id.official_selector);
+        restrictionsIgnored = root.findViewById(R.id.restricted_selector);
 
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
         CharacterManager.addSelectedCharacterListener(characterPlayer -> setCharacter(root, characterPlayer));
@@ -212,7 +217,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             final Planet selectedPlanet = planetSelector.getSelection();
 
             //Create new adapter with the new settings.
-            createRaceSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createSpecieSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
             createFactionSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
             createPlanetSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
 
@@ -248,13 +253,12 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         specieSelector.setSelection(SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()));
         factionsSelector.setSelection(FactionFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getFaction()));
-        planetSelector.setSelection(CharacterManager.getSelectedCharacter().getInfo().getPlanet());
+        planetSelector.setSelection(PlanetFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getInfo().getPlanet()));
 
         updateSettings(character);
 
         updatingCharacter = false;
     }
-
 
 
     private void createGenderSpinner(View root) {
@@ -279,141 +283,130 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createRaceSpinner(boolean nonOfficial) {
+    private void createSpecieSpinner(boolean nonOfficial) {
         List<Specie> options = new ArrayList<>(mViewModel.getAvailableSpecies(nonOfficial));
         options.add(0, null);
-//        specieSelector.setAdapter(new ElementAdapter<Race>(getActivity(), options, false, Race.class) {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                //Faction limitations
-//                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-//                        ((CharacterManager.getSelectedCharacter().getFaction() == null ||
-//                                CharacterManager.getSelectedCharacter().getFaction().getRestrictedToRaces() == null ||
-//                                CharacterManager.getSelectedCharacter().getFaction().getRestrictedToRaces().contains(getItem(position))) &&
-//
-//                                //Planet limitations
-//                                getItem(position).getPlanets().isEmpty() || CharacterManager.getSelectedCharacter().getInfo().getPlanet() == null ||
-//                                getItem(position).getPlanets().contains(CharacterManager.getSelectedCharacter().getInfo().getPlanet()));
-//            }
-//        });
-//        specieSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                try {
-//                    if (position == 0 || mViewModel.getAvailableSpecies(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
-//                        CharacterManager.setRace(null);
-//                    } else {
-//                        if (position > 0) {
-//                            CharacterManager.setRace(mViewModel.getAvailableSpecies(nonOfficial).get(position - 1));
-//                        } else {
-//                            CharacterManager.setRace(null);
-//                        }
-//                        if (!updatingCharacter) {
-//                            updateCounters(CharacterManager.getSelectedCharacter());
-//                        }
-//                    }
-//                } catch (InvalidRaceException | RestrictedElementException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.invalidFactionAndRace).show();
-//                    specieSelector.setSelection(null);
-//                } catch (UnofficialElementNotAllowedException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
-//                    specieSelector.setSelection(null);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                try {
-//                    CharacterManager.getSelectedCharacter().setRace(null);
-//                } catch (InvalidRaceException | RestrictedElementException |
-//                         UnofficialElementNotAllowedException e) {
-//                    AdvisorLog.errorMessage(this.getClass().getName(), e);
-//                }
-//                updateCounters(CharacterManager.getSelectedCharacter());
-//            }
-//        });
+        specieSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Specie.class) {
+            @Override
+            public boolean isEnabled(int position) {
+                //Faction limitations
+                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                        (getItem(position).getRestrictions().isRestricted());
+            }
+        });
+        specieSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                try {
+                    if (position == 0 || mViewModel.getAvailableSpecies(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                        CharacterManager.setSpecie(null);
+                    } else {
+                        if (position > 0) {
+                            CharacterManager.setSpecie(mViewModel.getAvailableSpecies(nonOfficial).get(position - 1));
+                        } else {
+                            CharacterManager.setSpecie(null);
+                        }
+                    }
+                } catch (InvalidSpecieException | RestrictedElementException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.invalidFactionAndRace).show();
+                    specieSelector.setSelection(null);
+                } catch (UnofficialElementNotAllowedException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
+                    specieSelector.setSelection(null);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                try {
+                    CharacterManager.setSpecie(null);
+                } catch (InvalidSpecieException | RestrictedElementException |
+                         UnofficialElementNotAllowedException e) {
+                    AdvisorLog.errorMessage(this.getClass().getName(), e);
+                }
+            }
+        });
     }
 
     private void createFactionSpinner(boolean nonOfficial) {
         List<Faction> options = new ArrayList<>(mViewModel.getAvailableFactions(nonOfficial));
         options.add(0, null);
-//        factionsSelector.setAdapter(new ElementAdapter<Faction>(getActivity(), options, false, Faction.class) {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                return !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() || CharacterManager.getSelectedCharacter().getRace() == null ||
-//                        getItem(position) == null || getItem(position).getRestrictedToRaces() == null ||
-//                        getItem(position).getRestrictedToRaces().contains(CharacterManager.getSelectedCharacter().getRace());
-//            }
-//        });
-//        factionsSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                try {
-//                    if (position == 0 || mViewModel.getAvailableFactions(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
-//                        try {
-//                            CharacterManager.setFaction(null);
-//                        } catch (InvalidFactionException e) {
-//                            //Nothing
-//                        }
-//                    } else {
-//                        if (position > 0) {
-//                            CharacterManager.setFaction(mViewModel.getAvailableFactions(nonOfficial).get(position - 1));
-//                        } else {
-//                            CharacterManager.setFaction(null);
-//                        }
-//                    }
-//                } catch (InvalidFactionException | RestrictedElementException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.invalidFactionAndRace).show();
-//                    factionsSelector.setSelection(null);
-//                } catch (UnofficialElementNotAllowedException e) {
-//                    SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
-//                    factionsSelector.setSelection(null);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                try {
-//                    CharacterManager.getSelectedCharacter().setFaction(null);
-//                } catch (InvalidFactionException | RestrictedElementException |
-//                         UnofficialElementNotAllowedException e) {
-//                    AdvisorLog.errorMessage(this.getClass().getName(), e);
-//                }
-//            }
-//        });
+        factionsSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Faction.class) {
+            @Override
+            public boolean isEnabled(int position) {
+                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                        (getItem(position).getRestrictions().isRestricted());
+            }
+        });
+        factionsSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                try {
+                    if (position == 0 || mViewModel.getAvailableFactions(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                        try {
+                            CharacterManager.setFaction(null);
+                        } catch (InvalidFactionException e) {
+                            //Nothing
+                        }
+                    } else {
+                        if (position > 0) {
+                            CharacterManager.setFaction(mViewModel.getAvailableFactions(nonOfficial).get(position - 1));
+                        } else {
+                            CharacterManager.setFaction(null);
+                        }
+                    }
+                } catch (InvalidFactionException | RestrictedElementException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.invalidFactionAndRace).show();
+                    factionsSelector.setSelection(null);
+                } catch (UnofficialElementNotAllowedException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
+                    factionsSelector.setSelection(null);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                try {
+                    CharacterManager.setFaction(null);
+                } catch (InvalidFactionException | RestrictedElementException |
+                         UnofficialElementNotAllowedException e) {
+                    AdvisorLog.errorMessage(this.getClass().getName(), e);
+                }
+            }
+        });
     }
 
     private void createPlanetSpinner(boolean nonOfficial) {
         List<Planet> options = new ArrayList<>(mViewModel.getAvailablePlanets(nonOfficial));
         options.add(0, null);
-//        planetSelector.setAdapter(new ElementAdapter<Planet>(getActivity(), options, false, Planet.class) {
-//            @Override
-//            public boolean isEnabled(int position) {
-//                return !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-//                        CharacterManager.getSelectedCharacter().getRace() == null ||
-//                        CharacterManager.getSelectedCharacter().getRace().getPlanets().isEmpty() ||
-//                        CharacterManager.getSelectedCharacter().getRace().getPlanets().contains(getItem(position));
-//            }
-//        });
-//        planetSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-//                if (position == 0 || mViewModel.getAvailablePlanets(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
-//                    CharacterManager.setPlanet(null);
-//                } else {
-//                    if (position > 0) {
-//                        CharacterManager.setPlanet(mViewModel.getAvailablePlanets(nonOfficial).get(position - 1));
-//                    } else {
-//                        CharacterManager.setPlanet(null);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView) {
-//                CharacterManager.getSelectedCharacter().getInfo().setPlanet(null);
-//            }
-//        });
+        planetSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Planet.class) {
+            @Override
+            public boolean isEnabled(int position) {
+                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                        CharacterManager.getSelectedCharacter().getSpecie() == null ||
+                        SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().isEmpty() ||
+                        SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().contains(getItem(position).getId());
+            }
+        });
+        planetSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position == 0 || mViewModel.getAvailablePlanets(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                    CharacterManager.setPlanet(null);
+                } else {
+                    if (position > 0) {
+                        CharacterManager.setPlanet(mViewModel.getAvailablePlanets(nonOfficial).get(position - 1));
+                    } else {
+                        CharacterManager.setPlanet(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                CharacterManager.setPlanet(null);
+            }
+        });
     }
 
 

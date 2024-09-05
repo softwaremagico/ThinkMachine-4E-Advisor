@@ -16,6 +16,13 @@ import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.Gender;
 import com.softwaremagico.tm.character.characteristics.CharacteristicName;
+import com.softwaremagico.tm.character.factions.Faction;
+import com.softwaremagico.tm.character.planets.Planet;
+import com.softwaremagico.tm.character.specie.Specie;
+import com.softwaremagico.tm.exceptions.InvalidFactionException;
+import com.softwaremagico.tm.exceptions.InvalidSpecieException;
+import com.softwaremagico.tm.exceptions.RestrictedElementException;
+import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -235,6 +242,34 @@ public final class CharacterManager {
 
     public static List<CharacterPlayer> getCharacters() {
         return characters;
+    }
+
+    public static void setSpecie(Specie specie) throws InvalidSpecieException, RestrictedElementException, UnofficialElementNotAllowedException {
+        if (specie != null) {
+            getSelectedCharacter().setSpecie(specie.getId());
+        } else {
+            getSelectedCharacter().setSpecie(null);
+        }
+        launchCharacterRaceUpdatedListeners(getSelectedCharacter());
+        launchCharacterUpdatedListeners(getSelectedCharacter());
+    }
+
+    public static void setPlanet(Planet planet) {
+        if (planet != null) {
+            getSelectedCharacter().getInfo().setPlanet(planet.getId());
+        } else {
+            getSelectedCharacter().getInfo().setPlanet((String) null);
+        }
+        launchCharacterPlanetUpdatedListeners(getSelectedCharacter());
+    }
+
+    public static void setFaction(Faction faction) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
+        if (faction != null) {
+            getSelectedCharacter().setFaction(faction.getId());
+        } else {
+            getSelectedCharacter().setFaction((String) null);
+        }
+        launchCharacterFactionUpdatedListeners(getSelectedCharacter());
     }
 
 }
