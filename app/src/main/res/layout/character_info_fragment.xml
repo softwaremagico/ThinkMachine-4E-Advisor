@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                custom:translation="infoName" />
+                custom:translation="name" />
 
             <ImageView
                 android:id="@+id/button_random_name"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                custom:translation="infoSurname" />
+                custom:translation="surname" />
 
             <ImageView
                 android:id="@+id/button_random_surname"
@@ -78,35 +78,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            custom:translation="infoGender" />
+            custom:translation="gender" />
 
         <com.softwaremagico.tm.advisor.ui.components.TranslatedEditText
             android:id="@+id/character_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            custom:translation="infoAge" />
+            custom:translation="age" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_specie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            custom:translation="infoRace" />
+            custom:translation="specie" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_faction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            custom:translation="infoFaction" />
+            custom:translation="faction" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_planet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            custom:translation="infoPlanet" />
+            custom:translation="planet" />
 
         <View style="@style/Divider.Horizontal" />
 

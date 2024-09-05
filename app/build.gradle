@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.softwaremagico.tm'
-    compileSdk 34
+    compileSdk 35
 
     signingConfigs {
         File keystoreFileConfig = rootProject.file('../../Documentos/Android Keys/keystore.config')
@@ -83,8 +83,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
@@ -124,4 +124,5 @@ dependencies {
     implementation libs.room.runtime
     annotationProcessor libs.room.compiler
     implementation libs.core.splashscreen
+    implementation libs.stax.api
 }

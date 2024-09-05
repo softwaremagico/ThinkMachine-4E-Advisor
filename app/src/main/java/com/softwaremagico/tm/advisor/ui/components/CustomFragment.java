@@ -14,7 +14,7 @@ public abstract class CustomFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        lazyInitData();
+        //lazyInitData();
     }
 
     /**

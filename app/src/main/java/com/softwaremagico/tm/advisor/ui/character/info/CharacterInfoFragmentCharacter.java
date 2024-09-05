@@ -186,9 +186,11 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         mViewModel = new ViewModelProvider(this).get(CharacterInfoViewModel.class);
 
         specieSelector = root.findViewById(R.id.character_specie);
+        factionsSelector = root.findViewById(R.id.character_faction);
+        planetSelector = root.findViewById(R.id.character_planet);
 
-        nonOfficialEnabled = root.findViewById(R.id.official_selector);
-        restrictionsIgnored = root.findViewById(R.id.restricted_selector);
+//        nonOfficialEnabled = root.findViewById(R.id.official_selector);
+//        restrictionsIgnored = root.findViewById(R.id.restricted_selector);
 
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
         CharacterManager.addSelectedCharacterListener(characterPlayer -> setCharacter(root, characterPlayer));
