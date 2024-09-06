@@ -105,9 +105,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         });
         createGenderSpinner(root);
-        createSpecieSpinner(true);
-        createFactionSpinner(true);
-        createPlanetSpinner(true);
 
         setCharacter(root, CharacterManager.getSelectedCharacter());
 
@@ -230,11 +227,11 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             final Planet selectedPlanet = planetSelector.getSelection();
 
             //Create new adapter with the new settings.
-            createSpecieSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            createUpbringingSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            createFactionSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            createCallingSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            createPlanetSpinner(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createSpecieSpinner(characterPlayer, !characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createUpbringingSpinner(characterPlayer, !characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createFactionSpinner(characterPlayer, !characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createCallingSpinner(characterPlayer, !characterPlayer.getSettings().isOnlyOfficialAllowed());
+            createPlanetSpinner(characterPlayer, !characterPlayer.getSettings().isOnlyOfficialAllowed());
 
             //Recovering old selected value.
             specieSelector.setSelection(selectedSpecie);
@@ -301,7 +298,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createSpecieSpinner(boolean nonOfficial) {
+    private void createSpecieSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Specie> options = new ArrayList<>(mViewModel.getAvailableSpecies(nonOfficial));
         options.add(0, null);
         specieSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Specie.class) {
@@ -309,7 +306,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             public boolean isEnabled(int position) {
                 //Faction limitations
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted());
+                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         specieSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -346,14 +343,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createUpbringingSpinner(boolean nonOfficial) {
+    private void createUpbringingSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Upbringing> options = new ArrayList<>(mViewModel.getAvailableUpbringings(nonOfficial));
         options.add(0, null);
         upbringingSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Upbringing.class) {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted());
+                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         upbringingSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -394,14 +391,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createFactionSpinner(boolean nonOfficial) {
+    private void createFactionSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Faction> options = new ArrayList<>(mViewModel.getAvailableFactions(nonOfficial));
         options.add(0, null);
         factionsSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Faction.class) {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted());
+                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         factionsSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -442,14 +439,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createCallingSpinner(boolean nonOfficial) {
+    private void createCallingSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Calling> options = new ArrayList<>(mViewModel.getAvailableCallings(nonOfficial));
         options.add(0, null);
         callingSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Calling.class) {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted());
+                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         callingSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -490,7 +487,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
-    private void createPlanetSpinner(boolean nonOfficial) {
+    private void createPlanetSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Planet> options = new ArrayList<>(mViewModel.getAvailablePlanets(nonOfficial));
         options.add(0, null);
         planetSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Planet.class) {
