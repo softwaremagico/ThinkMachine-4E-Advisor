@@ -136,4 +136,9 @@
         <item name="android:background">@color/md_theme_onPrimaryContainer</item>
     </style>
 
+    <style name="Theme.ThinkMachine4EAdvisor.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabIndicatorColor">@color/md_theme_onPrimaryContainer</item>
+    </style>
+
+
 </resources>
