@@ -10,57 +10,26 @@
  *  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.softwaremagico.tm.advisor.ui.visualization;
+package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
 import com.lowagie.text.DocumentException;
-import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.pdf.complete.CharacterSheet;
 import com.softwaremagico.tm.pdf.complete.EmptyPdfBodyException;
 
-public class CompletePdfVisualizationFragment extends PdfVisualizationFragment {
+public class CharacterPdfViewModel extends ViewModel {
 
-    public static CompletePdfVisualizationFragment newInstance(int index) {
-        final CompletePdfVisualizationFragment fragment = new CompletePdfVisualizationFragment();
-        final Bundle bundle = new Bundle();
-        bundle.putInt(ARG_SECTION_NUMBER, index);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-    @Override
-    protected View getFragmentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.visualization_pdf_fragment, container, false);
-    }
-
-    @Override
     protected byte[] generatePdf() {
         final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
         try {
             return (characterSheet.generate());
-        } catch (EmptyPdfBodyException e) {
-            AdvisorLog.errorMessage(this.getClass().getName(), e);
-        } catch (DocumentException e) {
-            AdvisorLog.errorMessage(this.getClass().getName(), e);
-        } catch (InvalidXmlElementException e) {
+        } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
         return new byte[0];
-    }
-
-    @Override
-    protected void generatePdfFile(String path) {
-        final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
-        characterSheet.createFile(path);
     }
 }

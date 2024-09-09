@@ -10,7 +10,7 @@
  *  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.softwaremagico.tm.advisor.ui.visualization;
+package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,21 +25,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
+import com.softwaremagico.tm.advisor.ui.visualization.VisualizationFragment;
 import com.softwaremagico.tm.log.MachineLog;
 
 import java.io.File;
 import java.util.List;
 
-public abstract class PdfVisualizationFragment extends Fragment {
+public abstract class PdfVisualizationFragment extends Fragment implements VisualizationFragment {
     protected static final String ARG_SECTION_NUMBER = "section_number";
     private static final int FILE_IDENTIFICATION = 42;
+    private CharacterPdfViewModel mViewModel;
     private File characterSheetAsPdf;
+    private PDFView pdfViewer;
 
     protected abstract View getFragmentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container);
 
@@ -51,16 +55,20 @@ public abstract class PdfVisualizationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         final View root = getFragmentView(inflater, container);
+        mViewModel = new ViewModelProvider(this).get(CharacterPdfViewModel.class);
 
-        final PDFView pdfViewer = root.findViewById(R.id.pdf_viewer);
-        pdfViewer.fromBytes(generatePdf()).load();
+        pdfViewer = root.findViewById(R.id.pdf_viewer);
 
         final FloatingActionButton fab = root.findViewById(R.id.share);
         fab.setOnClickListener(view -> sharePdf());
 
-
         return root;
     }
+
+    protected void initData(){
+        pdfViewer.fromBytes(mViewModel.generatePdf()).load();
+    }
+
 
     private void sharePdf() {
         final File imagePath = new File(getContext().getCacheDir(), "pdf");
@@ -102,5 +110,10 @@ public abstract class PdfVisualizationFragment extends Fragment {
                 MachineLog.debug(this.getClass().getName(), "File deleted");
             }
         }
+    }
+
+    @Override
+    public void updateData() {
+        //initData();
     }
 }

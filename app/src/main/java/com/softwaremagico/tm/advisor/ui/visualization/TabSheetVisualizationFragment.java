@@ -43,7 +43,7 @@ public class TabSheetVisualizationFragment extends Fragment {
         viewPager.setOffscreenPageLimit(characterSheetsPagerAdapter.getItemCount());
 
         final TabLayout tabs = view.findViewById(R.id.tabs);
-        for(int titleIndex: VisualizationSectionsPagerAdapter.TAB_TITLES){
+        for (int titleIndex : VisualizationSectionsPagerAdapter.TAB_TITLES) {
             tabs.addTab(tabs.newTab().setText(titleIndex));
         }
 
@@ -60,7 +60,6 @@ public class TabSheetVisualizationFragment extends Fragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
 
@@ -68,11 +67,11 @@ public class TabSheetVisualizationFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 tabs.selectTab(tabs.getTabAt(position));
+                characterSheetsPagerAdapter.refreshFragment(position);
             }
         });
 
         return view;
     }
-
 
 }

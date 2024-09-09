@@ -47,7 +47,7 @@ public class TabCharacterCreationFragment extends Fragment {
         viewPager.setOffscreenPageLimit(characterSectionsPagerAdapter.getItemCount());
 
         final TabLayout tabs = view.findViewById(R.id.tabs);
-        for(int titleIndex: CharacterSectionsPagerAdapter.TAB_TITLES){
+        for (int titleIndex : CharacterSectionsPagerAdapter.TAB_TITLES) {
             tabs.addTab(tabs.newTab().setText(titleIndex));
         }
 
