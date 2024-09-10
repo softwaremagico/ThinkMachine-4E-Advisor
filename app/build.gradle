@@ -118,7 +118,6 @@ dependencies {
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
     implementation libs.think.machine.pdf
-    implementation libs.android.pdf.viewer
     implementation libs.cardview
     implementation libs.recyclerview
     implementation libs.room.runtime

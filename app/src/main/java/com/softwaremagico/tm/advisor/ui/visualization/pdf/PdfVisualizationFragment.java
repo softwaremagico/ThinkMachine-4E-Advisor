@@ -15,11 +15,16 @@ package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,15 +32,18 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
 import com.softwaremagico.tm.advisor.ui.visualization.VisualizationFragment;
 import com.softwaremagico.tm.log.MachineLog;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PdfVisualizationFragment extends Fragment implements VisualizationFragment {
@@ -43,7 +51,8 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     private static final int FILE_IDENTIFICATION = 42;
     private CharacterPdfViewModel mViewModel;
     private File characterSheetAsPdf;
-    private PDFView pdfViewer;
+    private View root;
+    private LinearLayout layout;
 
     protected abstract View getFragmentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container);
 
@@ -54,10 +63,9 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        final View root = getFragmentView(inflater, container);
+        root = getFragmentView(inflater, container);
         mViewModel = new ViewModelProvider(this).get(CharacterPdfViewModel.class);
-
-        pdfViewer = root.findViewById(R.id.pdf_viewer);
+        layout = root.findViewById(R.id.content);
 
         final FloatingActionButton fab = root.findViewById(R.id.share);
         fab.setOnClickListener(view -> sharePdf());
@@ -65,14 +73,32 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
         return root;
     }
 
-    protected void initData(){
-        pdfViewer.fromBytes(mViewModel.generatePdf()).load();
+    protected void initData() {
+        try {
+            layout.removeAllViews();
+            final List<Bitmap> images = pdfRender(mViewModel.generatePdf(), root.getWidth());
+            for (Bitmap image : images) {
+                if (image != null) {
+                    final ImageView imageView = new ImageView(getContext());
+                    imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT));
+                    if (root.getWidth() > 0) {
+                        imageView.setImageBitmap(Bitmap.createScaledBitmap(image, root.getWidth(), root.getHeight(), false));
+                    } else {
+                        imageView.setImageBitmap(image);
+                    }
+                    layout.addView(imageView);
+                }
+            }
+        } catch (IOException e) {
+            AdvisorLog.errorMessage(this.getClass(), e);
+        }
     }
 
 
     private void sharePdf() {
         final File imagePath = new File(getContext().getCacheDir(), "pdf");
-        characterSheetAsPdf = new File(imagePath, CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().length() > 0 ?
+        characterSheetAsPdf = new File(imagePath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
                 CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet.pdf" :
                 "pdf_sheet.pdf");
         final Uri contentUri = FileProvider.getUriForFile(getContext(), "com.softwaremagico.tm.advisor", characterSheetAsPdf);
@@ -114,6 +140,56 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
 
     @Override
     public void updateData() {
-        //initData();
+        initData();
+    }
+
+
+    private List<Bitmap> pdfRender(byte[] byteArray, int width) throws IOException {
+        // create a new renderer
+        PdfRenderer renderer = new PdfRenderer(getFileDescriptor(byteArray));
+
+        List<Bitmap> gallery = new ArrayList<>();
+
+        // let us just render all pages
+        final int pageCount = renderer.getPageCount();
+        for (int i = 0; i < pageCount; i++) {
+            gallery.add(pdfRender(renderer, i, width));
+        }
+
+        // close the renderer
+        renderer.close();
+
+        return gallery;
+    }
+
+    private Bitmap pdfRender(PdfRenderer renderer, int pageNum, int width) {
+        // let us just render all pages
+        final int pageCount = renderer.getPageCount();
+        final PdfRenderer.Page page = renderer.openPage(pageNum);
+
+        // create bitmap at appropriate size
+        final float ratio = (float) page.getHeight() / page.getWidth();
+        final float newHeight = width * ratio;
+        final Bitmap bitmap = Bitmap.createBitmap(width != 0 ? width : page.getWidth(), width != 0 ? (int) newHeight : page.getHeight(), Bitmap.Config.ARGB_8888);
+
+        // render PDF page to bitmap
+        //var rect = new Rect(0, 0, width, height);
+        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT);
+
+        // close the page
+        page.close();
+
+        //Compress image.
+        return bitmap;
+    }
+
+    private ParcelFileDescriptor getFileDescriptor(byte[] byteArray) throws IOException {
+        File file = File.createTempFile("temp_sheet", "pdf");
+        try (FileOutputStream output = new FileOutputStream(file, true)) {
+            output.write(byteArray);
+        }
+        file.deleteOnExit();
+
+        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
     }
 }

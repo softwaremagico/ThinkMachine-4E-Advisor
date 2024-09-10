@@ -11,22 +11,23 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.softwaremagico.tm.advisor.ui.visualization.pdf.CompletePdfVisualizationFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content">
 
-        <com.github.barteksc.pdfviewer.PDFView
-            android:id="@+id/pdf_viewer"
+        <LinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/share"
@@ -35,10 +36,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/md_theme_primaryContainer"
-        android:tint="@color/md_theme_onPrimaryContainer"
+        android:scaleType="center"
         android:src="@drawable/ic_share_icon"
+        android:tint="@color/md_theme_onPrimaryContainer"
         app:fabSize="auto"
-        app:maxImageSize="32dp"
-        android:scaleType="center" />
+        app:maxImageSize="32dp" />
 
 </FrameLayout>

@@ -13,7 +13,6 @@ roomRuntime = "2.6.1"
 slf4jApi = "1.7.36"
 staxApi = "1.0-2"
 thinkMachine = { strictly = "[4.0.0, 4.1.0]"}
-androidPdfViewer = "3.2.0-beta.1"
 viewpager2 = "1.1.0"
 cardview = "1.0.0"
 
@@ -34,7 +33,6 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
 think-machine-pdf = { module = "com.softwaremagico:think-machine-4e-pdf", version.ref = "thinkMachine" }
 think-machine-random = { module = "com.softwaremagico:think-machine-4e-random", version.ref = "thinkMachine" }
-android-pdf-viewer = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewer" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 
