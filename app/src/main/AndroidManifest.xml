@@ -24,7 +24,7 @@
     </activity>
     <provider
         android:name="androidx.core.content.FileProvider"
-        android:authorities="com.softwaremagico.tm.advisor"
+        android:authorities="com.softwaremagico.tm.advisor.4e"
         android:exported="false"
         android:grantUriPermissions="true">
         <meta-data
