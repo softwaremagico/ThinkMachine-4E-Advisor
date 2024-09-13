@@ -90,6 +90,7 @@
 # Software Magico
 -keep class com.softwaremagico.*.** { *; }
 -keep class com.itextpdf.*.** { *; }
+-keep class com.lowagie.*.** { *; }
 
 
 ## ---- Missing classes in v 8.0
