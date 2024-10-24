@@ -1,7 +1,13 @@
 package com.softwaremagico.tm.advisor.ui.components;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.character.CharacterDefinitionStep;
@@ -22,6 +28,14 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     //private OptionSelectorLayout<EquipmentOption> materialAwardsLayout;
 
     private View root;
+
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.character_definition_fragment, container, false);
+        return root;
+    }
 
 
     protected void populateElements(View root, T definitionStep) {
@@ -51,18 +65,22 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
 
         addSection(getString(R.string.capabilities), rootLayout);
+        capabilityOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(capabilityOptionsLayout);
         addSpace(rootLayout);
 
         addSection(getString(R.string.characteristics), rootLayout);
+        characteristicsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(characteristicsOptionsLayout);
         addSpace(rootLayout);
 
         addSection(getString(R.string.skills), rootLayout);
+        skillsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(skillsOptionsLayout);
         addSpace(rootLayout);
 
         addSection(getString(R.string.perks), rootLayout);
+        perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(perksOptionsLayout);
         addSpace(rootLayout);
     }

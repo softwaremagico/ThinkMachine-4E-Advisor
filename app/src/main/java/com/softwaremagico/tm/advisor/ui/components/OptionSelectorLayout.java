@@ -15,6 +15,10 @@ public class OptionSelectorLayout<T extends Element> extends LinearLayout {
 
     public OptionSelectorLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setLayoutParams(new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        setOrientation(LinearLayout.VERTICAL);
     }
 
     public void setElements(List<OptionSelector> optionSelectors) {
