@@ -25,7 +25,7 @@ import com.softwaremagico.tm.advisor.ui.components.spinner.HelpElement;
 import com.softwaremagico.tm.advisor.ui.components.spinner.SearchableSpinner;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 
-public class ElementSpinner<T extends Element<T>> extends HelpElement<T> {
+public class ElementSpinner<T extends Element> extends HelpElement<T> {
 
     private SearchableSpinner<T> selector;
 
@@ -66,7 +66,7 @@ public class ElementSpinner<T extends Element<T>> extends HelpElement<T> {
         });
     }
 
-    public <E extends Element<?>> void setAdapter(ElementAdapter<E> adapter) {
+    public <E extends Element> void setAdapter(ElementAdapter<E> adapter) {
         selector.setAdapter(adapter);
     }
 

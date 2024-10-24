@@ -106,7 +106,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
         createGenderSpinner(root);
 
-        setCharacter(root, CharacterManager.getSelectedCharacter());
+        populateElements(root, CharacterManager.getSelectedCharacter());
 
 //        ImageView randomNameButton = root.findViewById(R.id.button_random_name);
 //        if (randomNameButton != null) {
@@ -204,7 +204,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         restrictionsIgnored = root.findViewById(R.id.restricted_selector);
 
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> setCharacter(root, characterPlayer));
+        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
 
         return root;
     }
@@ -243,7 +243,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
     @Override
-    public void setCharacter(View root, CharacterPlayer character) {
+    public void populateElements(View root, CharacterPlayer character) {
         updatingCharacter = true;
         final TranslatedEditText nameTextEditor = root.findViewById(R.id.character_name);
         nameTextEditor.setText(character.getInfo().getNameRepresentation());

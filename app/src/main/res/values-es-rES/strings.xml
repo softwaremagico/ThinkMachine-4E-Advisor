@@ -250,4 +250,12 @@
     <string name="remove">Eliminar</string>
     <string name="invalidCalling">Vocación inválida. No se cumplen con los requisitos.</string>
     <string name="invalidUpbringing">Educación inválida. No se cumplen con los requisitos.</string>
+    <string name="callings">Vocaciones</string>
+    <string name="faction">Facción</string>
+    <string name="upbringing">Educación</string>
+    <string name="specie">Especie</string>
+    <string name="capabilities">Competencias</string>
+    <string name="characteristics">Características</string>
+    <string name="skills">Habilidades</string>
+    <string name="perks">Beneficios</string>
 </resources>

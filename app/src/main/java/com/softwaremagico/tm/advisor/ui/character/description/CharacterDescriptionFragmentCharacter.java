@@ -47,7 +47,7 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
         updateTranslatedTextField(root, R.id.character_weight, value -> CharacterManager.getSelectedCharacter().getInfo().setWeight(value));
         updateTextField(root, R.id.character_description, value -> CharacterManager.getSelectedCharacter().getInfo().setCharacterDescription(value));
         updateTextField(root, R.id.character_background, value -> CharacterManager.getSelectedCharacter().getInfo().setBackgroundDescription(value));
-        setCharacter(root, CharacterManager.getSelectedCharacter());
+        populateElements(root, CharacterManager.getSelectedCharacter());
     }
 
     @Override
@@ -55,13 +55,13 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.character_description_fragment, container, false);
 
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> setCharacter(root, characterPlayer));
+        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
 
         return root;
     }
 
     @Override
-    public void setCharacter(View root, CharacterPlayer character) {
+    public void populateElements(View root, CharacterPlayer character) {
         if (getContext() != null) {
             final TranslatedEditText playerTextEditor = root.findViewById(R.id.character_player);
             playerTextEditor.setText(character.getInfo().getPlayer());

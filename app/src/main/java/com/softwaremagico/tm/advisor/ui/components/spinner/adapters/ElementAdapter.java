@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ElementAdapter<T extends Element<?>> extends ArrayAdapter<T> {
+public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
     private List<T> elements;
     private List<T> originalElements;
 

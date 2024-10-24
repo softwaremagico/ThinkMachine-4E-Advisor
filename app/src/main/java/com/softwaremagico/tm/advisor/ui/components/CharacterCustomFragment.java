@@ -31,13 +31,13 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
         CharacterManager.addSelectedCharacterListener(characterPlayer -> {
             if (getView() != null) {
-                setCharacter(getView().getRootView(), characterPlayer);
+                populateElements(getView().getRootView(), characterPlayer);
             }
         });
     }
 
 
-    protected abstract void setCharacter(View root, CharacterPlayer character);
+    protected abstract void populateElements(View root, CharacterPlayer character);
 
     protected void addSection(String title, LinearLayout linearLayout) {
         if (linearLayout != null) {

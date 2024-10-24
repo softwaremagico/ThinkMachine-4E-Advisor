@@ -252,5 +252,13 @@
     <string name="remove_character_warning">Are you sure you want to delete the selected character?</string>
     <string name="accept">Accept</string>
     <string name="remove">Remove</string>
+    <string name="upbringing">Upbringing</string>
+    <string name="callings">Callings</string>
+    <string name="faction">Faction</string>
+    <string name="specie">Specie</string>
+    <string name="capabilities">Capabilities</string>
+    <string name="characteristics">Characteristics</string>
+    <string name="skills">Skills</string>
+    <string name="perks">Perks</string>
 </resources>
 
