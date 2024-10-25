@@ -9,19 +9,18 @@ import androidx.core.content.ContextCompat;
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
-import com.softwaremagico.tm.character.characteristics.CharacteristicName;
 import com.softwaremagico.tm.character.equipment.Equipment;
 
 import java.util.List;
 
-public class EquipmentAdapter<T extends Equipment<?>> extends ElementAdapter<T> {
+public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {
 
-    public EquipmentAdapter(@NonNull Context context, @NonNull List<T> objects, boolean nullAllowed, Class<T> clazz) {
+    public EquipmentAdapter(@NonNull Context context, @NonNull List<Q> objects, boolean nullAllowed, Class<Q> clazz) {
         super(context, objects, nullAllowed, clazz);
     }
 
     @Override
-    protected void setElementColor(TextView elementRepresentation, T element, int position) {
+    protected void setElementColor(TextView elementRepresentation, Q element, int position) {
         if (isEnabled(position)) {
             if (CharacterManager.getSelectedCharacter().getCashMoney() < element.getCost()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unaffordableMoney));
@@ -38,7 +37,7 @@ public class EquipmentAdapter<T extends Equipment<?>> extends ElementAdapter<T> 
     }
 
     @Override
-    public String getElementRepresentation(T element) {
+    public String getElementRepresentation(Q element) {
         if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
             return "";
         }

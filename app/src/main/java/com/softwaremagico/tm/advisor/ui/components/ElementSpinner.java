@@ -25,9 +25,9 @@ import com.softwaremagico.tm.advisor.ui.components.spinner.HelpElement;
 import com.softwaremagico.tm.advisor.ui.components.spinner.SearchableSpinner;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 
-public class ElementSpinner<T extends Element> extends HelpElement<T> {
+public class ElementSpinner<E extends Element> extends HelpElement<E> {
 
-    private SearchableSpinner<T> selector;
+    private SearchableSpinner<E> selector;
 
     public ElementSpinner(Context context) {
         this(context, null);
@@ -51,8 +51,8 @@ public class ElementSpinner<T extends Element> extends HelpElement<T> {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (selector.getItemAtPosition(position) == null ||
-                        ((T) selector.getItemAtPosition(position)).getDescriptionRepresentation() == null ||
-                        ((T) selector.getItemAtPosition(position)).getDescriptionRepresentation().isEmpty()) {
+                        ((E) selector.getItemAtPosition(position)).getDescriptionRepresentation() == null ||
+                        ((E) selector.getItemAtPosition(position)).getDescriptionRepresentation().isEmpty()) {
                     getHelpButton().setVisibility(ImageView.INVISIBLE);
                 } else {
                     getHelpButton().setVisibility(ImageView.VISIBLE);
@@ -77,8 +77,8 @@ public class ElementSpinner<T extends Element> extends HelpElement<T> {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onItemSelectedListener.onItemSelected(parent, view, position, id);
                 if (selector.getItemAtPosition(position) == null ||
-                        ((T) selector.getItemAtPosition(position)).getDescriptionRepresentation() == null ||
-                        ((T) selector.getItemAtPosition(position)).getDescriptionRepresentation().isEmpty()) {
+                        ((E) selector.getItemAtPosition(position)).getDescriptionRepresentation() == null ||
+                        ((E) selector.getItemAtPosition(position)).getDescriptionRepresentation().isEmpty()) {
                     getHelpButton().setVisibility(ImageView.INVISIBLE);
                 } else {
                     getHelpButton().setVisibility(ImageView.VISIBLE);
@@ -93,18 +93,18 @@ public class ElementSpinner<T extends Element> extends HelpElement<T> {
         });
     }
 
-    public void setSelection(T selected) {
+    public void setSelection(E selected) {
         final Spinner selector = findViewById(R.id.spinner);
         if (selected == null) {
             selector.setSelection(0);
         } else {
-            selector.setSelection(((ElementAdapter<T>) selector.getAdapter()).indexOf(selected));
+            selector.setSelection(((ElementAdapter<E>) selector.getAdapter()).indexOf(selected));
         }
     }
 
     @Override
-    public T getSelection() {
-        final T selectedItem = (T) selector.getSelectedItem();
+    public E getSelection() {
+        final E selectedItem = (E) selector.getSelectedItem();
         if (Element.isNull(selectedItem)) {
             return null;
         }

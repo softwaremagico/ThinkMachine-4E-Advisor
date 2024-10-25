@@ -17,7 +17,7 @@ import com.softwaremagico.tm.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchableSpinner<E extends Element<E>> extends androidx.appcompat.widget.AppCompatSpinner implements View.OnTouchListener,
+public class SearchableSpinner<E extends Element> extends androidx.appcompat.widget.AppCompatSpinner implements View.OnTouchListener,
         SearchableListDialog.SearchableItem<E> {
 
     public static final int NO_ITEM_SELECTED = -1;

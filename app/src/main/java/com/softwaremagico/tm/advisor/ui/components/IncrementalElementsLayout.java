@@ -29,10 +29,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class IncrementalElementsLayout<T extends Element> extends LinearLayout {
-    private ElementAdapter<T> elementAdapter;
-    private final List<ElementSpinner<T>> defaultElementSpinners;
-    private final List<ElementSpinner<T>> elementSpinners;
+public abstract class IncrementalElementsLayout<E extends Element> extends LinearLayout {
+    private ElementAdapter<E> elementAdapter;
+    private final List<ElementSpinner<E>> defaultElementSpinners;
+    private final List<ElementSpinner<E>> elementSpinners;
     private boolean enabled = true;
     private final boolean nullAllowed;
     private final Set<AdapterView.OnItemSelectedListener> listeners;
@@ -97,9 +97,9 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         }
     }
 
-    private boolean removeDuplicates(List<ElementSpinner<T>> spinnerList) {
+    private boolean removeDuplicates(List<ElementSpinner<E>> spinnerList) {
         int i = 0;
-        Set<T> selections = new HashSet<>();
+        Set<E> selections = new HashSet<>();
         boolean removed = false;
         while (i < spinnerList.size()) {
             if (spinnerList.get(i).getSelection() != null) {
@@ -129,17 +129,17 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         defaultElementSpinners.clear();
     }
 
-    public void setElement(T element) {
-        final List<T> elements = new ArrayList<>();
+    public void setElement(E element) {
+        final List<E> elements = new ArrayList<>();
         elements.add(element);
         addElements(elements);
     }
 
-    public void setElements(Collection<T> elements) {
+    public void setElements(Collection<E> elements) {
         setElements(elements, new HashSet<>());
     }
 
-    public void setElements(Collection<T> elements, Collection<T> defaultElements) {
+    public void setElements(Collection<E> elements, Collection<E> defaultElements) {
         enabled = false;
         clear();
         addDefaults(defaultElements);
@@ -147,9 +147,9 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         enabled = true;
     }
 
-    private void addElements(Collection<T> elements) {
-        for (final T element : elements) {
-            final ElementSpinner<T> spinner = createElementSpinner();
+    private void addElements(Collection<E> elements) {
+        for (final E element : elements) {
+            final ElementSpinner<E> spinner = createElementSpinner();
             spinner.setSelection(element);
             addElementSpinner(spinner);
         }
@@ -159,13 +159,13 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         }
     }
 
-    public List<ElementSpinner<T>> getElementSpinners() {
+    public List<ElementSpinner<E>> getElementSpinners() {
         return elementSpinners;
     }
 
-    private void addDefaults(Collection<T> elements) {
+    private void addDefaults(Collection<E> elements) {
         elements.stream().sorted().forEach(element -> {
-            final ElementSpinner<T> spinner = createElementSpinner();
+            final ElementSpinner<E> spinner = createElementSpinner();
             spinner.setSelection(element);
             super.addView(spinner);
             setElementSpinnerProperties(spinner);
@@ -175,7 +175,7 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         removeDuplicates(defaultElementSpinners);
     }
 
-    private void addElementSpinner(ElementSpinner<T> spinner) {
+    private void addElementSpinner(ElementSpinner<E> spinner) {
         if (elementSpinners.size() >= maxElements) {
             return;
         }
@@ -203,14 +203,14 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         enabled = true;
     }
 
-    private void setElementSpinnerProperties(ElementSpinner<T> spinner) {
+    private void setElementSpinnerProperties(ElementSpinner<E> spinner) {
         spinner.setLayoutParams(new LayoutParams(
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT));
     }
 
-    private ElementSpinner<T> createElementSpinner() {
-        final ElementSpinner<T> selector = new ElementSpinner<>(getContext());
+    private ElementSpinner<E> createElementSpinner() {
+        final ElementSpinner<E> selector = new ElementSpinner<>(getContext());
         selector.setAdapter(getElementAdapter(true));
         return selector;
     }
@@ -220,9 +220,9 @@ public abstract class IncrementalElementsLayout<T extends Element> extends Linea
         elementSpinners.forEach(elementSpinner -> elementSpinner.setAdapter(elementAdapter));
     }
 
-    protected abstract ElementAdapter<T> createElementAdapter(boolean nonOfficial);
+    protected abstract ElementAdapter<E> createElementAdapter(boolean nonOfficial);
 
-    private ElementAdapter<T> getElementAdapter(boolean nonOfficial) {
+    private ElementAdapter<E> getElementAdapter(boolean nonOfficial) {
         if (elementAdapter == null) {
             elementAdapter = createElementAdapter(nonOfficial);
         }

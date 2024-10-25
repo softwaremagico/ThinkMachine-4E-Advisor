@@ -13,7 +13,6 @@
 package com.softwaremagico.tm.advisor.ui.components;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 
 import androidx.core.content.ContextCompat;
@@ -22,7 +21,7 @@ import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 
-public abstract class ElementComponent<T extends Element<T>> extends Component {
+public abstract class ElementComponent<E extends Element> extends Component {
 
     public interface SetElementColor {
         void setColor(int color);
@@ -32,7 +31,7 @@ public abstract class ElementComponent<T extends Element<T>> extends Component {
         super(context, attrs);
     }
 
-    protected void refreshElementColor(T element, SetElementColor colorSetter) {
+    protected void refreshElementColor(E element, SetElementColor colorSetter) {
         if (element == null) {
             return;
         }

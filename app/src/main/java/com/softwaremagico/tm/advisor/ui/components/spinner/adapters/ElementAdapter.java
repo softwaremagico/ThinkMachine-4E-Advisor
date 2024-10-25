@@ -33,14 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
-    private List<T> elements;
-    private List<T> originalElements;
+public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
+    private List<E> elements;
+    private List<E> originalElements;
 
     //For filtering
     private ElementFilter elementFilter;
 
-    public ElementAdapter(@NonNull Context context, @NonNull List<T> objects, boolean nullAllowed, Class<T> clazz) {
+    public ElementAdapter(@NonNull Context context, @NonNull List<E> objects, boolean nullAllowed, Class<E> clazz) {
         super(context, android.R.layout.simple_spinner_dropdown_item, objects);
         this.elements = new ArrayList<>(objects);
         if (nullAllowed) {
@@ -48,10 +48,10 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         }
     }
 
-    private void addNullValue(Class<T> clazz) {
+    private void addNullValue(Class<E> clazz) {
         try {
             //Create null instance.
-            final T instance = clazz.newInstance();
+            final E instance = clazz.newInstance();
             if (elements.isEmpty() || !getItem(0).getId().equals(Element.DEFAULT_NULL_ID)) {
                 insert(instance, 0);
                 elements.add(0, instance);
@@ -68,7 +68,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
             listItem = LayoutInflater.from(getContext()).inflate(R.layout.element_list, parent, false);
         }
 
-        final T element = elements.get(position);
+        final E element = elements.get(position);
 
         if (element != null) {
             final TextView name = listItem.findViewById(R.id.selected_item);
@@ -79,7 +79,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         return listItem;
     }
 
-    protected void setElementColor(TextView elementRepresentation, T element, int position) {
+    protected void setElementColor(TextView elementRepresentation, E element, int position) {
         if (isEnabled(position)) {
             if (!element.isOfficial()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));
@@ -91,7 +91,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         }
     }
 
-    public String getElementRepresentation(T element) {
+    public String getElementRepresentation(E element) {
         if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
             return "";
         }
@@ -110,7 +110,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         }
 
         try {
-            final T element = getItem(position);
+            final E element = getItem(position);
             final TextView elementName = listItem.findViewById(R.id.selected_item);
             if (element != null) {
                 elementName.setText(getElementRepresentation(element));
@@ -126,12 +126,12 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         return listItem;
     }
 
-    public int indexOf(T element) {
+    public int indexOf(E element) {
         return elements.indexOf(element);
     }
 
     @Override
-    public T getItem(int position) {
+    public E getItem(int position) {
         return elements.get(position);
     }
 
@@ -171,7 +171,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
 
             if (prefix == null || prefix.length() == 0) {
                 // No filter implemented we return all the original list
-                final ArrayList<T> list;
+                final ArrayList<E> list;
                 synchronized (this) {
                     list = new ArrayList<>(originalElements);
                 }
@@ -179,10 +179,10 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
                 results.count = list.size();
             } else {
                 // We perform filtering operation
-                List<T> elementList = new ArrayList<T>();
+                List<E> elementList = new ArrayList<E>();
                 final String prefixString = removeDiacriticalMarks(prefix.toString().toLowerCase());
 
-                for (T element : originalElements) {
+                for (E element : originalElements) {
                     if (element == null) {
                         continue;
                     }
@@ -211,7 +211,7 @@ public class ElementAdapter<T extends Element> extends ArrayAdapter<T> {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //noinspection unchecked
             if (results.values != null) {
-                elements = (List<T>) results.values;
+                elements = (List<E>) results.values;
             } else {
                 elements = new ArrayList<>();
             }

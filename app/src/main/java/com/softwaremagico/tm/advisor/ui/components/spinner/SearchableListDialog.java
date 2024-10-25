@@ -23,7 +23,7 @@ import com.softwaremagico.tm.R;
 import java.io.Serializable;
 import java.util.List;
 
-public class SearchableListDialog<E extends Element<E>> extends DialogFragment implements
+public class SearchableListDialog<E extends Element> extends DialogFragment implements
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static final String ITEMS = "items";

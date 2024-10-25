@@ -11,21 +11,25 @@ import androidx.annotation.Nullable;
 
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.character.CharacterDefinitionStep;
+import com.softwaremagico.tm.character.CharacterDefinitionStepSelection;
 import com.softwaremagico.tm.character.CharacterPlayer;
+import com.softwaremagico.tm.character.capabilities.Capability;
 import com.softwaremagico.tm.character.capabilities.CapabilityOption;
 import com.softwaremagico.tm.character.characteristics.CharacteristicBonusOption;
+import com.softwaremagico.tm.character.characteristics.CharacteristicDefinition;
+import com.softwaremagico.tm.character.perks.Perk;
 import com.softwaremagico.tm.character.perks.PerkOption;
+import com.softwaremagico.tm.character.skills.Skill;
 import com.softwaremagico.tm.character.skills.SkillBonusOption;
 
 import java.util.ArrayList;
 
 public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionStep<T>> extends CharacterCustomFragment {
-
-    private OptionSelectorLayout<CapabilityOption> capabilityOptionsLayout;
-    private OptionSelectorLayout<CharacteristicBonusOption> characteristicsOptionsLayout;
-    private OptionSelectorLayout<SkillBonusOption> skillsOptionsLayout;
-    private OptionSelectorLayout<PerkOption> perksOptionsLayout;
-    //private OptionSelectorLayout<EquipmentOption> materialAwardsLayout;
+    protected OptionSelectorLayout<Capability, CapabilityOption> capabilityOptionsLayout;
+    protected OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption> characteristicsOptionsLayout;
+    protected OptionSelectorLayout<Skill, SkillBonusOption> skillsOptionsLayout;
+    protected OptionSelectorLayout<Perk, PerkOption> perksOptionsLayout;
+    //protected OptionSelectorLayout<EquipmentOption> materialAwardsLayout;
 
     private View root;
 
@@ -38,19 +42,23 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     }
 
 
-    protected void populateElements(View root, T definitionStep) {
-        if (getContext() != null) {
+    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection, CharacterPlayer characterPlayer) {
+        if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && characterPlayer != null) {
             if (capabilityOptionsLayout != null) {
-                capabilityOptionsLayout.setElements(new ArrayList<>(definitionStep.getCapabilityOptions()));
+                capabilityOptionsLayout.setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
+                        characterDefinitionStepSelection.getCapabilityOptions(), characterPlayer);
             }
             if (characteristicsOptionsLayout != null) {
-                characteristicsOptionsLayout.setElements(new ArrayList<>(definitionStep.getCharacteristicOptions()));
+                characteristicsOptionsLayout.setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
+                        characterDefinitionStepSelection.getCharacteristicOptions(), characterPlayer);
             }
             if (skillsOptionsLayout != null) {
-                skillsOptionsLayout.setElements(new ArrayList<>(definitionStep.getSkillOptions()));
+                skillsOptionsLayout.setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
+                        characterDefinitionStepSelection.getSkillOptions(), characterPlayer);
             }
             if (perksOptionsLayout != null) {
-                perksOptionsLayout.setElements(new ArrayList<>(definitionStep.getPerksOptions()));
+                perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getPerksOptions()),
+                        characterDefinitionStepSelection.getPerksOptions(), characterPlayer);
             }
         }
     }

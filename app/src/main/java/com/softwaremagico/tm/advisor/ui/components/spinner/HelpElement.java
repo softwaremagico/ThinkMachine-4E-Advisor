@@ -6,17 +6,12 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.ui.components.ElementComponent;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
-import com.softwaremagico.tm.character.equipment.shields.Shield;
-import com.softwaremagico.tm.character.equipment.weapons.Weapon;
-import com.softwaremagico.tm.character.occultism.OccultismPower;
 
-public abstract class HelpElement<T extends Element<T>> extends ElementComponent<T> {
+public abstract class HelpElement<E extends Element> extends ElementComponent<E> {
     private ImageView helpButton;
 
     public HelpElement(Context context) {
@@ -48,9 +43,9 @@ public abstract class HelpElement<T extends Element<T>> extends ElementComponent
         return helpButton;
     }
 
-    public abstract T getSelection();
+    public abstract E getSelection();
 
-    protected void openDescriptionWindow(T element) {
+    protected void openDescriptionWindow(E element) {
         if (element != null) {
 //            if (element instanceof AvailableBenefice) {
 //                new BeneficeDescriptionDialog((AvailableBenefice) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
