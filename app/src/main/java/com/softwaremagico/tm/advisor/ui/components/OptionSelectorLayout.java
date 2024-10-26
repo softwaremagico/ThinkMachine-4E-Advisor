@@ -44,8 +44,6 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
 
-        options.add(0, null);
-
         elementSelector.setAdapter(new ElementAdapter<>(getContext(), options, false, clazz) {
             @Override
             public boolean isEnabled(int position) {
@@ -53,6 +51,13 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                         !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
+
+        if (options.size() > 1) {
+            options.add(0, null);
+        } else if (!options.isEmpty()) {
+            elementSelector.setSelection(options.get(0));
+            elementSelector.setEnabled(false);
+        }
 
         elementSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

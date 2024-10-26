@@ -34,17 +34,17 @@ import java.util.Set;
 public final class CharacterManager {
     private static final List<CharacterPlayer> characters = new ArrayList<>();
     private static CharacterPlayer selectedCharacter;
-    private static final Set<CharacterSelectedListener> characterSelectedListener = new HashSet<>();
-    private static final Set<CharacterUpdatedListener> characterUpdatedListener = new HashSet<>();
-    private static final Set<CharacterRaceUpdatedListener> characterRaceUpdatedListener = new HashSet<>();
-    private static final Set<CharacterAgeUpdatedListener> characterAgeUpdatedListener = new HashSet<>();
-    private static final Set<CharacterPlanetUpdatedListener> characterPlanetUpdatedListener = new HashSet<>();
-    private static final Set<CharacterFactionUpdatedListener> characterFactionUpdatedListener = new HashSet<>();
-    private static final Set<CharacterCallingUpdatedListener> characterCallingUpdatedListener = new HashSet<>();
-    private static final Set<CharacterUpbringingUpdatedListener> characterUpbringingUpdatedListener = new HashSet<>();
-    private static final Set<CharacterCharacteristicUpdatedListener> characterCharacteristicUpdatedListener = new HashSet<>();
-    private static final Set<CharacterSettingsUpdatedListener> characterSettingsUpdatedListeners = new HashSet<>();
-    private static final Set<CyberneticDeviceUpdatedListener> cyberneticDeviceUpdatedListeners = new HashSet<>();
+    private static final Set<CharacterSelectedListener> CHARACTER_SELECTED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterUpdatedListener> CHARACTER_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterSpecieUpdatedListener> CHARACTER_SPECIE_UPDATED_LISTENER = new HashSet<>();
+    private static final Set<CharacterAgeUpdatedListener> CHARACTER_AGE_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterPlanetUpdatedListener> CHARACTER_PLANET_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterFactionUpdatedListener> CHARACTER_FACTION_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterCallingUpdatedListener> CHARACTER_CALLING_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterUpbringingUpdatedListener> CHARACTER_UPBRINGING_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterCharacteristicUpdatedListener> CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterSettingsUpdatedListener> CHARACTER_SETTINGS_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CyberneticDeviceUpdatedListener> CYBERNETIC_DEVICE_UPDATED_LISTENERS = new HashSet<>();
     private static boolean updatingCharacter = false;
 
     public interface CharacterSelectedListener {
@@ -55,7 +55,7 @@ public final class CharacterManager {
         void updated(CharacterPlayer characterPlayer);
     }
 
-    public interface CharacterRaceUpdatedListener {
+    public interface CharacterSpecieUpdatedListener {
         void updated(CharacterPlayer characterPlayer);
     }
 
@@ -101,7 +101,7 @@ public final class CharacterManager {
 
     public static void launchCharacterSettingsUpdateListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterSettingsUpdatedListener listener : characterSettingsUpdatedListeners) {
+            for (final CharacterSettingsUpdatedListener listener : CHARACTER_SETTINGS_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -109,7 +109,7 @@ public final class CharacterManager {
 
     public static void launchSelectedCharacterListeners(CharacterPlayer characterPlayer) {
         updatingCharacter = true;
-        for (final CharacterSelectedListener listener : characterSelectedListener) {
+        for (final CharacterSelectedListener listener : CHARACTER_SELECTED_LISTENERS) {
             listener.selected(characterPlayer);
         }
         updatingCharacter = false;
@@ -117,15 +117,15 @@ public final class CharacterManager {
 
     private static void launchCharacterUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterUpdatedListener listener : characterUpdatedListener) {
+            for (final CharacterUpdatedListener listener : CHARACTER_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
     }
 
-    private static void launchCharacterRaceUpdatedListeners(CharacterPlayer characterPlayer) {
+    private static void launchCharacterSpecieUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterRaceUpdatedListener listener : characterRaceUpdatedListener) {
+            for (final CharacterSpecieUpdatedListener listener : CHARACTER_SPECIE_UPDATED_LISTENER) {
                 listener.updated(characterPlayer);
             }
         }
@@ -133,7 +133,7 @@ public final class CharacterManager {
 
     public static void launchCharacterAgeUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterAgeUpdatedListener listener : characterAgeUpdatedListener) {
+            for (final CharacterAgeUpdatedListener listener : CHARACTER_AGE_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -141,7 +141,7 @@ public final class CharacterManager {
 
     public static void launchCharacterPlanetUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterPlanetUpdatedListener listener : characterPlanetUpdatedListener) {
+            for (final CharacterPlanetUpdatedListener listener : CHARACTER_PLANET_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -149,7 +149,7 @@ public final class CharacterManager {
 
     public static void launchCharacterFactionUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterFactionUpdatedListener listener : characterFactionUpdatedListener) {
+            for (final CharacterFactionUpdatedListener listener : CHARACTER_FACTION_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -157,7 +157,7 @@ public final class CharacterManager {
 
     public static void launchCharacterCallingsUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterCallingUpdatedListener listener : characterCallingUpdatedListener) {
+            for (final CharacterCallingUpdatedListener listener : CHARACTER_CALLING_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -165,7 +165,7 @@ public final class CharacterManager {
 
     public static void launchCharacterUpbringingsUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterUpbringingUpdatedListener listener : characterUpbringingUpdatedListener) {
+            for (final CharacterUpbringingUpdatedListener listener : CHARACTER_UPBRINGING_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -173,7 +173,7 @@ public final class CharacterManager {
 
     public static void launchCharacterCharacteristicsUpdatedListeners(CharacterPlayer characterPlayer, CharacteristicName characteristicName) {
         if (!updatingCharacter) {
-            for (final CharacterCharacteristicUpdatedListener listener : characterCharacteristicUpdatedListener) {
+            for (final CharacterCharacteristicUpdatedListener listener : CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer, characteristicName);
             }
         }
@@ -181,46 +181,50 @@ public final class CharacterManager {
 
     public static void launchCyberneticDeviceUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CyberneticDeviceUpdatedListener listener : cyberneticDeviceUpdatedListeners) {
+            for (final CyberneticDeviceUpdatedListener listener : CYBERNETIC_DEVICE_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
     }
 
     public static void addCharacterSettingsUpdateListeners(CharacterSettingsUpdatedListener listener) {
-        characterSettingsUpdatedListeners.add(listener);
+        CHARACTER_SETTINGS_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addSelectedCharacterListener(CharacterSelectedListener listener) {
-        characterSelectedListener.add(listener);
+        CHARACTER_SELECTED_LISTENERS.add(listener);
     }
 
     public static void addCharacterUpdatedListener(CharacterUpdatedListener listener) {
-        characterUpdatedListener.add(listener);
+        CHARACTER_UPDATED_LISTENERS.add(listener);
     }
 
-    public static void addCharacterRaceUpdatedListener(CharacterRaceUpdatedListener listener) {
-        characterRaceUpdatedListener.add(listener);
+    public static void addCharacterSpecieUpdatedListener(CharacterSpecieUpdatedListener listener) {
+        CHARACTER_SPECIE_UPDATED_LISTENER.add(listener);
+    }
+
+    public static void addCharacterUpbringingUpdatedListener(CharacterUpbringingUpdatedListener listener) {
+        CHARACTER_UPBRINGING_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCharacterAgeUpdatedListener(CharacterAgeUpdatedListener listener) {
-        characterAgeUpdatedListener.add(listener);
+        CHARACTER_AGE_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCharacterPlanetUpdatedListener(CharacterPlanetUpdatedListener listener) {
-        characterPlanetUpdatedListener.add(listener);
+        CHARACTER_PLANET_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCharacterFactionUpdatedListener(CharacterFactionUpdatedListener listener) {
-        characterFactionUpdatedListener.add(listener);
+        CHARACTER_FACTION_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCharacterCharacteristicUpdatedListener(CharacterCharacteristicUpdatedListener listener) {
-        characterCharacteristicUpdatedListener.add(listener);
+        CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCyberneticDeviceUpdatedListeners(CyberneticDeviceUpdatedListener listener) {
-        cyberneticDeviceUpdatedListeners.add(listener);
+        CYBERNETIC_DEVICE_UPDATED_LISTENERS.add(listener);
     }
 
     public static boolean isStarted() {
@@ -278,7 +282,7 @@ public final class CharacterManager {
         } else {
             getSelectedCharacter().setSpecie(null);
         }
-        launchCharacterRaceUpdatedListeners(getSelectedCharacter());
+        launchCharacterSpecieUpdatedListeners(getSelectedCharacter());
         launchCharacterUpdatedListeners(getSelectedCharacter());
     }
 

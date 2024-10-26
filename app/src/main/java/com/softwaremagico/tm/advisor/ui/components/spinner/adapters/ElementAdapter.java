@@ -27,6 +27,7 @@ import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
+import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -95,7 +96,11 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
         if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
             return "";
         }
-        return element.getNameRepresentation();
+        try {
+            return element.getNameRepresentation();
+        }catch(InvalidXmlElementException e){
+            return "<<not implemented>>";
+        }
     }
 
     /*
