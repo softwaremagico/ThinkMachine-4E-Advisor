@@ -33,6 +33,7 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
                              @Nullable Bundle savedInstanceState) {
         root = super.onCreateView(inflater, container, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(CharacterDefinitionStepModel.class);
+        setCharacterDefinitionStepModel(mViewModel);
         CharacterManager.addCharacterUpbringingUpdatedListener(this::updateUpbringing);
         updateUpbringing(CharacterManager.getSelectedCharacter());
         return root;
@@ -45,6 +46,6 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
         populateElements(root, UpbringingFactory.getInstance().getElement(character.getUpbringing()),
-                mViewModel.getCharacterPlayer().getUpbringing(), mViewModel.getCharacterPlayer());
+                mViewModel.getCharacterPlayer().getUpbringing());
     }
 }

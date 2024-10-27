@@ -298,6 +298,23 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
     }
 
+    private void updateSpinnersStatus() {
+        upbringingSelector.setEnabled(specieSelector.getSelection() != null);
+        if (specieSelector == null) {
+            upbringingSelector.setSelection(null);
+        }
+
+        factionsSelector.setEnabled(upbringingSelector.getSelection() != null);
+        if (upbringingSelector == null) {
+            factionsSelector.setSelection(null);
+        }
+
+        callingSelector.setEnabled(factionsSelector.getSelection() != null);
+        if (factionsSelector == null) {
+            callingSelector.setSelection(null);
+        }
+    }
+
     private void createSpecieSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Specie> options = new ArrayList<>(mViewModel.getAvailableSpecies(nonOfficial));
         options.add(0, null);
@@ -329,6 +346,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
                     specieSelector.setSelection(null);
                 }
+                updateSpinnersStatus();
             }
 
             @Override
@@ -339,6 +357,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                          UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
+                updateSpinnersStatus();
             }
         });
     }
@@ -377,6 +396,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
                     upbringingSelector.setSelection(null);
                 }
+                updateSpinnersStatus();
             }
 
             @Override
@@ -387,9 +407,11 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                          UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
+                updateSpinnersStatus();
             }
         });
     }
+
 
     private void createFactionSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
         List<Faction> options = new ArrayList<>(mViewModel.getAvailableFactions(nonOfficial));
@@ -425,6 +447,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
                     factionsSelector.setSelection(null);
                 }
+                updateSpinnersStatus();
             }
 
             @Override
@@ -435,6 +458,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                          UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
+                updateSpinnersStatus();
             }
         });
     }
@@ -473,6 +497,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
                     callingSelector.setSelection(null);
                 }
+                updateSpinnersStatus();
             }
 
             @Override
@@ -483,6 +508,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                          UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
+                updateSpinnersStatus();
             }
         });
     }
@@ -493,10 +519,11 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         planetSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Planet.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        CharacterManager.getSelectedCharacter().getSpecie() == null ||
-                        SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().isEmpty() ||
-                        SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().contains(getItem(position).getId());
+                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked()
+                        || CharacterManager.getSelectedCharacter().getSpecie() == null
+                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets() == null
+                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().isEmpty()
+                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().contains(getItem(position).getId());
             }
         });
         planetSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -510,12 +537,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     } else {
                         CharacterManager.setPlanet(null);
                     }
+                    updateSpinnersStatus();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 CharacterManager.setPlanet(null);
+                updateSpinnersStatus();
             }
         });
     }

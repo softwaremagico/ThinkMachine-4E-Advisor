@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.ui.character.upbringing.CharacterDefinitionStepModel;
 import com.softwaremagico.tm.character.CharacterDefinitionStep;
 import com.softwaremagico.tm.character.CharacterDefinitionStepSelection;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -31,6 +32,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected OptionSelectorLayout<Perk, PerkOption> perksOptionsLayout;
     //protected OptionSelectorLayout<EquipmentOption> materialAwardsLayout;
 
+    private CharacterDefinitionStepModel mViewModel;
+
     private View root;
 
 
@@ -41,24 +44,28 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
         return root;
     }
 
+    protected void setCharacterDefinitionStepModel(CharacterDefinitionStepModel mViewModel) {
+        this.mViewModel = mViewModel;
+    }
 
-    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection, CharacterPlayer characterPlayer) {
-        if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && characterPlayer != null) {
+    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection) {
+        lazyInitData();
+        if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && mViewModel.getCharacterPlayer() != null) {
             if (capabilityOptionsLayout != null) {
                 capabilityOptionsLayout.setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
-                        characterDefinitionStepSelection.getCapabilityOptions(), characterPlayer);
+                        characterDefinitionStepSelection.getCapabilityOptions(), mViewModel.getCharacterPlayer());
             }
             if (characteristicsOptionsLayout != null) {
                 characteristicsOptionsLayout.setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
-                        characterDefinitionStepSelection.getCharacteristicOptions(), characterPlayer);
+                        characterDefinitionStepSelection.getCharacteristicOptions(), mViewModel.getCharacterPlayer());
             }
             if (skillsOptionsLayout != null) {
                 skillsOptionsLayout.setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
-                        characterDefinitionStepSelection.getSkillOptions(), characterPlayer);
+                        characterDefinitionStepSelection.getSkillOptions(), mViewModel.getCharacterPlayer());
             }
             if (perksOptionsLayout != null) {
                 perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getPerksOptions()),
-                        characterDefinitionStepSelection.getPerksOptions(), characterPlayer);
+                        characterDefinitionStepSelection.getPerksOptions(), mViewModel.getCharacterPlayer());
             }
         }
     }

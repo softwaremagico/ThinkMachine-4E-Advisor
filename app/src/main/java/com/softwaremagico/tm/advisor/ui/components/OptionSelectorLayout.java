@@ -18,7 +18,9 @@ import com.softwaremagico.tm.character.CharacterSelectedElement;
 import com.softwaremagico.tm.character.Selection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class OptionSelectorLayout<E extends Element, O extends Option<E>> extends LinearLayout {
 
@@ -43,6 +45,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
     private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, List<Selection> selections, boolean nonOfficial, CharacterPlayer characterPlayer) {
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
+        Collections.sort(options);
 
         elementSelector.setAdapter(new ElementAdapter<>(getContext(), options, false, clazz) {
             @Override
@@ -54,6 +57,10 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
 
         if (options.size() > 1) {
             options.add(0, null);
+            //Set Selection.
+            if (selections != null && !selections.isEmpty()) {
+                elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.get(0).getId())).findFirst().orElse(null));
+            }
         } else if (!options.isEmpty()) {
             elementSelector.setSelection(options.get(0));
             elementSelector.setEnabled(false);
@@ -63,21 +70,36 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (position == 0) {
-                    selections.clear();
-                } else {
-                    if (position > 0) {
-                        selections.add(new Selection(optionSelector.getOptions().get(position - 1).getId()));
-                    } else {
+                    if (selections != null) {
                         selections.clear();
+                    }
+                } else {
+                    if (selections != null) {
+                        if (position > 0) {
+                            selections.clear();
+                            selections.add(new Selection(optionSelector.getOptions().get(position - 1).getId()));
+                        } else {
+                            selections.clear();
+                        }
                     }
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                selections.clear();
+                if (selections != null) {
+                    selections.clear();
+                }
             }
+
         });
+
+        //Set default selection.
+        if (selections != null) {
+            selections.clear();
+            selections.add(new Selection(optionSelector.getOptions().get(0).getId()));
+        }
+
         return elementSelector;
     }
 }
