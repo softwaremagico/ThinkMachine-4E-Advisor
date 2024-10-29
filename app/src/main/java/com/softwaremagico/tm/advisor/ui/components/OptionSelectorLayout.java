@@ -16,6 +16,7 @@ import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.CharacterSelectedElement;
 import com.softwaremagico.tm.character.Selection;
+import com.softwaremagico.tm.character.capabilities.CapabilityOption;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,33 +56,16 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
             }
         });
 
-        if (options.size() > 1) {
-            options.add(0, null);
-            //Set Selection.
-            if (selections != null && !selections.isEmpty()) {
-                elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.get(0).getId())).findFirst().orElse(null));
-            }
-        } else if (!options.isEmpty()) {
-            elementSelector.setSelection(options.get(0));
-            elementSelector.setEnabled(false);
-        }
-
         elementSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == 0) {
-                    if (selections != null) {
-                        selections.clear();
-                    }
+                if (optionSelector.getTotalOptions() <= 1) {
+                    selections.clear();
+                }
+                if (options.get(position) instanceof CapabilityOption) {
+                    selections.add(new Selection(options.get(position).getId(), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
                 } else {
-                    if (selections != null) {
-                        if (position > 0) {
-                            selections.clear();
-                            selections.add(new Selection(optionSelector.getOptions().get(position - 1).getId()));
-                        } else {
-                            selections.clear();
-                        }
-                    }
+                    selections.add(new Selection(options.get(position).getId()));
                 }
             }
 
@@ -94,10 +78,15 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
 
         });
 
-        //Set default selection.
-        if (selections != null) {
-            selections.clear();
-            selections.add(new Selection(optionSelector.getOptions().get(0).getId()));
+        //Refresh selections.
+        if (options.size() > 1) {
+            //Set Selection.
+            if (selections != null && !selections.isEmpty()) {
+                elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.get(0).getId())).findFirst().orElse(null));
+            }
+        } else if (!options.isEmpty()) {
+            elementSelector.setSelection(options.get(0));
+            elementSelector.setEnabled(false);
         }
 
         return elementSelector;

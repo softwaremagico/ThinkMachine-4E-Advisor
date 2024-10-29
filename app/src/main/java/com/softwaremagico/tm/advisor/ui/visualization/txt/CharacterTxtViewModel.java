@@ -25,7 +25,7 @@ public class CharacterTxtViewModel extends ViewModel {
     protected String generateText() {
         final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
         try {
-            return characterSheet.toString();
+            return characterSheet.toString().trim();
         } catch (DocumentException | InvalidXmlElementException e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
