@@ -29,11 +29,9 @@ navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "n
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
 think-machine-pdf = { module = "com.softwaremagico:think-machine-4e-pdf", version.ref = "thinkMachine" }
 think-machine-random = { module = "com.softwaremagico:think-machine-4e-random", version.ref = "thinkMachine" }
-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 
 [plugins]
