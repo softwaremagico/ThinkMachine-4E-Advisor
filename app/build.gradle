@@ -47,8 +47,9 @@ android {
         applicationId "com.softwaremagico.tm"
         minSdk 31
         targetSdk 35
-        versionCode 2
+        versionCode 3
         versionName "0.0.2-beta"
+        setProperty("archivesBaseName", applicationId + "-v" + versionCode)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

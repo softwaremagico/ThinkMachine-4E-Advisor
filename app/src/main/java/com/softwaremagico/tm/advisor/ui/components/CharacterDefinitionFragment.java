@@ -18,6 +18,8 @@ import com.softwaremagico.tm.character.capabilities.Capability;
 import com.softwaremagico.tm.character.capabilities.CapabilityOption;
 import com.softwaremagico.tm.character.characteristics.CharacteristicBonusOption;
 import com.softwaremagico.tm.character.characteristics.CharacteristicDefinition;
+import com.softwaremagico.tm.character.equipment.Equipment;
+import com.softwaremagico.tm.character.equipment.EquipmentOption;
 import com.softwaremagico.tm.character.perks.Perk;
 import com.softwaremagico.tm.character.perks.PerkOption;
 import com.softwaremagico.tm.character.skills.Skill;
@@ -30,7 +32,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption> characteristicsOptionsLayout;
     protected OptionSelectorLayout<Skill, SkillBonusOption> skillsOptionsLayout;
     protected OptionSelectorLayout<Perk, PerkOption> perksOptionsLayout;
-    //protected OptionSelectorLayout<EquipmentOption> materialAwardsLayout;
+
+    protected OptionSelectorLayout<Equipment, EquipmentOption> materialAwardsLayout;
 
     private CharacterDefinitionStepModel mViewModel;
 
@@ -67,6 +70,10 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
                 perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getPerksOptions()),
                         characterDefinitionStepSelection.getPerksOptions(), mViewModel.getCharacterPlayer());
             }
+            if (materialAwardsLayout != null) {
+                materialAwardsLayout.setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
+                        new ArrayList<>(characterDefinitionStepSelection.getMaterialAwards()), mViewModel.getCharacterPlayer());
+            }
         }
     }
 
@@ -97,6 +104,11 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
         addSection(getString(R.string.perks), rootLayout);
         perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(perksOptionsLayout);
+        addSpace(rootLayout);
+
+        addSection(getString(R.string.material_awards), rootLayout);
+        materialAwardsLayout = new OptionSelectorLayout<>(getContext(), null);
+        rootLayout.addView(materialAwardsLayout);
         addSpace(rootLayout);
     }
 }
