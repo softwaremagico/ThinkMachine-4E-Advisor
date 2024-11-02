@@ -12,8 +12,6 @@
 
 package com.softwaremagico.tm.advisor.ui.character;
 
-import android.util.SparseArray;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
@@ -83,5 +81,14 @@ public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return TAB_TITLES.length;
+    }
+
+    public static int getIndexOf(int element) {
+        for (int i = 0; i < TAB_TITLES.length; i++) {
+            if (TAB_TITLES[i] == element) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

@@ -24,6 +24,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
+import com.softwaremagico.tm.character.CharacterDefinitionStepSelection;
 
 public class TabCharacterCreationFragment extends Fragment {
 
@@ -74,6 +76,25 @@ public class TabCharacterCreationFragment extends Fragment {
                 tabs.selectTab(tabs.getTabAt(position));
             }
         });
+
+        CharacterManager.addCharacterUpbringingUpdatedListener((player) ->
+                setTabTitle(tabs, player.getUpbringing(), R.string.upbringing));
+    }
+
+    private void setTabTitle(TabLayout tabs, CharacterDefinitionStepSelection selection, int tabOriginalTitle) {
+        final int position = CharacterSectionsPagerAdapter.getIndexOf(tabOriginalTitle);
+        final TabLayout.Tab tab = tabs.getTabAt(position);
+        if (tab != null) {
+            if (selection != null) {
+                tab.setText(selection.getNameRepresentation());
+            } else {
+                try {
+                    tab.setText(CharacterSectionsPagerAdapter.TAB_TITLES[position]);
+                } catch (Exception ignore) {
+
+                }
+            }
+        }
     }
 
 
