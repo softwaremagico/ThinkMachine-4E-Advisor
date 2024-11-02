@@ -1,4 +1,4 @@
-package com.softwaremagico.tm.advisor.ui.character.upbringing;
+package com.softwaremagico.tm.advisor.ui.components;
 
 import androidx.lifecycle.ViewModel;
 

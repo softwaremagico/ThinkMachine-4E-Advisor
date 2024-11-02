@@ -1,4 +1,4 @@
-package com.softwaremagico.tm.advisor.ui.character.upbringing;
+package com.softwaremagico.tm.advisor.ui.character.faction;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,16 +13,16 @@ import com.softwaremagico.tm.advisor.ui.components.CharacterDefinitionFragment;
 import com.softwaremagico.tm.advisor.ui.components.CharacterDefinitionStepModel;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
-import com.softwaremagico.tm.character.upbringing.Upbringing;
-import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
+import com.softwaremagico.tm.character.factions.Faction;
+import com.softwaremagico.tm.character.factions.FactionFactory;
 
-public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upbringing> {
+public class FactionFragmentCharacter extends CharacterDefinitionFragment<Faction> {
 
     private CharacterDefinitionStepModel mViewModel;
     private View root;
 
-    public static UpbringingFragmentCharacter newInstance(int index) {
-        final UpbringingFragmentCharacter fragment = new UpbringingFragmentCharacter();
+    public static FactionFragmentCharacter newInstance(int index) {
+        final FactionFragmentCharacter fragment = new FactionFragmentCharacter();
         final Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -35,18 +35,18 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
         root = super.onCreateView(inflater, container, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(CharacterDefinitionStepModel.class);
         setCharacterDefinitionStepModel(mViewModel);
-        CharacterManager.addCharacterUpbringingUpdatedListener(this::updateUpbringing);
-        updateUpbringing(CharacterManager.getSelectedCharacter());
+        CharacterManager.addCharacterFactionUpdatedListener(this::updateFaction);
+        updateFaction(CharacterManager.getSelectedCharacter());
         return root;
     }
 
-    private void updateUpbringing(CharacterPlayer characterPlayer) {
+    private void updateFaction(CharacterPlayer characterPlayer) {
         populateElements(this.root, characterPlayer);
     }
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
-        populateElements(root, UpbringingFactory.getInstance().getElement(character.getUpbringing()),
-                mViewModel.getCharacterPlayer().getUpbringing());
+        populateElements(root, FactionFactory.getInstance().getElement(character.getFaction()),
+                mViewModel.getCharacterPlayer().getFaction());
     }
 }
