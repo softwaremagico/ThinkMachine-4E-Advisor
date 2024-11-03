@@ -244,8 +244,11 @@
     <string name="action_new">Create new.</string>
     <string name="default_version" translatable="false">v0.0.0</string>
     <string name="restricted">Restricted</string>
-    <string name="restricted_races">Restricted to races:</string>
+    <string name="restricted_species">Restricted to species:</string>
     <string name="restricted_factions">Restricted to factions:</string>
+    <string name="restricted_callings">Restricted to callings:</string>
+    <string name="restricted_capabilities">Restricted to capabilities:</string>
+    <string name="restricted_perks">Restricted to perks:</string>
     <string name="allow_nonofficial">Enable non-official features</string>
     <string name="allow_restricted">Ignore restrictions</string>
     <string name="setting_title_new_characters">New Characters</string>

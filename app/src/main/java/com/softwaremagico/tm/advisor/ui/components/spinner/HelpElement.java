@@ -10,6 +10,7 @@ import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.R;
 import com.softwaremagico.tm.advisor.ui.components.ElementComponent;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.equipment.EquipmentOption;
 
 public abstract class HelpElement<E extends Element> extends ElementComponent<E> {
     private ImageView helpButton;
@@ -47,6 +48,9 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
 
     protected void openDescriptionWindow(E element) {
         if (element != null) {
+            if (element instanceof EquipmentOption) {
+
+            }
 //            if (element instanceof AvailableBenefice) {
 //                new BeneficeDescriptionDialog((AvailableBenefice) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
 //            } else if (element instanceof Blessing) {
