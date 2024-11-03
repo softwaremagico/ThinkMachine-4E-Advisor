@@ -39,7 +39,7 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
     protected abstract void populateElements(View root, CharacterPlayer character);
 
-    protected void addSection(String title, LinearLayout linearLayout) {
+    protected TextView addSection(String title, LinearLayout linearLayout) {
         if (linearLayout != null) {
             final TextView textView = new TextView(getContext(), null);
             textView.setText(title);
@@ -48,21 +48,24 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
             linearLayout.addView(textView);
             addSpace(linearLayout, 5);
+            return textView;
         }
+        return null;
     }
 
     protected void addFinalSpace(LinearLayout linearLayout) {
         addSpace(linearLayout, 150);
     }
 
-    protected void addSpace(LinearLayout linearLayout) {
-        addSpace(linearLayout, 30);
+    protected View addSpace(LinearLayout linearLayout) {
+        return addSpace(linearLayout, 30);
     }
 
-    protected void addSpace(LinearLayout linearLayout, int height) {
+    protected View addSpace(LinearLayout linearLayout, int height) {
         final View space = new View(getContext(), null);
         space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
         linearLayout.addView(space);
+        return space;
     }
 
     protected void setEnabled(boolean enable, ViewGroup vg) {

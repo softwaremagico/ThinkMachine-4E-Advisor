@@ -20,10 +20,18 @@ import com.softwaremagico.tm.character.capabilities.CapabilityOption;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class OptionSelectorLayout<E extends Element, O extends Option<E>> extends LinearLayout {
+
+    private final Set<ElementsSizeUpdatedListener> optionsSizeUpdatedListeners = new HashSet<>();
+
+    public interface ElementsSizeUpdatedListener {
+        void sizeChanged(int size);
+    }
 
     public OptionSelectorLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -33,6 +41,16 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         setOrientation(LinearLayout.VERTICAL);
     }
 
+    public void launchElementsSizeUpdatedListeners(List<OptionSelector<E, O>> optionSelectors) {
+        for (final ElementsSizeUpdatedListener listener : optionsSizeUpdatedListeners) {
+            listener.sizeChanged(optionSelectors.size());
+        }
+    }
+
+    public void addElementsSizeUpdatedListener(ElementsSizeUpdatedListener listener) {
+        optionsSizeUpdatedListeners.add(listener);
+    }
+
 
     public void setElements(Class<O> clazz, List<OptionSelector<E, O>> optionSelectors, List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
         super.removeAllViews();
@@ -40,6 +58,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
             selections.get(i).getSelections().clear();
             super.addView(createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, characterPlayer));
         }
+        launchElementsSizeUpdatedListeners(optionSelectors);
     }
 
     //Currently only one option is allowed.

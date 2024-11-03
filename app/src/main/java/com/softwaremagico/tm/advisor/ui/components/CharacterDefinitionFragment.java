@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,29 +86,88 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected void initData() {
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
 
-        addSection(getString(R.string.capabilities), rootLayout);
+        final TextView capabilitiesTitle = addSection(getString(R.string.capabilities), rootLayout);
         capabilityOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(capabilityOptionsLayout);
-        addSpace(rootLayout);
+        View capabilitiesSpace = addSpace(rootLayout);
+        capabilityOptionsLayout.addElementsSizeUpdatedListener(size -> {
+            if (size == 0) {
+                capabilitiesTitle.setVisibility(View.INVISIBLE);
+                capabilitiesSpace.setVisibility(View.INVISIBLE);
+            } else {
+                capabilitiesTitle.setVisibility(View.VISIBLE);
+                capabilitiesSpace.setVisibility(View.VISIBLE);
+            }
+        });
+        capabilitiesTitle.setVisibility(View.INVISIBLE);
+        capabilitiesSpace.setVisibility(View.INVISIBLE);
 
-        addSection(getString(R.string.characteristics), rootLayout);
+
+        final TextView characteristicsTitle = addSection(getString(R.string.characteristics), rootLayout);
         characteristicsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(characteristicsOptionsLayout);
-        addSpace(rootLayout);
+        View characteristicsSpace = addSpace(rootLayout);
+        characteristicsOptionsLayout.addElementsSizeUpdatedListener(size -> {
+            if (size == 0) {
+                characteristicsTitle.setVisibility(View.INVISIBLE);
+                characteristicsSpace.setVisibility(View.INVISIBLE);
+            } else {
+                characteristicsTitle.setVisibility(View.VISIBLE);
+                characteristicsSpace.setVisibility(View.VISIBLE);
+            }
+        });
+        characteristicsTitle.setVisibility(View.INVISIBLE);
+        characteristicsSpace.setVisibility(View.INVISIBLE);
 
-        addSection(getString(R.string.skills), rootLayout);
+
+        final TextView skillsTitle = addSection(getString(R.string.skills), rootLayout);
         skillsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(skillsOptionsLayout);
-        addSpace(rootLayout);
+        View skillsSpace = addSpace(rootLayout);
+        skillsOptionsLayout.addElementsSizeUpdatedListener(size -> {
+            if (size == 0) {
+                skillsTitle.setVisibility(View.INVISIBLE);
+                skillsSpace.setVisibility(View.INVISIBLE);
+            } else {
+                skillsTitle.setVisibility(View.VISIBLE);
+                skillsSpace.setVisibility(View.VISIBLE);
+            }
+        });
+        skillsTitle.setVisibility(View.INVISIBLE);
+        skillsSpace.setVisibility(View.INVISIBLE);
 
-        addSection(getString(R.string.perks), rootLayout);
+
+        final TextView perksTitle = addSection(getString(R.string.perks), rootLayout);
         perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(perksOptionsLayout);
-        addSpace(rootLayout);
+        View perksSpace = addSpace(rootLayout);
+        perksOptionsLayout.addElementsSizeUpdatedListener(size -> {
+            if (size == 0) {
+                perksTitle.setVisibility(View.INVISIBLE);
+                perksSpace.setVisibility(View.INVISIBLE);
+            } else {
+                perksTitle.setVisibility(View.VISIBLE);
+                perksSpace.setVisibility(View.VISIBLE);
+            }
+        });
+        perksTitle.setVisibility(View.INVISIBLE);
+        perksSpace.setVisibility(View.INVISIBLE);
 
-        addSection(getString(R.string.material_awards), rootLayout);
+
+        final TextView materialAwardsTitle = addSection(getString(R.string.material_awards), rootLayout);
         materialAwardsLayout = new OptionSelectorLayout<>(getContext(), null);
         rootLayout.addView(materialAwardsLayout);
-        addSpace(rootLayout);
+        View materialAwardsSpace = addSpace(rootLayout);
+        materialAwardsLayout.addElementsSizeUpdatedListener(size -> {
+            if (size == 0) {
+                materialAwardsTitle.setVisibility(View.INVISIBLE);
+                materialAwardsSpace.setVisibility(View.INVISIBLE);
+            } else {
+                materialAwardsTitle.setVisibility(View.VISIBLE);
+                materialAwardsSpace.setVisibility(View.VISIBLE);
+            }
+        });
+        materialAwardsTitle.setVisibility(View.INVISIBLE);
+        materialAwardsSpace.setVisibility(View.INVISIBLE);
     }
 }
