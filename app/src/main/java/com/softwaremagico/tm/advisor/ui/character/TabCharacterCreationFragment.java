@@ -82,6 +82,9 @@ public class TabCharacterCreationFragment extends Fragment {
 
         CharacterManager.addCharacterFactionUpdatedListener((player) ->
                 setTabTitle(tabs, player.getFaction(), R.string.faction));
+
+        CharacterManager.addCharacterCallingUpdatedListener((player) ->
+                setTabTitle(tabs, player.getCalling(), R.string.calling));
     }
 
     private void setTabTitle(TabLayout tabs, CharacterDefinitionStepSelection selection, int tabOriginalTitle) {

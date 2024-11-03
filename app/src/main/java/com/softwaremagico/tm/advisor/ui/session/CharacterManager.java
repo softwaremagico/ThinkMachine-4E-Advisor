@@ -219,6 +219,10 @@ public final class CharacterManager {
         CHARACTER_FACTION_UPDATED_LISTENERS.add(listener);
     }
 
+    public static void addCharacterCallingUpdatedListener(CharacterCallingUpdatedListener listener) {
+        CHARACTER_CALLING_UPDATED_LISTENERS.add(listener);
+    }
+
     public static void addCharacterCharacteristicUpdatedListener(CharacterCharacteristicUpdatedListener listener) {
         CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS.add(listener);
     }
