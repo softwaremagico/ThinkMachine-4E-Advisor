@@ -54,11 +54,11 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     }
 
     private String getHeader(T element) {
-        return "<h2>" + element.getName() + "</h2>";
+        return "<h2>" + element.getNameRepresentation() + "</h2>";
     }
 
     private String getBody(T element) {
-        return "<p>" + element.getDescription() + "</p>";
+        return "<p>" + element.getDescription().getTranslatedText() + "</p>";
     }
 
     private String getRestrictions(T element) {
