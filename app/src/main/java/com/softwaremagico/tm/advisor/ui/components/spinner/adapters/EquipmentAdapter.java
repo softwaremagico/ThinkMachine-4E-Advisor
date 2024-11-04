@@ -41,6 +41,7 @@ public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {
         if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
             return "";
         }
-        return element.getName() + " (" + element.getCost() + " " + getContext().getResources().getString(R.string.firebird_abbrev) + ")";
+        return element.getName().getTranslatedText()
+                + " (" + element.getCost() + " " + getContext().getResources().getString(R.string.firebird_abbrev) + ")";
     }
 }
