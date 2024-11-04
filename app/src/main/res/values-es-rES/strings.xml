@@ -263,4 +263,5 @@
     <string name="skills">Habilidades</string>
     <string name="perks">Beneficios</string>
     <string name="material_awards">Premio Material</string>
+    <string name="no_data">Sin Datos</string>
 </resources>

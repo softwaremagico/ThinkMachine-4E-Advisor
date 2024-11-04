@@ -26,6 +26,7 @@ import com.softwaremagico.tm.character.skills.Skill;
 import com.softwaremagico.tm.character.skills.SkillBonusOption;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionStep<T>> extends CharacterCustomFragment {
     protected OptionSelectorLayout<Capability, CapabilityOption> capabilityOptionsLayout;
@@ -38,6 +39,10 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     private CharacterDefinitionStepModel mViewModel;
 
     private View root;
+
+    private TextView noDataText;
+
+    private List<View> elements = new ArrayList<>();
 
 
     @Override
@@ -54,6 +59,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection) {
         lazyInitData();
         if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && mViewModel.getCharacterPlayer() != null) {
+            noDataText.setVisibility(View.INVISIBLE);
+            elements.forEach(element -> element.setVisibility(View.VISIBLE));
             if (capabilityOptionsLayout != null) {
                 capabilityOptionsLayout.setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
                         characterDefinitionStepSelection.getCapabilityOptions(), mViewModel.getCharacterPlayer());
@@ -74,6 +81,9 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
                 materialAwardsLayout.setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
                         new ArrayList<>(characterDefinitionStepSelection.getMaterialAwards()), mViewModel.getCharacterPlayer());
             }
+        } else {
+            noDataText.setVisibility(View.VISIBLE);
+            elements.forEach(element -> element.setVisibility(View.INVISIBLE));
         }
     }
 
@@ -86,10 +96,17 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected void initData() {
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
 
+        noDataText = noDataText();
+        noDataText.setVisibility(View.VISIBLE);
+        rootLayout.addView(noDataText);
+
         final TextView capabilitiesTitle = addSection(getString(R.string.capabilities), rootLayout);
+        elements.add(capabilitiesTitle);
         capabilityOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        elements.add(capabilityOptionsLayout);
         rootLayout.addView(capabilityOptionsLayout);
         View capabilitiesSpace = addSpace(rootLayout);
+        elements.add(capabilitiesSpace);
         capabilityOptionsLayout.addElementsSizeUpdatedListener(size -> {
             if (size == 0) {
                 capabilitiesTitle.setVisibility(View.INVISIBLE);
@@ -104,9 +121,12 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
 
         final TextView characteristicsTitle = addSection(getString(R.string.characteristics), rootLayout);
+        elements.add(characteristicsTitle);
         characteristicsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        elements.add(characteristicsOptionsLayout);
         rootLayout.addView(characteristicsOptionsLayout);
         View characteristicsSpace = addSpace(rootLayout);
+        elements.add(characteristicsSpace);
         characteristicsOptionsLayout.addElementsSizeUpdatedListener(size -> {
             if (size == 0) {
                 characteristicsTitle.setVisibility(View.INVISIBLE);
@@ -121,9 +141,12 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
 
         final TextView skillsTitle = addSection(getString(R.string.skills), rootLayout);
+        elements.add(skillsTitle);
         skillsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        elements.add(skillsOptionsLayout);
         rootLayout.addView(skillsOptionsLayout);
         View skillsSpace = addSpace(rootLayout);
+        elements.add(skillsSpace);
         skillsOptionsLayout.addElementsSizeUpdatedListener(size -> {
             if (size == 0) {
                 skillsTitle.setVisibility(View.INVISIBLE);
@@ -138,9 +161,12 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
 
         final TextView perksTitle = addSection(getString(R.string.perks), rootLayout);
+        elements.add(perksTitle);
         perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        elements.add(perksOptionsLayout);
         rootLayout.addView(perksOptionsLayout);
         View perksSpace = addSpace(rootLayout);
+        elements.add(perksSpace);
         perksOptionsLayout.addElementsSizeUpdatedListener(size -> {
             if (size == 0) {
                 perksTitle.setVisibility(View.INVISIBLE);
@@ -155,9 +181,12 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
 
         final TextView materialAwardsTitle = addSection(getString(R.string.material_awards), rootLayout);
+        elements.add(materialAwardsTitle);
         materialAwardsLayout = new OptionSelectorLayout<>(getContext(), null);
+        elements.add(materialAwardsLayout);
         rootLayout.addView(materialAwardsLayout);
         View materialAwardsSpace = addSpace(rootLayout);
+        elements.add(materialAwardsSpace);
         materialAwardsLayout.addElementsSizeUpdatedListener(size -> {
             if (size == 0) {
                 materialAwardsTitle.setVisibility(View.INVISIBLE);

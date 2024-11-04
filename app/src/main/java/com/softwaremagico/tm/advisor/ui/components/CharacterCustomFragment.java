@@ -53,6 +53,13 @@ public abstract class CharacterCustomFragment extends CustomFragment {
         return null;
     }
 
+    protected TextView noDataText(){
+        final TextView textView = new TextView(getContext(), null);
+        textView.setText(R.string.no_data);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        return textView;
+    }
+
     protected void addFinalSpace(LinearLayout linearLayout) {
         addSpace(linearLayout, 150);
     }
