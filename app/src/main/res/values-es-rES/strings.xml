@@ -25,7 +25,7 @@
     <string name="tab_character_equipment">Equipo</string>
     <string name="message_too_many_blessings">Máximo número de bendiciones excedido.</string>
     <string name="message_invalid_benefice">Beneficio invalido.</string>
-    <string name="message_invalid_shield_armour_combination">Combinación inválida de armadura y escudo energético.</string>
+    <string name="message_invalid_shield_armor_combination">Combinación inválida de armadura y escudo energético.</string>
     <string name="settings_load">Cargar</string>
     <string name="settings_save">Guardar</string>
     <string name="settings_import">Importar</string>

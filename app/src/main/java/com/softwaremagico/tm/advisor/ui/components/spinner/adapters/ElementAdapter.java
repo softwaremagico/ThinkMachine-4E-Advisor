@@ -32,6 +32,7 @@ import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
@@ -53,7 +54,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
         try {
             //Create null instance.
             final E instance = clazz.newInstance();
-            if (elements.isEmpty() || !getItem(0).getId().equals(Element.DEFAULT_NULL_ID)) {
+            if (elements.isEmpty() || !Element.isNull(getItem(0))) {
                 insert(instance, 0);
                 elements.add(0, instance);
             }
@@ -93,12 +94,12 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     }
 
     public String getElementRepresentation(E element) {
-        if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
+        if (element.getId() == null || Objects.equals(element.getId(), Element.DEFAULT_NULL_ID)) {
             return "";
         }
         try {
             return element.getNameRepresentation();
-        }catch(InvalidXmlElementException e){
+        } catch (InvalidXmlElementException e) {
             return "<<not implemented>>";
         }
     }

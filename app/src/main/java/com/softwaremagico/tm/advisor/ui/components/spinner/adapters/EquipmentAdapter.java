@@ -8,10 +8,12 @@ import androidx.core.content.ContextCompat;
 
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.equipment.Equipment;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {
 
@@ -38,10 +40,10 @@ public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {
 
     @Override
     public String getElementRepresentation(Q element) {
-        if (element.getId().equals(Element.DEFAULT_NULL_ID)) {
+        if (element == null || element.getId() == null || Objects.equals(element.getId(), Element.DEFAULT_NULL_ID)) {
             return "";
         }
         return element.getName().getTranslatedText()
-                + " (" + element.getCost() + " " + getContext().getResources().getString(R.string.firebird_abbrev) + ")";
+                + " (" + (Numbers.PRICE_FORMAT.format(element.getCost())) + " " + getContext().getResources().getString(R.string.firebird_abbrev) + ")";
     }
 }

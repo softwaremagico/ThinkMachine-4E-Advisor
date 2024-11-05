@@ -1,8 +1,10 @@
 package com.softwaremagico.tm.advisor.ui.components.descriptions;
 
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.characteristics.CharacteristicName;
 import com.softwaremagico.tm.character.equipment.DamageType;
 import com.softwaremagico.tm.character.equipment.DamageTypeFactory;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
@@ -19,19 +21,26 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
 
     @Override
     protected String getDetails(Armor armour) {
+        boolean techLimited = CharacterManager.getSelectedCharacter().getTechLevel() <
+                armour.getTechLevel();
         boolean costLimited = CharacterManager.getSelectedCharacter().getCashMoney() < armour.getCost();
         boolean costProhibited = CharacterManager.getSelectedCharacter().getRemainingCash() < armour.getCost();
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">" +
                 "<tr>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("armorRating") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("dexterityAbbreviature") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("strengthAbbreviature") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("iniciativeAbbreviature") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("enduranceAbbreviature") + "</th>" +
+                "<th>" + ThinkMachineTranslator.getTranslatedText("dexterity") + "</th>" +
+                "<th>" + ThinkMachineTranslator.getTranslatedText("strength") + "</th>" +
+                "<th>" + ThinkMachineTranslator.getTranslatedText("initiative") + "</th>" +
+                "<th>" + ThinkMachineTranslator.getTranslatedText("endurance") + "</th>" +
                 "</tr>" +
                 "<tr>" +
-                "<td style=\"text-align:center\">" + armour.getProtection() + "D</td>" +
+                "<td style=\"text-align:center\">" +
+                (techLimited ? "<font color=\"" + getColor(R.color.insufficientTechnology) + "\">" : "") +
+                armour.getTechLevel() +
+                (techLimited ? "</font>" : "") +
+                "</td>" +
+                "<td style=\"text-align:center\">" + armour.getProtection() + "</td>" +
                 "<td style=\"text-align:center\">" + (armour.getStandardPenalization() != null ? armour.getStandardPenalization().getDexterityModification() : "")
                 + (armour.getSpecialPenalization() != null && armour.getSpecialPenalization().getDexterityModification() != 0 ? "/" +
                 armour.getSpecialPenalization().getDexterityModification() : "") + "</td>" +
@@ -80,7 +89,8 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             }
         }
         stringBuilder.append("<br><b>").append(getString(R.string.cost)).append("</b> ").append(costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
-                (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")).append(armour.getCost()).append(costLimited || costProhibited ? "</font>" : "").append(" ").append(ThinkMachineTranslator.getTranslatedText("firebirds"));
+                (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : ""))
+                .append(Numbers.PRICE_FORMAT.format(armour.getCost())).append(costLimited || costProhibited ? "</font>" : "").append(" ").append(ThinkMachineTranslator.getTranslatedText("firebirds"));
         return stringBuilder.toString();
     }
 }

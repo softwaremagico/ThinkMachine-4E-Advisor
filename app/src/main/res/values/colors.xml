@@ -171,6 +171,11 @@
     <color name="colorDisabled">#ffaaaaaa</color>
     <color name="restricted">@color/md_theme_onErrorContainer</color>
     <color name="unofficialElement">@color/colorWarning</color>
+    <color name="insufficientTechnology">@color/colorError</color>
     <color name="insufficientMoney">@color/colorWarning</color>
     <color name="unaffordableMoney">@color/colorError</color>
+
+    <color name="counterError">@color/colorError</color>
+    <color name="counterFirebirdsText">@color/colorNormal</color>
+    <color name="counterFirebirds">@color/colorNormal</color>
 </resources>

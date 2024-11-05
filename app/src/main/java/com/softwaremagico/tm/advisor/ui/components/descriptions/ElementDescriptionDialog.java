@@ -25,6 +25,8 @@ import com.softwaremagico.tm.character.perks.PerkFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.stream.Collectors;
 
 public class ElementDescriptionDialog<T extends Element> extends DialogFragment {
