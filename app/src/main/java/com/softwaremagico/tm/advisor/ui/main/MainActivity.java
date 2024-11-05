@@ -36,7 +36,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.advisor.core.FileUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;

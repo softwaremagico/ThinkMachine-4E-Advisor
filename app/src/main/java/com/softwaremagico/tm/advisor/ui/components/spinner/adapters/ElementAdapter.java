@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;

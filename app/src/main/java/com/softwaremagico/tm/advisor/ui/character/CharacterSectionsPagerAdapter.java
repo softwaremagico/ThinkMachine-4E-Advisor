@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.character.calling.CallingFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.description.CharacterDescriptionFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.faction.FactionFragmentCharacter;

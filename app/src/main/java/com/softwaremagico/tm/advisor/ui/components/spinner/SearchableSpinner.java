@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 
 import java.util.ArrayList;
 import java.util.List;

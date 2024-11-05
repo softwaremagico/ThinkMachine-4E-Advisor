@@ -20,7 +20,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 
 public class TranslatedEditText extends Component {

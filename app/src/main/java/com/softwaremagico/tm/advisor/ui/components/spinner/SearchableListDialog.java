@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 
 import java.io.Serializable;
 import java.util.List;

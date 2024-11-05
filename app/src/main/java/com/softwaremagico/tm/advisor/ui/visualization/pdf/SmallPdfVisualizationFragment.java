@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 
 public class SmallPdfVisualizationFragment extends PdfVisualizationFragment {
 

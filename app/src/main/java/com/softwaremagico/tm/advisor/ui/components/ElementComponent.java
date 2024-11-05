@@ -18,7 +18,7 @@ import android.util.AttributeSet;
 import androidx.core.content.ContextCompat;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 
 public abstract class ElementComponent<E extends Element> extends Component {

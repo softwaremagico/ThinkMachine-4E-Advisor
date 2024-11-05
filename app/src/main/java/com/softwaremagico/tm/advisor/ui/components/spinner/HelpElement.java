@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.components.ElementComponent;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.ArmorDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.ElementDescriptionDialog;

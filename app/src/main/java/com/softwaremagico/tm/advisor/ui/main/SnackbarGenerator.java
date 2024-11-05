@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 
 public final class SnackbarGenerator {
 

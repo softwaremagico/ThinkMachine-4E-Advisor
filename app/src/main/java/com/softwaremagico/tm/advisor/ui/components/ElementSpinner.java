@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.softwaremagico.tm.Element;
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.components.spinner.HelpElement;
 import com.softwaremagico.tm.advisor.ui.components.spinner.SearchableSpinner;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;

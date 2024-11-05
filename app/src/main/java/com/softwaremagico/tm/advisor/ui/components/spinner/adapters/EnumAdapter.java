@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.softwaremagico.tm.R;
+import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 
 import java.util.List;
