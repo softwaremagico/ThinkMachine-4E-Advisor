@@ -86,7 +86,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
             if (!element.isOfficial()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));
             } else {
-                elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.md_theme_onPrimaryContainer));
+                elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorNormal));
             }
         } else {
             elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDisabled));

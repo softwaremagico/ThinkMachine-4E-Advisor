@@ -1,4 +1,5 @@
 <resources>
+    <color name="icons_color">#FFD9DD</color>
     <color name="md_theme_primary">#FFB4A6</color>
     <color name="md_theme_onPrimary">#561E15</color>
     <color name="md_theme_primaryContainer">#733429</color>
@@ -164,4 +165,7 @@
     <color name="colorOnInfo_highContrast">#000000</color>
     <color name="colorInfoContainer_highContrast">#FFBAAE</color>
     <color name="colorOnInfoContainer_highContrast">#000000</color>
+
+    <color name="colorError">#D7322C</color>
+    <color name="colorDisabled">#998888aa</color>
 </resources>

@@ -330,9 +330,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 try {
-                    if (position == 0
-                            || mViewModel.getAvailableSpecies(nonOfficial).get(position - 1).getId() != null
-                            || mViewModel.getAvailableSpecies(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                    if (position == 0) {
                         CharacterManager.setSpecie(null);
                     } else {
                         if (position > 0) {
@@ -378,9 +376,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 try {
-                    if (position == 0
-                            || mViewModel.getAvailableUpbringings(nonOfficial).get(position - 1).getId() != null
-                            || mViewModel.getAvailableUpbringings(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                    if (position == 0) {
                         try {
                             CharacterManager.setUpbringing(null);
                         } catch (InvalidUpbringingException e) {
@@ -431,9 +427,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 try {
-                    if (position == 0
-                            || mViewModel.getAvailableFactions(nonOfficial).get(position - 1).getId() == null
-                            || mViewModel.getAvailableFactions(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                    if (position == 0) {
                         try {
                             CharacterManager.setFaction(null);
                         } catch (InvalidFactionException e) {
@@ -476,7 +470,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
+                        (getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         callingSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
