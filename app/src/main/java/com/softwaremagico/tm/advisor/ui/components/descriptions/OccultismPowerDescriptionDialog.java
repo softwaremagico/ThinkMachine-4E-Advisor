@@ -20,6 +20,9 @@ public class OccultismPowerDescriptionDialog extends ElementDescriptionDialog<Oc
         stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableTime")).append(":</b>")
                 .append(TimeFactory.getInstance().getElement(occultismPower.getTime()).getName().getTranslatedText());
+        if (!TimeFactory.getInstance().getElement(occultismPower.getTime()).getDescription().getTranslatedText().isBlank()) {
+            stringBuilder.append(" (").append(TimeFactory.getInstance().getElement(occultismPower.getTime()).getDescription().getTranslatedText()).append(")");
+        }
         stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableCost")).append(":</b>")
                 .append(occultismPower.getCost().getTranslatedText());

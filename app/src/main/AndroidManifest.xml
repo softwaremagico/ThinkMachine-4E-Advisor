@@ -12,25 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
 
-    <activity
-        android:name="com.softwaremagico.tm.advisor.ui.main.MainActivity"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.ThinkMachine4EAdvisor"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <provider
-        android:name="androidx.core.content.FileProvider"
-        android:authorities="com.softwaremagico.tm.advisor.4e"
-        android:exported="false"
-        android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/filepaths" />
-    </provider>
+        <activity
+            android:name="com.softwaremagico.tm.advisor.ui.main.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ThinkMachine4EAdvisor">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
 
     </application>
 

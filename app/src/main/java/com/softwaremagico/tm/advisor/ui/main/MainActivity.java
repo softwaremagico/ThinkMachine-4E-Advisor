@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.MenuCompat;
@@ -36,6 +35,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.softwaremagico.tm.advisor.BuildConfig;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.advisor.core.FileUtils;
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         File characterExport = new File(exportsPath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
                 CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
                 "export_sheet." + FileUtils.CHARACTER_FILE_EXTENSION);
-        final Uri contentUri = FileProvider.getUriForFile(view.getContext(), "com.softwaremagico.tm.advisor", characterExport);
+        final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", characterExport);
 
         if (contentUri != null) {
             if (exportsPath.mkdir()) {
