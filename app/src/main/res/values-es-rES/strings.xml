@@ -177,6 +177,7 @@
     <string name="tab_character_cybernetics">Cibernética</string>
     <string name="message_too_many_cybernetics">Máximo número de ciberrasgos alcanzado.</string>
     <string name="message_required_cybernetic_missing">Falata un dispositivo cibernético requerido.</string>
+    <string name="counter_points">PUNTOS</string>
     <string name="counter_cybernetics">INCOMPAT.</string>
     <string name="message_duplicated_item_removed">Se ha eliminado un elemento duplicado.</string>
     <string name="message_invalid_tech_level">Algunos elementos tienen un nivel tecnológico superior al del personaje.</string>

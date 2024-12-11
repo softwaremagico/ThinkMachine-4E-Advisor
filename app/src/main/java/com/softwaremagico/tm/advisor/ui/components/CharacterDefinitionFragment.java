@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterDefinitionStep;
 import com.softwaremagico.tm.character.CharacterDefinitionStepSelection;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -42,7 +43,7 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
     private TextView noDataText;
 
-    private List<View> elements = new ArrayList<>();
+    private final List<View> elements = new ArrayList<>();
 
 
     @Override
@@ -68,6 +69,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
             if (characteristicsOptionsLayout != null) {
                 characteristicsOptionsLayout.setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
                         characterDefinitionStepSelection.getCharacteristicOptions(), mViewModel.getCharacterPlayer());
+                characteristicsOptionsLayout.addElementsSelectedListener(selections ->
+                        CharacterManager.launchCharacterCharacteristicsUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (skillsOptionsLayout != null) {
                 skillsOptionsLayout.setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
@@ -76,6 +79,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
             if (perksOptionsLayout != null) {
                 perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getPerksOptions()),
                         characterDefinitionStepSelection.getPerksOptions(), mViewModel.getCharacterPlayer());
+                perksOptionsLayout.addElementsSelectedListener(selections ->
+                        CharacterManager.launchPerkUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (materialAwardsLayout != null) {
                 materialAwardsLayout.setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),

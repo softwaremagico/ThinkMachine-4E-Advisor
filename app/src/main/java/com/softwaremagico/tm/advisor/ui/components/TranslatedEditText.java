@@ -24,6 +24,8 @@ import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 
 public class TranslatedEditText extends Component {
+    private EditText editText;
+    private TextView tagTex;
 
     public TranslatedEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,41 +37,70 @@ public class TranslatedEditText extends Component {
         initComponents(attrs);
     }
 
+    private EditText getEditText() {
+        if (editText == null) {
+            editText = findViewById(R.id.input);
+        }
+        return editText;
+    }
+
+    private TextView getTagText() {
+        if (tagTex == null) {
+            tagTex = findViewById(R.id.translated_tag);
+        }
+        return tagTex;
+    }
+
     private void initComponents(AttributeSet attrs) {
-        final TextView tagText = findViewById(R.id.translated_tag);
+        final TextView tagText = getTagText();
         final TypedArray attributes = getContext().obtainStyledAttributes(attrs,
                 R.styleable.TranslatedEditText, 0, 0);
         final String tag = attributes.getString(R.styleable.TranslatedEditText_translation);
-        tagText.setText(ThinkMachineTranslator.getTranslatedText(tag) + " ");
+        if (tag != null) {
+            tagText.setText(ThinkMachineTranslator.getTranslatedText(tag) + " ");
+        }
         tagText.setTextAppearance(R.style.CharacterInfo);
     }
 
     public void setAsNumberEditor() {
-        final EditText tagText = findViewById(R.id.input);
+        final EditText tagText = getEditText();
         tagText.setInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     public void setLabel(String text) {
-        final TextView tagText = findViewById(R.id.translated_tag);
+        final TextView tagText = getTagText();
         tagText.setText(text);
     }
 
     public String getText() {
-        final EditText tagText = findViewById(R.id.input);
+        final EditText tagText = getEditText();
         return tagText.getText().toString();
     }
 
     public void setText(String text) {
-        final EditText tagText = findViewById(R.id.input);
+        final EditText tagText = getEditText();
         tagText.setText(text);
         //Place cursor at the end.
         tagText.setSelection(tagText.getText().length());
     }
 
     public void addTextChangedListener(TextWatcher watcher) {
-        final EditText tagText = findViewById(R.id.input);
+        final EditText tagText = getEditText();
         tagText.addTextChangedListener(watcher);
     }
 
+    @Override
+    public void setFocusable(boolean focusable){
+        super.setFocusable(focusable);
+        getTagText().setFocusable(focusable);
+        getEditText().setFocusable(focusable);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled){
+        super.setEnabled(enabled);
+        getTagText().setEnabled(enabled);
+        getEditText().setEnabled(enabled);
+    }
 
 }

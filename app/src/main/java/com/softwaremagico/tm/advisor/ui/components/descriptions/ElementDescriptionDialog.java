@@ -1,9 +1,13 @@
 package com.softwaremagico.tm.advisor.ui.components.descriptions;
 
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 
@@ -25,18 +29,30 @@ import com.softwaremagico.tm.character.perks.PerkFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.stream.Collectors;
 
 public class ElementDescriptionDialog<T extends Element> extends DialogFragment {
-    protected static final String TABLE_STYLE = "border:1px solid black;margin-left:auto;margin-right:auto;font-size:60%";
+    protected static final String TABLE_STYLE = "border:1px solid;border-color:"+ R.color.md_theme_onPrimaryContainer +";margin-left:auto;margin-right:auto;font-size:70%";
     protected static final int TABLE_PADDING = 2;
     private final T element;
 
     public ElementDescriptionDialog(T element) {
         super();
         this.element = element;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Window window = getDialog().getWindow();
+
+        Rect size = window.getWindowManager().getCurrentWindowMetrics().getBounds();
+
+        int width = size.width();
+
+        window.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setGravity(Gravity.CENTER);
     }
 
     @Override
@@ -56,11 +72,11 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     }
 
     private String getHeader(T element) {
-        return "<h2>" + element.getNameRepresentation() + "</h2>";
+        return "<h2>" + adaptText(element.getNameRepresentation()) + "</h2>";
     }
 
     private String getBody(T element) {
-        return "<p>" + element.getDescription().getTranslatedText() + "</p>";
+        return "<p>" + adaptText(element.getDescription().getTranslatedText()) + "</p>";
     }
 
     private String getRestrictions(T element) {
@@ -95,15 +111,17 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
                             .stream().map(Perk::getNameRepresentation)
                             .collect(Collectors.joining(", "))).append("</p>");
         }
-//        if (element.isRestricted()) {
-//            restrictions.append("<p><b><font color=\"" + getColor(R.color.restricted) + "\">").append(getString(R.string.restricted))
-//                    .append("</font></b></p>");
-//        }
+        if (element.getRestrictions().isRestricted()) {
+            restrictions.append("<p><b><font color=\"").append(getColor(R.color.restricted)).append("\">").append(getString(R.string.restricted))
+                    .append("</font></b></p>");
+        }
         return restrictions.toString();
     }
 
     private String setContent(T element) {
-        return "<html><body style='text-align:justify;font-size:14px;'>" +
+        return "<html><body style='text-align:justify;font-size:14px;"
+                + "color:" + getColor(R.color.md_theme_onPrimaryContainer) + ";"
+                + "background-color:" + getColor(R.color.md_theme_background) + "'>" +
                 getHeader(element) +
                 getBody(element) +
                 getDetails(element) +
@@ -119,5 +137,9 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
         int labelColor = ContextCompat.getColor(getContext(), color);
         //Removing Alpha value
         return String.format("%X", labelColor).substring(2);
+    }
+
+    protected String adaptText(String text) {
+        return text.replaceAll("\\\\n", "<br><br>").trim().replaceAll(" +", " ");
     }
 }

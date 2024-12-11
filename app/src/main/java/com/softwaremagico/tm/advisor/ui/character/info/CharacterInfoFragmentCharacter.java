@@ -470,7 +470,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        (getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
+                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
         callingSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

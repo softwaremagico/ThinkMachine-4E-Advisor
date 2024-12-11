@@ -42,8 +42,9 @@ public final class CharacterManager {
     private static final Set<CharacterFactionUpdatedListener> CHARACTER_FACTION_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CharacterCallingUpdatedListener> CHARACTER_CALLING_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CharacterUpbringingUpdatedListener> CHARACTER_UPBRINGING_UPDATED_LISTENERS = new HashSet<>();
-    private static final Set<CharacterCharacteristicUpdatedListener> CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<CharacterCharacteristicsUpdatedListener> CHARACTER_CHARACTERISTICS_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CharacterSettingsUpdatedListener> CHARACTER_SETTINGS_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<PerkUpdatedListener> PERK_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CyberneticDeviceUpdatedListener> CYBERNETIC_DEVICE_UPDATED_LISTENERS = new HashSet<>();
     private static boolean updatingCharacter = false;
 
@@ -83,11 +84,19 @@ public final class CharacterManager {
         void updated(CharacterPlayer characterPlayer, CharacteristicName characteristic);
     }
 
+    public interface CharacterCharacteristicsUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
     public interface CharacterSettingsUpdatedListener {
         void updated(CharacterPlayer characterPlayer);
     }
 
     public interface CyberneticDeviceUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
+    public interface PerkUpdatedListener {
         void updated(CharacterPlayer characterPlayer);
     }
 
@@ -134,7 +143,7 @@ public final class CharacterManager {
     public static void launchCharacterAgeUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
             for (final CharacterAgeUpdatedListener listener : CHARACTER_AGE_UPDATED_LISTENERS) {
-                listener.updated(characterPlayer);
+               // listener.updated(characterPlayer);
             }
         }
     }
@@ -171,10 +180,10 @@ public final class CharacterManager {
         }
     }
 
-    public static void launchCharacterCharacteristicsUpdatedListeners(CharacterPlayer characterPlayer, CharacteristicName characteristicName) {
+    public static void launchCharacterCharacteristicsUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
-            for (final CharacterCharacteristicUpdatedListener listener : CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS) {
-                listener.updated(characterPlayer, characteristicName);
+            for (final CharacterCharacteristicsUpdatedListener listener : CHARACTER_CHARACTERISTICS_UPDATED_LISTENERS) {
+                listener.updated(characterPlayer);
             }
         }
     }
@@ -182,6 +191,14 @@ public final class CharacterManager {
     public static void launchCyberneticDeviceUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
             for (final CyberneticDeviceUpdatedListener listener : CYBERNETIC_DEVICE_UPDATED_LISTENERS) {
+                listener.updated(characterPlayer);
+            }
+        }
+    }
+
+    public static void launchPerkUpdatedListeners(CharacterPlayer characterPlayer) {
+        if (!updatingCharacter) {
+            for (final PerkUpdatedListener listener : PERK_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -223,12 +240,21 @@ public final class CharacterManager {
         CHARACTER_CALLING_UPDATED_LISTENERS.add(listener);
     }
 
-    public static void addCharacterCharacteristicUpdatedListener(CharacterCharacteristicUpdatedListener listener) {
-        CHARACTER_CHARACTERISTIC_UPDATED_LISTENERS.add(listener);
+    public static void addCharacterCharacteristicsUpdatedListener(CharacterCharacteristicsUpdatedListener listener) {
+        CHARACTER_CHARACTERISTICS_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addCyberneticDeviceUpdatedListeners(CyberneticDeviceUpdatedListener listener) {
         CYBERNETIC_DEVICE_UPDATED_LISTENERS.add(listener);
+    }
+
+    public static PerkUpdatedListener addPerkUpdatedListeners(PerkUpdatedListener listener) {
+        PERK_UPDATED_LISTENERS.add(listener);
+        return listener;
+    }
+
+    public static void removePerkUpdatedListeners(PerkUpdatedListener listener) {
+        PERK_UPDATED_LISTENERS.remove(listener);
     }
 
     public static boolean isStarted() {

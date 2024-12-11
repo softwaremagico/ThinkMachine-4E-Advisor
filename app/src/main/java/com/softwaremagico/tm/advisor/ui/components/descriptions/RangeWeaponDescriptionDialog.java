@@ -50,7 +50,8 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                     "<td style=\"text-align:center\" >" + weaponDamage.getRange() + "</td>" +
                     "<td style=\"text-align:center\" >" + (weaponDamage.getShots() != null ? weaponDamage.getShots() : "") + "</td>" +
                     "<td style=\"text-align:center\" >" + weaponDamage.getRate() + "</td>" +
-                    "<td style=\"text-align:center\" >" + (weapon.getSize() != null ? weapon.getSize().toString() : "") + "</td>" +
+                    "<td style=\"text-align:center\" >" + (weaponDamage.getSize() != null ? weaponDamage.getSize().toString()
+                    : (weapon.getSize() != null ? weapon.getSize() : "")) + "</td>" +
                     "</tr>");
         }
         stringBuilder.append("</table>" +

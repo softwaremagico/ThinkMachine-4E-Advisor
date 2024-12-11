@@ -19,6 +19,7 @@ import com.softwaremagico.tm.character.Selection;
 import com.softwaremagico.tm.character.capabilities.CapabilityOption;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -28,9 +29,14 @@ import java.util.Set;
 public class OptionSelectorLayout<E extends Element, O extends Option<E>> extends LinearLayout {
 
     private final Set<ElementsSizeUpdatedListener> optionsSizeUpdatedListeners = new HashSet<>();
+    private final Set<ElementsSelectedListener> elementsSelectedUpdatedListeners = new HashSet<>();
 
     public interface ElementsSizeUpdatedListener {
         void sizeChanged(int size);
+    }
+
+    public interface ElementsSelectedListener {
+        void selectedElements(Collection<Selection> selections);
     }
 
     public OptionSelectorLayout(Context context, @Nullable AttributeSet attrs) {
@@ -51,6 +57,16 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         optionsSizeUpdatedListeners.add(listener);
     }
 
+    public void launchElementsSelectedListener(Collection<Selection> selections) {
+        for (final ElementsSelectedListener listener : elementsSelectedUpdatedListeners) {
+            listener.selectedElements(selections);
+        }
+    }
+
+    public void addElementsSelectedListener(ElementsSelectedListener listener) {
+        elementsSelectedUpdatedListeners.add(listener);
+    }
+
 
     public void setElements(Class<O> clazz, List<OptionSelector<E, O>> optionSelectors, List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
         super.removeAllViews();
@@ -62,7 +78,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
     }
 
     //Currently only one option is allowed.
-    private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, List<Selection> selections, boolean nonOfficial, CharacterPlayer characterPlayer) {
+    private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, Set<Selection> selections, boolean nonOfficial, CharacterPlayer characterPlayer) {
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
         Collections.sort(options);
@@ -86,6 +102,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                 } else {
                     selections.add(new Selection(options.get(position).getId()));
                 }
+                launchElementsSelectedListener(selections);
             }
 
             @Override
@@ -101,7 +118,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         if (options.size() > 1) {
             //Set Selection.
             if (selections != null && !selections.isEmpty()) {
-                elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.get(0).getId())).findFirst().orElse(null));
+                elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.iterator().next().getId())).findFirst().orElse(null));
             }
         } else if (!options.isEmpty()) {
             elementSelector.setSelection(options.get(0));

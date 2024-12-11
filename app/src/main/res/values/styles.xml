@@ -59,7 +59,7 @@
     </style>
 
     <style name="LayoutPadding">
-        <item name="android:padding">15sp</item>
+        <item name="android:padding">5sp</item>
     </style>
 
     <style name="SettingsTitle" parent="@android:style/Widget.TextView">

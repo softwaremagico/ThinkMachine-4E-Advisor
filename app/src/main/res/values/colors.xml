@@ -178,4 +178,6 @@
     <color name="counterError">@color/colorError</color>
     <color name="counterFirebirdsText">@color/colorNormal</color>
     <color name="counterFirebirds">@color/colorNormal</color>
+    <color name="counterOccultism">#384E85</color>
+    <color name="counterOccultismText">@color/md_theme_onPrimary</color>
 </resources>
