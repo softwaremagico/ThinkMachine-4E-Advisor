@@ -12,12 +12,14 @@ import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.components.ElementComponent;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.ArmorDescriptionDialog;
+import com.softwaremagico.tm.advisor.ui.components.descriptions.CyberdeviceDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.ElementDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.MeleeWeaponDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.OccultismPowerDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.RangeWeaponDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.components.descriptions.ShieldDescriptionDialog;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.cybernetics.Cyberdevice;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
 import com.softwaremagico.tm.character.equipment.shields.Shield;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
@@ -69,8 +71,8 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
                 } else {
                     new MeleeWeaponDescriptionDialog((Weapon) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
                 }
-//            } else if (element instanceof CyberneticDevice) {
-//                new CyberneticDeviceDescriptionDialog((CyberneticDevice) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
+            } else if (element instanceof Cyberdevice) {
+                new CyberdeviceDescriptionDialog((Cyberdevice) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
             } else if (element instanceof OccultismPower) {
                 new OccultismPowerDescriptionDialog((OccultismPower) element).show(((FragmentActivity) getContext()).getSupportFragmentManager(), "");
             } else {

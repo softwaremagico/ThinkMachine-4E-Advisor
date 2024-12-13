@@ -56,7 +56,7 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
                 "</tr>" +
                 "</table>");
         if (!armor.getAllowedShields().isEmpty()) {
-            stringBuilder.append("<br><b>").append(ThinkMachineTranslator.getTranslatedText("shield")).append(":</b> ");
+            stringBuilder.append("<br><br><b>").append(ThinkMachineTranslator.getTranslatedText("shield")).append(":</b> ");
             String separator = "";
             for (String shieldName : armor.getAllowedShields()) {
                 final Shield shield = ShieldFactory.getInstance().getElement(shieldName);
@@ -66,7 +66,7 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             }
         }
         if (!armor.getSpecifications().isEmpty()) {
-            stringBuilder.append("<br><b>").append(ThinkMachineTranslator.getTranslatedText("othersTable")).append(":</b> ");
+            stringBuilder.append("<br><br><b>").append(ThinkMachineTranslator.getTranslatedText("othersTable")).append(":</b> ");
             String separator = "";
             for (String specificationName : armor.getSpecifications()) {
                 final ArmourSpecification armourSpecification = ArmourSpecificationFactory.getInstance().getElement(specificationName);

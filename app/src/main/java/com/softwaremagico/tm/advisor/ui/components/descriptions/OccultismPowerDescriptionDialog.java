@@ -20,14 +20,17 @@ public class OccultismPowerDescriptionDialog extends ElementDescriptionDialog<Oc
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableLevel")).append(": </b>")
                 .append(occultismPower.getOccultismLevel());
         stringBuilder.append("<br>");
+        stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableTime")).append(": </b>")
                 .append(TimeFactory.getInstance().getElement(occultismPower.getTime()).getName().getTranslatedText());
         if (!TimeFactory.getInstance().getElement(occultismPower.getTime()).getDescription().getTranslatedText().isBlank()) {
             stringBuilder.append(" (").append(TimeFactory.getInstance().getElement(occultismPower.getTime()).getDescription().getTranslatedText()).append(")");
         }
         stringBuilder.append("<br>");
+        stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableCost")).append(": </b>")
                 .append(occultismPower.getCost().getTranslatedText());
+        stringBuilder.append("<br>");
         stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableRoll")).append(": </b>")
                 .append(SkillFactory.getInstance().getElements(occultismPower.getSkills()).stream()
@@ -35,8 +38,10 @@ public class OccultismPowerDescriptionDialog extends ElementDescriptionDialog<Oc
                 .append(" + ")
                 .append(CharacteristicsDefinitionFactory.getInstance().getElement(occultismPower.getCharacteristic()).getName().getTranslatedText());
         stringBuilder.append("<br>");
+        stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableResistance")).append(": </b>")
                 .append(adaptText(occultismPower.getResistance().getTranslatedText()));
+        stringBuilder.append("<br>");
         stringBuilder.append("<br>");
         stringBuilder.append("<b>").append(ThinkMachineTranslator.getTranslatedText("occultismTableImpact")).append(": </b>")
                 .append(adaptText(occultismPower.getImpact().getTranslatedText()));

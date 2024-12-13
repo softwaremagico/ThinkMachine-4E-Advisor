@@ -168,4 +168,12 @@
 
     <color name="colorError">#D7322C</color>
     <color name="colorDisabled">#998888aa</color>
+
+    <color name="counterError">@color/colorError</color>
+    <color name="counterFirebirdsText">@color/colorNormal</color>
+    <color name="counterFirebirds">@color/colorNormal</color>
+    <color name="counterOccultism">#5A72D0</color>
+    <color name="counterOccultismText">@color/md_theme_onPrimary</color>
+    <color name="counterCybernetics">#766A99</color>
+    <color name="counterCyberneticsText">@color/md_theme_onPrimary</color>
 </resources>

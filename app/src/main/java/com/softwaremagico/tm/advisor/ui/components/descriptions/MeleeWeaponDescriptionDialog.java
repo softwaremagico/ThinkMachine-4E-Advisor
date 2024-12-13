@@ -35,7 +35,7 @@ public class MeleeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                     CharacterManager.getSelectedCharacter().getTechLevel() < weaponDamage.getDamageTechLevel();
             stringBuilder.append("<tr>");
             if (weapon.getWeaponDamages().size() > 1) {
-                stringBuilder.append("<td style=\"text-align:center\">" + (weaponDamage.getName().getTranslatedText() != null
+                stringBuilder.append("<td style=\"text-align:center\">" + (weaponDamage.getName() != null && weaponDamage.getName().getTranslatedText() != null
                         ? weaponDamage.getName().getTranslatedText() : weapon.getName().getTranslatedText()) + "</td>");
             }
             stringBuilder.append("<td style=\"text-align:center\">" +

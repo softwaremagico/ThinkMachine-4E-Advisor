@@ -180,4 +180,6 @@
     <color name="counterFirebirds">@color/colorNormal</color>
     <color name="counterOccultism">#384E85</color>
     <color name="counterOccultismText">@color/md_theme_onPrimary</color>
+    <color name="counterCybernetics">#554b6b</color>
+    <color name="counterCyberneticsText">@color/md_theme_onPrimary</color>
 </resources>
