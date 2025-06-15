@@ -78,6 +78,9 @@ public class EnumAdapter<T> extends ArrayAdapter<T> {
     }
 
     public int indexOf(T element) {
+        if (element == null) {
+            return -1;
+        }
         return elements.indexOf(element);
     }
 
