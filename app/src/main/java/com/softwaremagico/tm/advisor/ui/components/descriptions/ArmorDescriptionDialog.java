@@ -7,8 +7,8 @@ import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 import com.softwaremagico.tm.character.equipment.DamageType;
 import com.softwaremagico.tm.character.equipment.DamageTypeFactory;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
-import com.softwaremagico.tm.character.equipment.armors.ArmourSpecification;
-import com.softwaremagico.tm.character.equipment.armors.ArmourSpecificationFactory;
+import com.softwaremagico.tm.character.equipment.armors.ArmorSpecification;
+import com.softwaremagico.tm.character.equipment.armors.ArmorSpecificationFactory;
 import com.softwaremagico.tm.character.equipment.shields.Shield;
 import com.softwaremagico.tm.character.equipment.shields.ShieldFactory;
 import com.softwaremagico.tm.character.resistances.ResistanceType;
@@ -69,7 +69,7 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             stringBuilder.append("<br><br><b>").append(ThinkMachineTranslator.getTranslatedText("othersTable")).append(":</b> ");
             String separator = "";
             for (String specificationName : armor.getSpecifications()) {
-                final ArmourSpecification armourSpecification = ArmourSpecificationFactory.getInstance().getElement(specificationName);
+                final ArmorSpecification armourSpecification = ArmorSpecificationFactory.getInstance().getElement(specificationName);
                 stringBuilder.append(separator);
                 stringBuilder.append(armourSpecification.getName().getTranslatedText());
                 if (armourSpecification.getDescription() != null && !armourSpecification.getDescription().getTranslatedText().isEmpty()) {

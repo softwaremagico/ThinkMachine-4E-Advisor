@@ -11,7 +11,7 @@ navigationFragment = "2.8.5"
 recyclerview = "1.3.2"
 roomRuntime = "2.6.1"
 staxApi = "1.0-2"
-thinkMachine = { strictly = "[4.0, 4.1]"}
+thinkMachine = { strictly = "4.1.3-SNAPSHOT"}
 cardview = "1.0.0"
 
 [libraries]

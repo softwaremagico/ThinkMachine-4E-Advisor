@@ -68,7 +68,8 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
     }
 
 
-    public void setElements(Class<O> clazz, List<OptionSelector<E, O>> optionSelectors, List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
+    public void setElements(Class<O> clazz, List<OptionSelector<E, O>> optionSelectors,
+                            List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
         super.removeAllViews();
         for (int i = 0; i < optionSelectors.size(); i++) {
             selections.get(i).getSelections().clear();
@@ -78,7 +79,8 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
     }
 
     //Currently only one option is allowed.
-    private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, Set<Selection> selections, boolean nonOfficial, CharacterPlayer characterPlayer) {
+    private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, Collection<Selection> selections,
+                                            boolean nonOfficial, CharacterPlayer characterPlayer) {
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
         Collections.sort(options);
@@ -98,9 +100,9 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                     selections.clear();
                 }
                 if (options.get(position) instanceof CapabilityOption) {
-                    selections.add(new Selection(options.get(position).getId(), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
+                    selections.add(new Selection(options.get(position), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
                 } else {
-                    selections.add(new Selection(options.get(position).getId()));
+                    selections.add(new Selection(options.get(position)));
                 }
                 launchElementsSelectedListener(selections);
             }

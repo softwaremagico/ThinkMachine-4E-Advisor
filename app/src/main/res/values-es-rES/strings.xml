@@ -151,7 +151,6 @@
     <string name="preference_option_malefaction">Criminales</string>
     <string name="preference_option_lore">Saber</string>
     <string name="preference_option_technical">Técnicas</string>
-    <string name="preference_option_very_specialized">Muy Especializado</string>
     <string name="preference_option_specialized">Especializado</string>
     <string name="preference_option_generalized">Generalizado</string>
     <string name="preference_option_very_generalized">Muy Generalizado</string>
@@ -161,6 +160,7 @@
     <string name="preference_option_modern">Moderno</string>
     <string name="preference_option_basic">Básico</string>
     <string name="preference_option_medieval">Medieval</string>
+    <string name="preference_option_very_specialized">Muy Especializado</string>
     <string name="preference_option_prehistoric">Prehistórico</string>
     <string name="preference_option_warlord">Señor de la Guerra</string>
     <string name="preference_option_control">Control</string>
@@ -243,6 +243,9 @@
     <string name="preference_option_usually_male">Usualmente Hombre</string>
     <string name="preference_option_usually_female">Usualmente Mujer</string>
     <string name="npc_knightlyorders_section">Ordenes Caballerescas</string>
+    <string name="restricted_characteristics">Restringido a las características:</string>
+    <string name="restricted_skills">Restringido a las habilidades:</string>
+    <string name="restricted_levels">Restringido a los niveles:</string>
     <string name="allow_nonofficial">Habilitar características no oficiales</string>
     <string name="allow_restricted">Ignorar restricciones del personaje</string>
     <string name="message_setting_unofficial_not_changed">El personaje está usando algunos elementos no oficiales. La configuración no puede ser cambiada.</string>
@@ -265,4 +268,5 @@
     <string name="perks">Beneficios</string>
     <string name="material_awards">Premio Material</string>
     <string name="no_data">Sin Datos</string>
+    <string name="raised_in_space">Criado en el Espacio</string>
 </resources>

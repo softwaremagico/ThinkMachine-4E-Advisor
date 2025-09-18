@@ -29,7 +29,7 @@ import com.softwaremagico.tm.character.skills.SkillBonusOption;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionStep<T>> extends CharacterCustomFragment {
+public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionStep> extends CharacterCustomFragment {
     protected OptionSelectorLayout<Capability, CapabilityOption> capabilityOptionsLayout;
     protected OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption> characteristicsOptionsLayout;
     protected OptionSelectorLayout<Skill, SkillBonusOption> skillsOptionsLayout;
@@ -64,27 +64,27 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
             elements.forEach(element -> element.setVisibility(View.VISIBLE));
             if (capabilityOptionsLayout != null) {
                 capabilityOptionsLayout.setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
-                        characterDefinitionStepSelection.getCapabilityOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedCapabilityOptions(), mViewModel.getCharacterPlayer());
             }
             if (characteristicsOptionsLayout != null) {
                 characteristicsOptionsLayout.setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
-                        characterDefinitionStepSelection.getCharacteristicOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedCharacteristicOptions(), mViewModel.getCharacterPlayer());
                 characteristicsOptionsLayout.addElementsSelectedListener(selections ->
                         CharacterManager.launchCharacterCharacteristicsUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (skillsOptionsLayout != null) {
                 skillsOptionsLayout.setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
-                        characterDefinitionStepSelection.getSkillOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedSkillOptions(), mViewModel.getCharacterPlayer());
             }
             if (perksOptionsLayout != null) {
-                perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getPerksOptions()),
-                        characterDefinitionStepSelection.getPerksOptions(), mViewModel.getCharacterPlayer());
+                perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getCharacterAvailablePerksOptions()),
+                        characterDefinitionStepSelection.getSelectedPerksOptions(), mViewModel.getCharacterPlayer());
                 perksOptionsLayout.addElementsSelectedListener(selections ->
                         CharacterManager.launchPerkUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (materialAwardsLayout != null) {
                 materialAwardsLayout.setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
-                        new ArrayList<>(characterDefinitionStepSelection.getMaterialAwards()), mViewModel.getCharacterPlayer());
+                        new ArrayList<>(characterDefinitionStepSelection.getSelectedMaterialAwards()), mViewModel.getCharacterPlayer());
             }
         } else {
             noDataText.setVisibility(View.VISIBLE);

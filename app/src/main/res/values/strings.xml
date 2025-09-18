@@ -250,6 +250,9 @@
     <string name="restricted_callings">Restricted to callings:</string>
     <string name="restricted_capabilities">Restricted to capabilities:</string>
     <string name="restricted_perks">Restricted to perks:</string>
+    <string name="restricted_characteristics">Restricted to characteristics:</string>
+    <string name="restricted_skills">Restricted to skills:</string>
+    <string name="restricted_levels">Restricted to levels:</string>
     <string name="allow_nonofficial">Enable non-official features</string>
     <string name="allow_restricted">Ignore restrictions</string>
     <string name="setting_title_new_characters">New Characters</string>
@@ -267,5 +270,6 @@
     <string name="perks">Perks</string>
     <string name="material_awards">Material Awards</string>
     <string name="no_data">No Data</string>
+    <string name="raised_in_space">Raised in Space</string>
 </resources>
 

@@ -28,11 +28,16 @@ import com.softwaremagico.tm.character.perks.Perk;
 import com.softwaremagico.tm.character.perks.PerkFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
+import com.softwaremagico.tm.character.upbringing.Upbringing;
+import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
+import com.softwaremagico.tm.restrictions.RestrictedCapability;
+import com.softwaremagico.tm.restrictions.RestrictedCharacteristic;
+import com.softwaremagico.tm.restrictions.RestrictedSkill;
 
 import java.util.stream.Collectors;
 
 public class ElementDescriptionDialog<T extends Element> extends DialogFragment {
-    protected static final String TABLE_STYLE = "border:1px solid;border-color:"+ R.color.md_theme_onPrimaryContainer +";margin-left:auto;margin-right:auto;font-size:70%";
+    protected static final String TABLE_STYLE = "border:1px solid;border-color:" + R.color.md_theme_onPrimaryContainer + ";margin-left:auto;margin-right:auto;font-size:70%";
     protected static final int TABLE_PADDING = 2;
     private final T element;
 
@@ -44,8 +49,15 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     @Override
     public void onResume() {
         super.onResume();
+        if (getDialog() == null) {
+            return;
+        }
 
         Window window = getDialog().getWindow();
+
+        if (window == null) {
+            return;
+        }
 
         Rect size = window.getWindowManager().getCurrentWindowMetrics().getBounds();
 
@@ -87,9 +99,21 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
                             .stream().map(Specie::getNameRepresentation)
                             .collect(Collectors.joining(", "))).append("</p>");
         }
+        if (element.getRestrictions().getRestrictedToUpbringing() != null && !element.getRestrictions().getRestrictedToUpbringing().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
+                    .append(UpbringingFactory.getInstance().getElements(element.getRestrictions().getRestrictedToUpbringing())
+                            .stream().map(Upbringing::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
         if (element.getRestrictions().getRestrictedToFactions() != null && !element.getRestrictions().getRestrictedToFactions().isEmpty()) {
             restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
                     .append(FactionFactory.getInstance().getElements(element.getRestrictions().getRestrictedToFactions())
+                            .stream().map(Faction::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedToFactionGroups() != null && !element.getRestrictions().getRestrictedToFactionGroups().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
+                    .append(FactionFactory.getInstance().getByFactionGroups(element.getRestrictions().getRestrictedToFactionGroups())
                             .stream().map(Faction::getNameRepresentation)
                             .collect(Collectors.joining(", "))).append("</p>");
         }
@@ -101,8 +125,8 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
         }
         if (element.getRestrictions().getRestrictedToCapabilities() != null && !element.getRestrictions().getRestrictedToCapabilities().isEmpty()) {
             restrictions.append("<p><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
-                    .append(CapabilityFactory.getInstance().getElements(element.getRestrictions().getRestrictedToCapabilities())
-                            .stream().map(Capability::getNameRepresentation)
+                    .append(element.getRestrictions().getRestrictedToCapabilities()
+                            .stream().map(RestrictedCapability::getNameRepresentation)
                             .collect(Collectors.joining(", "))).append("</p>");
         }
         if (element.getRestrictions().getRestrictedPerks() != null && !element.getRestrictions().getRestrictedPerks().isEmpty()) {
@@ -110,6 +134,37 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
                     .append(PerkFactory.getInstance().getElements(element.getRestrictions().getRestrictedPerks())
                             .stream().map(Perk::getNameRepresentation)
                             .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedToPerksGroups() != null && !element.getRestrictions().getRestrictedToPerksGroups().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_perks)).append("</b> ")
+                    .append(PerkFactory.getInstance().getElementsByGroup(element.getRestrictions().getRestrictedToPerksGroups())
+                            .stream().map(Perk::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedToCapabilitiesGroups() != null && !element.getRestrictions().getRestrictedToCapabilitiesGroups().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
+                    .append(CapabilityFactory.getInstance().getElementsByGroup(element.getRestrictions().getRestrictedToCapabilitiesGroups())
+                            .stream().map(Capability::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedCharacteristics() != null && !element.getRestrictions().getRestrictedCharacteristics().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_characteristics)).append("</b> ")
+                    .append(element.getRestrictions().getRestrictedCharacteristics()
+                            .stream().map(RestrictedCharacteristic::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedSkills() != null && !element.getRestrictions().getRestrictedSkills().isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_skills)).append("</b> ")
+                    .append(element.getRestrictions().getRestrictedSkills()
+                            .stream().map(RestrictedSkill::getNameRepresentation)
+                            .collect(Collectors.joining(", "))).append("</p>");
+        }
+        if (element.getRestrictions().getRestrictedLevel() != null) {
+            restrictions.append("<p><b>").append(getString(R.string.restricted_levels)).append("</b> ")
+                    .append(element.getRestrictions().getRestrictedLevel()).append("</p>");
+        }
+        if (element.getRestrictions().isRaisedInSpace()) {
+            restrictions.append("<p>").append(getString(R.string.raised_in_space)).append("</p>");
         }
         if (element.getRestrictions().isRestricted()) {
             restrictions.append("<p><b><font color=\"").append(getColor(R.color.restricted)).append("\">").append(getString(R.string.restricted))
