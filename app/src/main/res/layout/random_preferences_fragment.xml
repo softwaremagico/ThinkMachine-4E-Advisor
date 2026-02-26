@@ -10,39 +10,22 @@
   ~  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    style="@style/TextSubtitleLayout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.random.preferences.RandomPreferencesFragment">
 
-    <LinearLayout
-        android:id="@+id/counters"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:scrollbars="none">
-
-        <com.softwaremagico.tm.advisor.ui.components.counters.OccultismExtraCounter
-            android:id="@+id/extra_counter"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center" />
-    </LinearLayout>
-
-    <ScrollView xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/occultism_frame"
+    <ScrollView
+        android:id="@+id/preferences_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        tools:context=".ui.character.occultism.OccultismFragmentCharacter">
+        tools:context=".ui.random.preferences.RandomPreferencesFragment">
 
         <LinearLayout
-            android:id="@+id/root_container"
+            android:id="@+id/preferences_container"
             style="@style/TextSubtitleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +34,19 @@
 
         </LinearLayout>
 
-
     </ScrollView>
 
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/md_theme_primaryContainer"
+        android:tint="@color/md_theme_onPrimaryContainer"
+        android:src="@drawable/ic_random_icon"
+        app:fabSize="auto"
+        app:maxImageSize="32dp"
+        android:scaleType="center" />
+
+</FrameLayout>

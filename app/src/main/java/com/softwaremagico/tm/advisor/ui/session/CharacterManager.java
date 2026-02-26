@@ -23,8 +23,12 @@ import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.upbringing.Upbringing;
 import com.softwaremagico.tm.exceptions.InvalidFactionException;
 import com.softwaremagico.tm.exceptions.InvalidSpecieException;
+import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.exceptions.RestrictedElementException;
 import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
+import com.softwaremagico.tm.random.character.RandomizeCharacter;
+import com.softwaremagico.tm.random.exceptions.InvalidRandomElementSelectedException;
+import com.softwaremagico.tm.random.preferences.IRandomPreference;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -143,7 +147,7 @@ public final class CharacterManager {
     public static void launchCharacterAgeUpdatedListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
             for (final CharacterAgeUpdatedListener listener : CHARACTER_AGE_UPDATED_LISTENERS) {
-               // listener.updated(characterPlayer);
+                listener.updated(characterPlayer);
             }
         }
     }
@@ -350,6 +354,13 @@ public final class CharacterManager {
             getSelectedCharacter().setUpbringing((String) null);
         }
         launchCharacterUpbringingsUpdatedListeners(getSelectedCharacter());
+    }
+
+    public static void randomizeCharacter(Set<IRandomPreference> randomPreferences) throws InvalidXmlElementException,
+            InvalidRandomElementSelectedException {
+        final RandomizeCharacter randomizeCharacter = new RandomizeCharacter(getSelectedCharacter(), 0, randomPreferences.toArray(new IRandomPreference[0]));
+        randomizeCharacter.createCharacter();
+        setSelectedCharacter(getSelectedCharacter());
     }
 
 }
