@@ -72,7 +72,7 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                             List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
         super.removeAllViews();
         for (int i = 0; i < optionSelectors.size(); i++) {
-            selections.get(i).getSelections().clear();
+            //selections.get(i).getSelections().clear();
             super.addView(createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, characterPlayer));
         }
         launchElementsSizeUpdatedListeners(optionSelectors);

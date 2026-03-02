@@ -33,6 +33,7 @@ import com.softwaremagico.tm.random.preferences.IRandomPreference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public final class CharacterManager {
@@ -321,39 +322,47 @@ public final class CharacterManager {
     }
 
     public static void setPlanet(Planet planet) {
-        if (planet != null) {
-            getSelectedCharacter().getInfo().setPlanet(planet.getId());
-        } else {
-            getSelectedCharacter().getInfo().setPlanet((String) null);
+        if (planet == null || !Objects.equals(planet.getId(), getSelectedCharacter().getInfo().getPlanet())) {
+            if (planet != null) {
+                getSelectedCharacter().getInfo().setPlanet(planet.getId());
+            } else {
+                getSelectedCharacter().getInfo().setPlanet((String) null);
+            }
+            launchCharacterPlanetUpdatedListeners(getSelectedCharacter());
         }
-        launchCharacterPlanetUpdatedListeners(getSelectedCharacter());
     }
 
     public static void setFaction(Faction faction) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
-        if (faction != null) {
-            getSelectedCharacter().setFaction(faction.getId());
-        } else {
-            getSelectedCharacter().setFaction((String) null);
+        if (faction == null || getSelectedCharacter().getFaction() == null || !Objects.equals(faction.getId(), getSelectedCharacter().getFaction().getId())) {
+            if (faction != null) {
+                getSelectedCharacter().setFaction(faction.getId());
+            } else {
+                getSelectedCharacter().setFaction((String) null);
+            }
+            launchCharacterFactionUpdatedListeners(getSelectedCharacter());
         }
-        launchCharacterFactionUpdatedListeners(getSelectedCharacter());
     }
 
     public static void setCalling(Calling calling) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
-        if (calling != null) {
-            getSelectedCharacter().setCalling(calling.getId());
-        } else {
-            getSelectedCharacter().setCalling((String) null);
+        if (calling == null || getSelectedCharacter().getCalling() == null || !Objects.equals(calling.getId(), getSelectedCharacter().getCalling().getId())) {
+            if (calling != null) {
+                getSelectedCharacter().setCalling(calling.getId());
+            } else {
+                getSelectedCharacter().setCalling((String) null);
+            }
+            launchCharacterCallingsUpdatedListeners(getSelectedCharacter());
         }
-        launchCharacterCallingsUpdatedListeners(getSelectedCharacter());
     }
 
     public static void setUpbringing(Upbringing upbringing) throws InvalidFactionException, RestrictedElementException, UnofficialElementNotAllowedException {
-        if (upbringing != null) {
-            getSelectedCharacter().setUpbringing(upbringing.getId());
-        } else {
-            getSelectedCharacter().setUpbringing((String) null);
+        if (upbringing == null || getSelectedCharacter().getUpbringing() == null || !Objects.equals(upbringing.getId(), getSelectedCharacter().getUpbringing().getId())) {
+            if (upbringing != null) {
+                getSelectedCharacter().setUpbringing(upbringing.getId());
+            } else {
+                getSelectedCharacter().setUpbringing((String) null);
+            }
+            launchCharacterUpbringingsUpdatedListeners(getSelectedCharacter());
         }
-        launchCharacterUpbringingsUpdatedListeners(getSelectedCharacter());
     }
 
     public static void randomizeCharacter(Set<IRandomPreference> randomPreferences) throws InvalidXmlElementException,

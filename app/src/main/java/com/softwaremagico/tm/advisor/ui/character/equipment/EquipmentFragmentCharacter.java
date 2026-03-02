@@ -133,8 +133,6 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         mViewModel = new ViewModelProvider(this).get(EquipmentViewModel.class);
         firebirdsCounter = root.findViewById(R.id.firebirds_counter);
 
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
-
         return root;
     }
 

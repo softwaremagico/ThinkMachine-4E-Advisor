@@ -37,6 +37,7 @@ import com.softwaremagico.tm.character.occultism.OccultismPower;
 import com.softwaremagico.tm.character.occultism.OccultismType;
 import com.softwaremagico.tm.character.occultism.OccultismTypeFactory;
 import com.softwaremagico.tm.exceptions.InvalidOccultismPowerException;
+import com.softwaremagico.tm.exceptions.InvalidPsiqueLevelException;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
 
@@ -177,8 +178,15 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
 
     private void enableOccultismPowers(OccultismPath occultismPath) {
         if (selectors.get(occultismPath) != null) {
-            selectors.get(occultismPath).forEach(occultismPowerElementSelector ->
-                    occultismPowerElementSelector.setEnabled(CharacterManager.getSelectedCharacter().canAddOccultismPower(occultismPowerElementSelector.getSelection())));
+            for (ElementSelector<OccultismPower> occultismPowerElementSelector : selectors.get(occultismPath)) {
+                if (occultismPowerElementSelector != null) {
+                    try {
+                        occultismPowerElementSelector.setEnabled(CharacterManager.getSelectedCharacter().canAddOccultismPower(occultismPowerElementSelector.getSelection()));
+                    } catch (InvalidPsiqueLevelException e) {
+                        occultismPowerElementSelector.setEnabled(false);
+                    }
+                }
+            }
         }
     }
 
@@ -194,7 +202,6 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
         CharacterManager.addCharacterFactionUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterSpecieUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterAgeUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
 
         return root;

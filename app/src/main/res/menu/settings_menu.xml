@@ -15,6 +15,12 @@
 
     <group android:id="@+id/settings">
         <item
+            android:id="@+id/settings_new"
+            android:icon="@drawable/ic_character_full"
+            android:title="@string/settings_new"
+            app:showAsAction="ifRoom" />
+
+        <item
             android:id="@+id/settings_save"
             android:icon="@drawable/ic_character_save"
             android:title="@string/settings_save"
@@ -24,12 +30,6 @@
             android:id="@+id/settings_load"
             android:icon="@drawable/ic_character_load"
             android:title="@string/settings_load"
-            app:showAsAction="ifRoom" />
-
-        <item
-            android:id="@+id/settings_new"
-            android:icon="@drawable/ic_character_full"
-            android:title="@string/settings_new"
             app:showAsAction="ifRoom" />
 
         <item

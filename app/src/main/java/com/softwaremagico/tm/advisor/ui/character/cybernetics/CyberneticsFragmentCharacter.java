@@ -166,7 +166,6 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
         CharacterManager.addCharacterFactionUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterSpecieUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterAgeUpdatedListener(characterPlayer -> populateElements(root, characterPlayer));
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
 
         return root;

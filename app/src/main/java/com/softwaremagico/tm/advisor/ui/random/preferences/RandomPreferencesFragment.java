@@ -66,11 +66,11 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
                         getContext().getPackageName())), linearLayout);
                 for (PreferenceOption preferenceOption : preferenceGroup.getOptions()) {
                     final EnumSpinner optionsSelector = new EnumSpinner(getContext(), null);
-                    List<IRandomPreference> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
+                    final List<IRandomPreference> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
                     if (preferenceOption.getRandomPreferences().length == 0 || preferenceOption.getDefaultOption() == null) {
                         options.add(0, null);
                     }
-                    optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, Arrays.asList(preferenceOption.getRandomPreferences())));
+                    optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
                     try {
                         optionsSelector.setText(getResources().getString(getResources().getIdentifier(getPreferenceStringResource(preferenceOption), "string",
                                 getContext().getPackageName())));

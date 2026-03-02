@@ -47,8 +47,11 @@ import com.softwaremagico.tm.character.planets.PlanetFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
 import com.softwaremagico.tm.character.upbringing.Upbringing;
+import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
+import com.softwaremagico.tm.exceptions.IncompleteSelectedElementException;
 import com.softwaremagico.tm.exceptions.InvalidCallingException;
 import com.softwaremagico.tm.exceptions.InvalidFactionException;
+import com.softwaremagico.tm.exceptions.InvalidSelectedElementException;
 import com.softwaremagico.tm.exceptions.InvalidSpecieException;
 import com.softwaremagico.tm.exceptions.InvalidUpbringingException;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
@@ -204,7 +207,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         restrictionsIgnored = root.findViewById(R.id.restricted_selector);
 
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
 
         return root;
     }
@@ -266,6 +268,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         restrictionsIgnored.setChecked(!character.getSettings().isRestrictionsChecked());
 
         specieSelector.setSelection(SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()));
+        upbringingSelector.setSelection(UpbringingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getUpbringing()));
         factionsSelector.setSelection(FactionFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getFaction()));
         callingSelector.setSelection(CallingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getCalling()));
         planetSelector.setSelection(PlanetFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getInfo().getPlanet()));
@@ -345,6 +348,8 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                 } catch (UnofficialElementNotAllowedException e) {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_unofficial_element_not_allowed).show();
                     specieSelector.setSelection(null);
+                } catch (IncompleteSelectedElementException e) {
+
                 }
                 updateSpinnersStatus();
             }

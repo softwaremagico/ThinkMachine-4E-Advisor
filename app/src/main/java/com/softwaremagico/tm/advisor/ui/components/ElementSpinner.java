@@ -66,7 +66,7 @@ public class ElementSpinner<E extends Element> extends HelpElement<E> {
         });
     }
 
-    public <E extends Element> void setAdapter(ElementAdapter<E> adapter) {
+    public void setAdapter(ElementAdapter<E> adapter) {
         selector.setAdapter(adapter);
     }
 

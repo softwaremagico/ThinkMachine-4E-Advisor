@@ -55,9 +55,11 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
                              @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.character_description_fragment, container, false);
 
-        CharacterManager.addSelectedCharacterListener(characterPlayer -> populateElements(root, characterPlayer));
-
         return root;
+    }
+
+    private void updateDescription(CharacterPlayer characterPlayer) {
+        populateElements(this.root, characterPlayer);
     }
 
     @Override
