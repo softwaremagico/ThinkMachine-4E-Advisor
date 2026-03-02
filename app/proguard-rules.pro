@@ -414,6 +414,6 @@
 -dontwarn org.osgi.framework.BundleActivator
 -dontwarn org.osgi.framework.BundleContext
 -dontwarn org.osgi.framework.ServiceRegistration
-
+-dontwarn org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder
 
 

@@ -17249,6 +17249,7 @@ com.lowagie.text.pdf.fonts.cmaps.CMapParser-IA
 com.lowagie.text.pdf.parser.PdfContentStreamHandler-IA
 com.softwaremagico.tm.advisor.ui.components.descriptions.OccultismPowerDescriptionDialog$$InternalSyntheticBackport$1$bc2c0f26daea4efe64c6145ca783edaea9f7a84e1cee4f734071dfc2ef33d221$0
 com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter-IA
+com.softwaremagico.tm.character.CharacterPlayer$$InternalSyntheticBackport$1$b0d2464c12c1a731dd8753fd0cdc3edbb3ce0d8dad4babf3a1f9e8393cb02af4$0
 com.softwaremagico.tm.file.modules.ModuleManager:
     static void <clinit>()
 com.softwaremagico.tm.language.Translator:
