@@ -42,6 +42,7 @@ import com.softwaremagico.tm.advisor.core.FileUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.persistence.CharacterHandler;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
+import com.softwaremagico.tm.advisor.ui.about.AboutWindow;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 removeSelectedCharacter(parentLayout);
                 return true;
             case R.id.settings_about:
-//                new AboutWindow().show(getSupportFragmentManager(), "");
+                new AboutWindow().show(getSupportFragmentManager(), "");
                 return super.onOptionsItemSelected(menuItem);
             default:
                 //Select an existing character
