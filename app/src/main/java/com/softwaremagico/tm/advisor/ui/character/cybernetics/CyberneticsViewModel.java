@@ -18,10 +18,10 @@ public class CyberneticsViewModel extends ViewModel {
     public List<Cyberdevice> getAvailableCyberdevices(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return CyberdeviceFactory.getInstance().getElements().
+                return CyberdeviceFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return CyberdeviceFactory.getInstance().getElements().
+                return CyberdeviceFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException | NullPointerException e) {

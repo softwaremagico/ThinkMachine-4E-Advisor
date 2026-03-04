@@ -20,10 +20,10 @@ public class OccultismViewModel extends ViewModel {
     public List<OccultismPath> getAvailableOccultismPath(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return OccultismPathFactory.getInstance().getElements().
+                return OccultismPathFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return OccultismPathFactory.getInstance().getElements().
+                return OccultismPathFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException | NullPointerException e) {
