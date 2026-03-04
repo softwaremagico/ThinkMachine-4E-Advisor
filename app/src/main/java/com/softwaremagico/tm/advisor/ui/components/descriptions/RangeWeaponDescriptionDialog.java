@@ -7,6 +7,8 @@ import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
 import com.softwaremagico.tm.character.equipment.weapons.WeaponDamage;
 
+import java.util.stream.Collectors;
+
 public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
 
     public RangeWeaponDescriptionDialog(Weapon element) {
@@ -31,6 +33,7 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                 "<th>" + ThinkMachineTranslator.getTranslatedText("weaponShots") + "</th>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("weaponRate") + "</th>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("size") + "</th>" +
+                "<th>" + ThinkMachineTranslator.getTranslatedText("agora") + "</th>" +
                 "</tr>");
         for (WeaponDamage weaponDamage : weapon.getWeaponDamages()) {
             boolean techDamageLimited = weaponDamage.getDamageTechLevel() != null &&
@@ -63,7 +66,19 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                         (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")) +
                 Numbers.PRICE_FORMAT.format(weapon.getCost()) +
                 (costLimited || costProhibited ? "</font>" : "") +
-                " " + ThinkMachineTranslator.getTranslatedText("firebirds"));
+                " " + ThinkMachineTranslator.getTranslatedText("firebirds") +
+                ((weapon.getAgora() != null || !weapon.getAgoraGroups().isEmpty())
+                        //Title
+                        ? "<br><b>" + getString(R.string.agora) + "</b> "
+                        //Agora
+                        + (weapon.getAgora() != null ? translateAgora(weapon.getAgora()) : "")
+                        //Comma separator if both agora and agora group.
+                        + (weapon.getAgora() != null && !weapon.getAgoraGroups().isEmpty() ? ", " : "")
+                        //Agora Groups
+                        + ((weapon.getAgoraGroups() != null && !weapon.getAgoraGroups().isEmpty()
+                        ? weapon.getAgoraGroups().stream().map(this::translateAgoraGroup).collect(Collectors.joining(", "))
+                        : ""))
+                        : ""));
         return stringBuilder.toString();
     }
 

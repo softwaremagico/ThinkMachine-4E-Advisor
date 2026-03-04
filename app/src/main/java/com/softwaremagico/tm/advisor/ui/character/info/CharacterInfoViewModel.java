@@ -42,10 +42,10 @@ public class CharacterInfoViewModel extends ViewModel {
     public List<Faction> getAvailableFactions(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return FactionFactory.getInstance().getElements()
+                return FactionFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return FactionFactory.getInstance().getElements()
+                return FactionFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
@@ -57,10 +57,10 @@ public class CharacterInfoViewModel extends ViewModel {
     public List<Planet> getAvailablePlanets(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return PlanetFactory.getInstance().getElements()
+                return PlanetFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return PlanetFactory.getInstance().getElements()
+                return PlanetFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
@@ -72,10 +72,10 @@ public class CharacterInfoViewModel extends ViewModel {
     public List<Specie> getAvailableSpecies(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return SpecieFactory.getInstance().getElements()
+                return SpecieFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return SpecieFactory.getInstance().getElements()
+                return SpecieFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
@@ -87,10 +87,10 @@ public class CharacterInfoViewModel extends ViewModel {
     public List<Calling> getAvailableCallings(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return CallingFactory.getInstance().getElements()
+                return CallingFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return CallingFactory.getInstance().getElements()
+                return CallingFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
@@ -102,10 +102,10 @@ public class CharacterInfoViewModel extends ViewModel {
     public List<Upbringing> getAvailableUpbringings(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return UpbringingFactory.getInstance().getElements()
+                return UpbringingFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return UpbringingFactory.getInstance().getElements()
+                return UpbringingFactory.getInstance().getSelectableElements()
                         .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {

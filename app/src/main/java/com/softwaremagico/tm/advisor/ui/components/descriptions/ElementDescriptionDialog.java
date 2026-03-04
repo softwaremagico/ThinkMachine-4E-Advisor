@@ -22,10 +22,14 @@ import com.softwaremagico.tm.character.callings.Calling;
 import com.softwaremagico.tm.character.callings.CallingFactory;
 import com.softwaremagico.tm.character.capabilities.Capability;
 import com.softwaremagico.tm.character.capabilities.CapabilityFactory;
+import com.softwaremagico.tm.character.equipment.Agora;
+import com.softwaremagico.tm.character.equipment.AgoraGroup;
 import com.softwaremagico.tm.character.factions.Faction;
 import com.softwaremagico.tm.character.factions.FactionFactory;
 import com.softwaremagico.tm.character.perks.Perk;
 import com.softwaremagico.tm.character.perks.PerkFactory;
+import com.softwaremagico.tm.character.planets.Planet;
+import com.softwaremagico.tm.character.planets.PlanetFactory;
 import com.softwaremagico.tm.character.specie.Specie;
 import com.softwaremagico.tm.character.specie.SpecieFactory;
 import com.softwaremagico.tm.character.upbringing.Upbringing;
@@ -196,5 +200,33 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
 
     protected String adaptText(String text) {
         return text.replaceAll("\\\\n", "<br><br>").trim().replaceAll(" +", " ");
+    }
+
+    protected String translateAgora(Agora agora) {
+        return "agora_" + agora.name().toLowerCase();
+    }
+
+    protected String translateAgoraGroup(AgoraGroup agoraGroup) {
+        //It is a faction
+        final Faction faction = FactionFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
+        if (faction != null) {
+            return faction.getNameRepresentation();
+        }
+        //It is a upbringing
+        final Upbringing upbringing = UpbringingFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
+        if (upbringing != null) {
+            return upbringing.getNameRepresentation();
+        }
+        //It is a planet
+        final Planet planet = PlanetFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
+        if (planet != null) {
+            return planet.getNameRepresentation();
+        }
+        //It is a specie
+        final Specie specie = SpecieFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
+        if (specie != null) {
+            return specie.getNameRepresentation();
+        }
+        return "agora_group_" + agoraGroup.name().toLowerCase();
     }
 }

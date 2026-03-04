@@ -76,7 +76,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
                 extraCounter.setCharacter(character);
             }
             try {
-                for (OccultismType occultismType : OccultismTypeFactory.getInstance().getElements()) {
+                for (OccultismType occultismType : OccultismTypeFactory.getInstance().getSelectableElements()) {
                     if (occultismLevelFields.get(occultismType) != null) {
                         occultismLevelFields.get(occultismType).setText(String.valueOf(character.getOccultismLevel(occultismType)));
                     }

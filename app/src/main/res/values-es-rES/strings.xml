@@ -174,6 +174,7 @@
     <string name="message_random_character_success">Personaje finalizado aleatoriamente.</string>
     <string name="message_random_character_error">¡El personaje no ha podido finalizarse aleatoriamente!</string>
     <string name="cost">Coste</string>
+    <string name="agora">Agora</string>
     <string name="close">Cerrar</string>
     <string name="properties">Propiedades</string>
     <string name="tab_character_description">Descripción</string>
@@ -312,4 +313,24 @@
     <string name="preference_attack">Ataque</string>
     <string name="preference_defense">Defensa</string>
     <string name="preference_tech">Tecnología</string>
+    <string name="agora_common">Común</string>
+    <string name="agora_rare">Raro</string>
+    <string name="agora_exotic">Exótico</string>
+    <string name="agora_group_imperial">Imperial</string>
+    <string name="agora_group_known_worlds">Mundos Conocidos</string>
+    <string name="agora_group_merchant">Liga Mercantil</string>
+    <string name="agora_group_priest">Iglesia Universal</string>
+    <string name="agora_group_engineers">Ingenieros</string>
+    <string name="agora_group_hazat">Hazat</string>
+    <string name="agora_group_al_malik">Al-Malik</string>
+    <string name="agora_group_hawkwood">Hawkwood</string>
+    <string name="agora_group_scravers">Carroñeros</string>
+    <string name="agora_group_reeves">Magistrados</string>
+    <string name="agora_group_musters">Asamblea</string>
+    <string name="agora_group_vuldrok">Vuldrok</string>
+    <string name="agora_group_oroym">Oro\'ym</string>
+    <string name="agora_group_tetis">Tetis</string>
+    <string name="agora_group_marte">Marte</string>
+    <string name="agora_group_bannockburn">Bannockburn</string>
+    <string name="agora_group_leagueheim">Leagueheim</string>
 </resources>

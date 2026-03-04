@@ -248,6 +248,7 @@
     <string name="preference_option_fight">Fight</string>
     <string name="preference_option_any">Any</string>
     <string name="cost">Cost</string>
+    <string name="agora">Agora</string>
     <string name="close">Close</string>
     <string name="properties">Properties</string>
     <string name="description">Character Description:</string>
@@ -314,5 +315,25 @@
     <string name="no_data">No Data</string>
     <string name="raised_in_space">Raised in Space</string>
     <string name="preference_option_very_generalized">Very Generical</string>
+    <string name="agora_common">Common</string>
+    <string name="agora_rare">Rare</string>
+    <string name="agora_exotic">Exotic</string>
+    <string name="agora_group_imperial">Imperial</string>
+    <string name="agora_group_known_worlds">Known Worlds</string>
+    <string name="agora_group_merchant">Merchant League</string>
+    <string name="agora_group_priest">Universal Church</string>
+    <string name="agora_group_engineers">Engineers</string>
+    <string name="agora_group_hazat">Hazat</string>
+    <string name="agora_group_al_malik">Al-Malik</string>
+    <string name="agora_group_hawkwood">Hawkwood</string>
+    <string name="agora_group_scravers">Scravers</string>
+    <string name="agora_group_reeves">Reeves</string>
+    <string name="agora_group_musters">Musters</string>
+    <string name="agora_group_vuldrok">Vuldrok</string>
+    <string name="agora_group_oroym">Oro'ym</string>
+    <string name="agora_group_tetis">Tetis</string>
+    <string name="agora_group_marte">Marte</string>
+    <string name="agora_group_bannockburn">Bannockburn</string>
+    <string name="agora_group_leagueheim">Leagueheim</string>
 </resources>
 

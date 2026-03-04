@@ -34,10 +34,10 @@ public class EquipmentViewModel extends ViewModel {
     public List<Weapon> getAvailableMeleeWeapons(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return WeaponFactory.getInstance().getElements().
+                return WeaponFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Weapon::isMeleeWeapon).collect(Collectors.toList());
             } else {
-                return WeaponFactory.getInstance().getElements().
+                return WeaponFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Weapon::isMeleeWeapon).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (NullPointerException e) {
@@ -50,10 +50,10 @@ public class EquipmentViewModel extends ViewModel {
     public List<Weapon> getAvailableRangedWeapons(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return WeaponFactory.getInstance().getElements().
+                return WeaponFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Weapon::isRangedWeapon).collect(Collectors.toList());
             } else {
-                return WeaponFactory.getInstance().getElements().
+                return WeaponFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Weapon::isRangedWeapon).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (NullPointerException e) {
@@ -65,10 +65,10 @@ public class EquipmentViewModel extends ViewModel {
     public List<Armor> getAvailableArmors(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return ArmorFactory.getInstance().getElements().
+                return ArmorFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return ArmorFactory.getInstance().getElements().
+                return ArmorFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (NullPointerException e) {
@@ -80,10 +80,10 @@ public class EquipmentViewModel extends ViewModel {
     public List<Shield> getAvailableShields(boolean nonOfficial) {
         try {
             if (nonOfficial) {
-                return ShieldFactory.getInstance().getElements().
+                return ShieldFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
-                return ShieldFactory.getInstance().getElements().
+                return ShieldFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (NullPointerException e) {
