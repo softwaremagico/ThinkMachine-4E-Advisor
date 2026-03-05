@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModel;
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
 import com.softwaremagico.tm.character.equipment.armors.ArmorFactory;
+import com.softwaremagico.tm.character.equipment.handheldshield.HandheldShield;
+import com.softwaremagico.tm.character.equipment.handheldshield.HandheldShieldFactory;
 import com.softwaremagico.tm.character.equipment.shields.Shield;
 import com.softwaremagico.tm.character.equipment.shields.ShieldFactory;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
@@ -69,6 +71,21 @@ public class EquipmentViewModel extends ViewModel {
                         stream().filter(Objects::nonNull).collect(Collectors.toList());
             } else {
                 return ArmorFactory.getInstance().getSelectableElements().
+                        stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+            }
+        } catch (NullPointerException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<HandheldShield> getAvailableHandheldShields(boolean nonOfficial) {
+        try {
+            if (nonOfficial) {
+                return HandheldShieldFactory.getInstance().getSelectableElements().
+                        stream().filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                return HandheldShieldFactory.getInstance().getSelectableElements().
                         stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
             }
         } catch (NullPointerException e) {

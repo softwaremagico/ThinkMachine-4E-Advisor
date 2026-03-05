@@ -12,7 +12,9 @@ import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.equipment.Equipment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {

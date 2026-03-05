@@ -32,6 +32,7 @@ import com.softwaremagico.tm.advisor.ui.components.IncrementalElementsLayout;
 import com.softwaremagico.tm.advisor.ui.components.counters.FirebirdsCounter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ArmorAdapter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
+import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.HandheldShieldAdapter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ShieldAdapter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.WeaponAdapter;
 import com.softwaremagico.tm.advisor.ui.main.SnackbarGenerator;
@@ -40,6 +41,7 @@ import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.equipment.Equipment;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
+import com.softwaremagico.tm.character.equipment.handheldshield.HandheldShield;
 import com.softwaremagico.tm.character.equipment.shields.Shield;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
 import com.softwaremagico.tm.exceptions.InvalidArmorException;
@@ -55,7 +57,8 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
     private EquipmentViewModel mViewModel;
     private IncrementalElementsLayout<Weapon> meleeWeaponsLayout;
     private IncrementalElementsLayout<Weapon> rangeWeaponsLayout;
-    private IncrementalElementsLayout<Armor> ArmorsLayout;
+    private IncrementalElementsLayout<Armor> armorsLayout;
+    private IncrementalElementsLayout<HandheldShield> handheldShieldsLayout;
     private IncrementalElementsLayout<Shield> shieldsLayout;
     private FirebirdsCounter firebirdsCounter;
     private View root;
@@ -78,8 +81,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
             if (rangeWeaponsLayout != null) {
                 rangeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedMeleeWeapons());
             }
-            if (ArmorsLayout != null) {
-                ArmorsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedArmor());
+            if (armorsLayout != null) {
+                armorsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedArmor());
+            }
+            if (handheldShieldsLayout != null) {
+                handheldShieldsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedHandheldShield());
             }
             if (shieldsLayout != null) {
                 shieldsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedShield());
@@ -105,8 +111,13 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         addSpace(rootLayout);
 
         addSection(ThinkMachineTranslator.getTranslatedText("armor"), rootLayout);
-        ArmorsLayout = new ArmorLayout(getContext(), true);
-        rootLayout.addView(ArmorsLayout);
+        armorsLayout = new ArmorLayout(getContext(), true);
+        rootLayout.addView(armorsLayout);
+        addSpace(rootLayout);
+
+        addSection(ThinkMachineTranslator.getTranslatedText("handheldShield"), rootLayout);
+        handheldShieldsLayout = new HandheldShieldsLayout(getContext(), true);
+        rootLayout.addView(handheldShieldsLayout);
         addSpace(rootLayout);
 
         addSection(ThinkMachineTranslator.getTranslatedText("shield"), rootLayout);
@@ -121,7 +132,8 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         if (getContext() != null) {
             rangeWeaponsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
             meleeWeaponsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            ArmorsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+            armorsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+            handheldShieldsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
             shieldsLayout.updateElementAdapter(!characterPlayer.getSettings().isOnlyOfficialAllowed());
         }
     }
@@ -171,15 +183,15 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
             }
             if (shields.isEmpty()) {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedShield(null);
-                    firebirdsCounter.setValue(CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    CharacterManager.getSelectedCharacter().setPurchasedShield(null, true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
                 } catch (InvalidShieldException | UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
             } else {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedShield(shields.get(0));
-                    firebirdsCounter.setValue(CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    CharacterManager.getSelectedCharacter().setPurchasedShield(shields.get(0), true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
                 } catch (InvalidShieldException e) {
                     SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
                 } catch (UnofficialElementNotAllowedException e) {
@@ -191,6 +203,10 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
     private <T extends Equipment> void checkTechLevel(List<ElementSpinner<T>> spinners) {
         //Check if has the capability
+        if (spinners.stream().anyMatch(spinner -> spinner.getSelection() != null && spinner.getSelection().getTechLevel() >
+                CharacterManager.getSelectedCharacter().getTechLevel())) {
+            SnackbarGenerator.getWarningMessage(root, R.string.message_invalid_tech_level).show();
+        }
     }
 
 
@@ -221,23 +237,76 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         }
 
         private void setArmor(List<ElementSpinner<Armor>> spinners) {
-            final List<Armor> Armors = new ArrayList<>();
+            final List<Armor> armors = new ArrayList<>();
             for (final ElementSpinner<Armor> spinner : spinners) {
                 if (spinner.getSelection() != null) {
-                    Armors.add(spinner.getSelection());
+                    armors.add(spinner.getSelection());
                 }
             }
-            if (Armors.isEmpty()) {
+            if (armors.isEmpty()) {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedArmor(null);
-                    firebirdsCounter.setValue(CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    CharacterManager.getSelectedCharacter().setPurchasedArmor(null, true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
                 } catch (InvalidArmorException | UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
             } else {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedArmor(Armors.get(0));
-                    firebirdsCounter.setValue(CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    CharacterManager.getSelectedCharacter().setPurchasedArmor(armors.get(0), true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                } catch (InvalidArmorException e) {
+                    SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
+                } catch (UnofficialElementNotAllowedException e) {
+                    SnackbarGenerator.getErrorMessage(this, R.string.message_unofficial_element_not_allowed).show();
+                }
+            }
+        }
+    }
+
+    class HandheldShieldsLayout extends IncrementalElementsLayout<HandheldShield> {
+        private static final int MAX_ITEMS = 1;
+
+        public HandheldShieldsLayout(Context context, boolean nullsAllowed) {
+            super(context, nullsAllowed, MAX_ITEMS);
+
+            setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    setHandheldShield(getElementSpinners());
+                    checkTechLevel(getElementSpinners());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    setHandheldShield(getElementSpinners());
+                    checkTechLevel(getElementSpinners());
+                }
+            });
+        }
+
+        @Override
+        protected ElementAdapter<HandheldShield> createElementAdapter(boolean nonOfficial) {
+            return new HandheldShieldAdapter(getActivity(), mViewModel.getAvailableHandheldShields(nonOfficial), isNullAllowed());
+        }
+
+        private void setHandheldShield(List<ElementSpinner<HandheldShield>> spinners) {
+            final List<HandheldShield> handheldShield = new ArrayList<>();
+            for (final ElementSpinner<HandheldShield> spinner : spinners) {
+                if (spinner.getSelection() != null) {
+                    handheldShield.add(spinner.getSelection());
+                }
+            }
+            if (handheldShield.isEmpty()) {
+                try {
+                    CharacterManager.getSelectedCharacter().setPurchasedHandheldShield(null, true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                } catch (InvalidArmorException | UnofficialElementNotAllowedException e) {
+                    AdvisorLog.errorMessage(this.getClass().getName(), e);
+                }
+            } else {
+                try {
+                    CharacterManager.getSelectedCharacter().setPurchasedHandheldShield(handheldShield.get(0), true);
+                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
                 } catch (InvalidArmorException e) {
                     SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
                 } catch (UnofficialElementNotAllowedException e) {
@@ -281,7 +350,7 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
                 }
             }
             assignWeapons(weapons);
-            firebirdsCounter.setValue(CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+            firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
         }
 
         protected abstract void assignWeapons(List<Weapon> weapons);
@@ -301,7 +370,7 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         protected void assignWeapons(List<Weapon> weapons) {
             try {
                 CharacterManager.getSelectedCharacter().setPurchasedMeleeWeapons(weapons.stream()
-                        .filter(weapon -> !Objects.equals(weapon.getId(), null)).collect(Collectors.toList()));
+                        .filter(weapon -> !Objects.equals(weapon.getId(), null)).collect(Collectors.toList()), false);
             } catch (UnofficialElementNotAllowedException e) {
                 SnackbarGenerator.getErrorMessage(this, R.string.message_unofficial_element_not_allowed).show();
             }
@@ -322,7 +391,7 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
         protected void assignWeapons(List<Weapon> weapons) {
             try {
                 CharacterManager.getSelectedCharacter().setPurchasedRangedWeapons(weapons.stream()
-                        .filter(weapon -> !Objects.equals(weapon.getId(), null)).collect(Collectors.toList()));
+                        .filter(weapon -> !Objects.equals(weapon.getId(), null)).collect(Collectors.toList()), false);
             } catch (UnofficialElementNotAllowedException e) {
                 SnackbarGenerator.getErrorMessage(this, R.string.message_unofficial_element_not_allowed).show();
             }

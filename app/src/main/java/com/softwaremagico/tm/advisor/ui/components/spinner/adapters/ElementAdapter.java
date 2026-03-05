@@ -31,7 +31,9 @@ import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
 
     //For filtering
     private ElementFilter elementFilter;
+    private final Map<Integer, Boolean> positionEnabled;
 
     public ElementAdapter(@NonNull Context context, @NonNull List<E> objects, boolean nullAllowed, Class<E> clazz) {
         super(context, android.R.layout.simple_spinner_dropdown_item, objects);
@@ -48,6 +51,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
         if (nullAllowed) {
             addNullValue(clazz);
         }
+        positionEnabled = new HashMap<>();
     }
 
     private void addNullValue(Class<E> clazz) {
@@ -236,6 +240,17 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
         }
         return Normalizer.normalize(string, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+
+
+    @Override
+    public boolean isEnabled(int position) {
+        if (positionEnabled.get(position) == null) {
+            positionEnabled.put(position, getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                    (getItem(position).getRestrictions() == null
+                            || !getItem(position).getRestrictions().isRestricted(CharacterManager.getSelectedCharacter())));
+        }
+        return positionEnabled.get(position);
     }
 
 }

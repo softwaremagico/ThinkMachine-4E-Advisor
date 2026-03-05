@@ -18,10 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.softwaremagico.tm.Element;
@@ -51,7 +53,6 @@ import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
 import com.softwaremagico.tm.exceptions.IncompleteSelectedElementException;
 import com.softwaremagico.tm.exceptions.InvalidCallingException;
 import com.softwaremagico.tm.exceptions.InvalidFactionException;
-import com.softwaremagico.tm.exceptions.InvalidSelectedElementException;
 import com.softwaremagico.tm.exceptions.InvalidSpecieException;
 import com.softwaremagico.tm.exceptions.InvalidUpbringingException;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
@@ -531,6 +532,17 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                         || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets() == null
                         || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().isEmpty()
                         || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().contains(getItem(position).getId());
+            }
+
+            @Override
+            protected void setElementColor(TextView elementRepresentation, Planet planet, int position) {
+                if (CharacterManager.getSelectedCharacter().getSpecie() != null && planet.getSpecies().contains(CharacterManager.getSelectedCharacter().getSpecie().getId())) {
+                    elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorHighlyRecommended));
+                } else if (CharacterManager.getSelectedCharacter().getFaction() != null && planet.getFactions().contains(CharacterManager.getSelectedCharacter().getFaction().getId())) {
+                    elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRecommended));
+                } else {
+                    elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));
+                }
             }
         });
         planetSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

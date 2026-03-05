@@ -9,21 +9,23 @@ import androidx.core.content.ContextCompat;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
+import com.softwaremagico.tm.character.values.Phase;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ArmorAdapter extends EquipmentAdapter<Armor> {
+
     public ArmorAdapter(@NonNull Context context, @NonNull List<Armor> armours, boolean nullAllowed) {
         super(context, armours, nullAllowed, Armor.class);
     }
 
     @Override
-    protected void setElementColor(TextView elementRepresentation, Armor armour, int position) {
-        if (Objects.equals(armour, CharacterManager.getSelectedCharacter().getPurchasedArmor())) {
+    protected void setElementColor(TextView elementRepresentation, Armor armor, int position) {
+        if (Objects.equals(armor, CharacterManager.getSelectedCharacter().getPurchasedArmor())) {
             elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorNormal));
         } else {
-            super.setElementColor(elementRepresentation, armour, position);
+            super.setElementColor(elementRepresentation, armor, position);
         }
     }
 }

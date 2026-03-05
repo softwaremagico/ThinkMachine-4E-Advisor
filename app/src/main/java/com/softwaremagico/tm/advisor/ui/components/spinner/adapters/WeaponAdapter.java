@@ -9,13 +9,15 @@ import androidx.core.content.ContextCompat;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
+import com.softwaremagico.tm.character.values.Phase;
 
 import java.util.List;
+import java.util.Objects;
 
 public class WeaponAdapter extends EquipmentAdapter<Weapon> {
+
     public WeaponAdapter(@NonNull Context context, @NonNull List<Weapon> weapons, boolean nullAllowed) {
-        super(context, weapons, nullAllowed, Weapon.class);
-    }
+        super(context, weapons, nullAllowed, Weapon.class);}
 
     @Override
     protected void setElementColor(TextView elementRepresentation, Weapon weapon, int position) {

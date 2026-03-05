@@ -321,19 +321,31 @@
     <string name="agora_group_imperial">Imperial</string>
     <string name="agora_group_known_worlds">Known Worlds</string>
     <string name="agora_group_merchant">Merchant League</string>
+    <string name="agora_group_noble">Noble</string>
     <string name="agora_group_priest">Universal Church</string>
     <string name="agora_group_engineers">Engineers</string>
     <string name="agora_group_hazat">Hazat</string>
-    <string name="agora_group_al_malik">Al-Malik</string>
+    <string name="agora_group_almalik">Al-Malik</string>
     <string name="agora_group_hawkwood">Hawkwood</string>
+    <string name="agora_group_decados">Decados</string>
     <string name="agora_group_scravers">Scravers</string>
+    <string name="agora_group_lihalan">Li Halan</string>
     <string name="agora_group_reeves">Reeves</string>
     <string name="agora_group_musters">Musters</string>
     <string name="agora_group_vuldrok">Vuldrok</string>
-    <string name="agora_group_oroym">Oro'ym</string>
+    <string name="agora_group_kurgan">Kurgan</string>
+    <string name="agora_group_avestites">Avestites</string>
+    <string name="agora_group_brotherbattle">Brother Battle</string>
     <string name="agora_group_tetis">Tetis</string>
     <string name="agora_group_marte">Marte</string>
     <string name="agora_group_bannockburn">Bannockburn</string>
     <string name="agora_group_leagueheim">Leagueheim</string>
+    <string name="agora_group_icon">Icon</string>
+    <string name="agora_group_rampart">Rampart</string>
+    <string name="agora_group_oroym">Oro\'ym</string>
+    <string name="agora_group_hironem">Hironem</string>
+    <string name="agora_group_ascorbite">Ascorbite</string>
+    <string name="agora_group_vorox">Vorox</string>
+    <string name="agora_group_obun">Ur-Obun</string>
 </resources>
 
