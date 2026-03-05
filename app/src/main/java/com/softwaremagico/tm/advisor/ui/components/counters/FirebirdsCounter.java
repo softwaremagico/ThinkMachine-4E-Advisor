@@ -14,15 +14,12 @@ import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.components.Component;
 import com.softwaremagico.tm.character.CharacterPlayer;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 public class FirebirdsCounter extends Component {
     private static final int DURATION = 1000;
     private ImageView coinImage;
     private TextView valueText;
     private float currentValue = 0;
-//    private CostCalculatorModificationHandler.ICurrentFirebirdSpendListener listener;
+    //    private CostCalculatorModificationHandler.ICurrentFirebirdSpendListener listener;
 //    private CostCalculatorModificationHandler.IInitialFirebirdsUpdated initialListener;
     private boolean unitHidden = false;
 
@@ -82,7 +79,7 @@ public class FirebirdsCounter extends Component {
 
 
     public void setCharacter(CharacterPlayer character) {
-        setValue((character.getRemainingCash()), false);
+        setValue((int) (character.getRemainingCash()), false);
     }
 
 
