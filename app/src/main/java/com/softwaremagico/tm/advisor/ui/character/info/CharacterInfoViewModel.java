@@ -31,6 +31,7 @@ import com.softwaremagico.tm.log.MachineLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -43,10 +44,12 @@ public class CharacterInfoViewModel extends ViewModel {
         try {
             if (nonOfficial) {
                 return FactionFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Faction::getNameRepresentation)).collect(Collectors.toList());
             } else {
                 return FactionFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial)
+                        .sorted(Comparator.comparing(Faction::getNameRepresentation)).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
             MachineLog.errorMessage(this.getClass().getName(), e);
@@ -58,10 +61,12 @@ public class CharacterInfoViewModel extends ViewModel {
         try {
             if (nonOfficial) {
                 return PlanetFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Planet::getNameRepresentation)).collect(Collectors.toList());
             } else {
                 return PlanetFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial)
+                        .sorted(Comparator.comparing(Planet::getNameRepresentation)).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
             MachineLog.errorMessage(this.getClass().getName(), e);
@@ -73,10 +78,12 @@ public class CharacterInfoViewModel extends ViewModel {
         try {
             if (nonOfficial) {
                 return SpecieFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Specie::getNameRepresentation)).collect(Collectors.toList());
             } else {
                 return SpecieFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial)
+                        .sorted(Comparator.comparing(Specie::getNameRepresentation)).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
             MachineLog.errorMessage(this.getClass().getName(), e);
@@ -88,10 +95,12 @@ public class CharacterInfoViewModel extends ViewModel {
         try {
             if (nonOfficial) {
                 return CallingFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Calling::getNameRepresentation)).collect(Collectors.toList());
             } else {
                 return CallingFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial)
+                        .sorted(Comparator.comparing(Calling::getNameRepresentation)).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
             MachineLog.errorMessage(this.getClass().getName(), e);
@@ -103,10 +112,12 @@ public class CharacterInfoViewModel extends ViewModel {
         try {
             if (nonOfficial) {
                 return UpbringingFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Upbringing::getNameRepresentation)).collect(Collectors.toList());
             } else {
                 return UpbringingFactory.getInstance().getSelectableElements()
-                        .stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+                        .stream().filter(Objects::nonNull).filter(Element::isOfficial)
+                        .sorted(Comparator.comparing(Upbringing::getNameRepresentation)).collect(Collectors.toList());
             }
         } catch (InvalidXmlElementException e) {
             MachineLog.errorMessage(this.getClass().getName(), e);

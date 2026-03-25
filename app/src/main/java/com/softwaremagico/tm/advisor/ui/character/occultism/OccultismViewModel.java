@@ -31,4 +31,34 @@ public class OccultismViewModel extends ViewModel {
         }
         return new ArrayList<>();
     }
+
+    public List<OccultismPath> getAvailablePsiOccultismPath(boolean nonOfficial) {
+        try {
+            if (nonOfficial) {
+                return OccultismPathFactory.getInstance().getPsiPaths().
+                        stream().filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                return OccultismPathFactory.getInstance().getPsiPaths().
+                        stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+            }
+        } catch (InvalidXmlElementException | NullPointerException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<OccultismPath> getAvailableTheurgyOccultismPath(boolean nonOfficial) {
+        try {
+            if (nonOfficial) {
+                return OccultismPathFactory.getInstance().getTheurgyPaths().
+                        stream().filter(Objects::nonNull).collect(Collectors.toList());
+            } else {
+                return OccultismPathFactory.getInstance().getTheurgyPaths().
+                        stream().filter(Objects::nonNull).filter(Element::isOfficial).collect(Collectors.toList());
+            }
+        } catch (InvalidXmlElementException | NullPointerException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new ArrayList<>();
+    }
 }

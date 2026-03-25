@@ -127,7 +127,16 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void setOccultismPaths(LinearLayout rootLayout, CharacterPlayer characterPlayer) {
-        List<OccultismPath> occultismPaths = mViewModel.getAvailableOccultismPath(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+        List<OccultismPath> occultismPaths;
+        if (!characterPlayer.isOccultist()) {
+            return;
+        } else if (characterPlayer.getOccultismType() == OccultismTypeFactory.getPsi()) {
+            occultismPaths = mViewModel.getAvailablePsiOccultismPath(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+        } else if (characterPlayer.getOccultismType() == OccultismTypeFactory.getTheurgy()) {
+            occultismPaths = mViewModel.getAvailableTheurgyOccultismPath(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+        } else {
+            occultismPaths = mViewModel.getAvailableOccultismPath(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+        }
         occultismPaths.stream().sorted(
                         Comparator.comparing(OccultismPath::getOccultismType).thenComparing(OccultismPath::getName))
                 .forEach(
