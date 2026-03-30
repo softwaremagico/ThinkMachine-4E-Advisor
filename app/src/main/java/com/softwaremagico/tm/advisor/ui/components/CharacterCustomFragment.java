@@ -14,6 +14,7 @@ package com.softwaremagico.tm.advisor.ui.components;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -40,6 +41,23 @@ public abstract class CharacterCustomFragment extends CustomFragment {
     protected abstract void populateElements(View root, CharacterPlayer character);
 
     protected TextView addSection(String title, LinearLayout linearLayout) {
+        if (linearLayout != null) {
+            addSpace(linearLayout, 5);
+            final TextView textView = new TextView(getContext(), null);
+            textView.setText(title);
+            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setTextAppearance(R.style.TextSubtitle);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(32);
+
+            linearLayout.addView(textView);
+            addSpace(linearLayout, 5);
+            return textView;
+        }
+        return null;
+    }
+
+    protected TextView addSubSection(String title, LinearLayout linearLayout) {
         if (linearLayout != null) {
             final TextView textView = new TextView(getContext(), null);
             textView.setText(title);

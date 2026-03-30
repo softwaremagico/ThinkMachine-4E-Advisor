@@ -58,11 +58,11 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
         final LinearLayout rootLayout = root.findViewById(R.id.level_root_container);
-        rootLayout.removeAllViews();
+        initData();
         for (int i = 2; i <= character.getLevel(); i++) {
             addSection(ThinkMachineTranslator.getTranslatedText("level") + " " + i, rootLayout);
             addSpace(rootLayout);
-            populateElements(LevelFactory.getInstance().getElement(character, i),
+            populateElements(root, LevelFactory.getInstance().getElement(character, i),
                     mViewModel.getCharacterPlayer().getLevel(i - 1));
         }
     }

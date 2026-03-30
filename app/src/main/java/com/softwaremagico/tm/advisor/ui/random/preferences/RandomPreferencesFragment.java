@@ -62,7 +62,7 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
         }
         for (PreferenceGroup preferenceGroup : PreferenceGroup.values()) {
             try {
-                addSection(getResources().getString(getResources().getIdentifier(getGroupPreferenceStringResource(preferenceGroup), "string",
+                addSubSection(getResources().getString(getResources().getIdentifier(getGroupPreferenceStringResource(preferenceGroup), "string",
                         getContext().getPackageName())), linearLayout);
                 for (PreferenceOption preferenceOption : preferenceGroup.getOptions()) {
                     final EnumSpinner optionsSelector = new EnumSpinner(getContext(), null);

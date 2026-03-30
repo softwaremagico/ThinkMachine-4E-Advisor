@@ -119,7 +119,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void addContent(LinearLayout rootLayout, CharacterPlayer characterPlayer) {
-        addSection(ThinkMachineTranslator.getTranslatedText("occultism"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("occultism"), rootLayout);
         createOccultismInfo(rootLayout, OccultismTypeFactory.getPsi());
         createOccultismInfo(rootLayout, OccultismTypeFactory.getTheurgy());
 
@@ -148,7 +148,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
         LinearLayout occultismLayout = new LinearLayout(getContext());
         occultismLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         occultismLayout.setOrientation(LinearLayout.VERTICAL);
-        addSection(occultismPath.getName().getTranslatedText(), occultismLayout);
+        addSubSection(occultismPath.getName().getTranslatedText(), occultismLayout);
         selectors.put(occultismPath, new HashSet<>());
         occultismPath.getOccultismPowers().values().stream().sorted(
                 Comparator.comparing(OccultismPower::getOccultismLevel).thenComparing(OccultismPower::getName)).forEach(occultismPower -> {

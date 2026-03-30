@@ -75,7 +75,7 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
 
     private void setContent(LinearLayout rootLayout, CharacterPlayer characterPlayer) {
         rootLayout.removeAllViews();
-        addSection(ThinkMachineTranslator.getTranslatedText("cyberdevices"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("cyberdevices"), rootLayout);
         addSpace(rootLayout);
         setCyberdevices(rootLayout, characterPlayer);
     }

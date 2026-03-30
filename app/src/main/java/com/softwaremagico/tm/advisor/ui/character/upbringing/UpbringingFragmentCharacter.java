@@ -46,6 +46,7 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
+        initData();
         populateElements(root, UpbringingFactory.getInstance().getElement(character.getUpbringing()),
                 mViewModel.getCharacterPlayer().getUpbringing());
     }

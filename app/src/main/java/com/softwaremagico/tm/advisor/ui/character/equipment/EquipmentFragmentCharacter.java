@@ -98,29 +98,29 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
     protected void initData() {
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
 
-        addSection(ThinkMachineTranslator.getTranslatedText("rangedWeapons"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("rangedWeapons"), rootLayout);
 
         rangeWeaponsLayout = new RangedWeaponsLayout(getContext(), true);
         rootLayout.addView(rangeWeaponsLayout);
         addSpace(rootLayout);
 
-        addSection(ThinkMachineTranslator.getTranslatedText("meleeWeapons"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("meleeWeapons"), rootLayout);
 
         meleeWeaponsLayout = new MeleeWeaponsLayout(getContext(), true);
         rootLayout.addView(meleeWeaponsLayout);
         addSpace(rootLayout);
 
-        addSection(ThinkMachineTranslator.getTranslatedText("armor"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("armor"), rootLayout);
         armorsLayout = new ArmorLayout(getContext(), true);
         rootLayout.addView(armorsLayout);
         addSpace(rootLayout);
 
-        addSection(ThinkMachineTranslator.getTranslatedText("handheldShield"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("handheldShield"), rootLayout);
         handheldShieldsLayout = new HandheldShieldsLayout(getContext(), true);
         rootLayout.addView(handheldShieldsLayout);
         addSpace(rootLayout);
 
-        addSection(ThinkMachineTranslator.getTranslatedText("shield"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText("shield"), rootLayout);
         shieldsLayout = new ShieldLayout(getContext(), true);
         rootLayout.addView(shieldsLayout);
 

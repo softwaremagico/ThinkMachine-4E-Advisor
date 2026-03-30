@@ -46,6 +46,7 @@ public class CallingFragmentCharacter extends CharacterDefinitionFragment<Callin
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
+        initData();
         populateElements(root, CallingFactory.getInstance().getElement(character.getCalling()),
                 mViewModel.getCharacterPlayer().getCalling());
     }

@@ -46,6 +46,7 @@ public class FactionFragmentCharacter extends CharacterDefinitionFragment<Factio
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
+        initData();
         populateElements(root, FactionFactory.getInstance().getElement(character.getFaction()),
                 mViewModel.getCharacterPlayer().getFaction());
     }
