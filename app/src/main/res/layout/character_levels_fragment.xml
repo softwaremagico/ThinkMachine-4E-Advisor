@@ -22,10 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        tools:context=".ui.character.cybernetics.CyberneticsFragmentCharacter">
+        tools:context=".ui.character.level.LevelFragmentCharacter">
 
         <LinearLayout
-            android:id="@+id/cyberdevices_root_container"
+            android:id="@+id/level_root_container"
             style="@style/TextSubtitleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

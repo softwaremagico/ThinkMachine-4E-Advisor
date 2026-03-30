@@ -28,15 +28,18 @@ import com.softwaremagico.tm.character.skills.SkillBonusOption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionStep> extends CharacterCustomFragment {
-    protected OptionSelectorLayout<Capability, CapabilityOption> capabilityOptionsLayout;
-    protected OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption> characteristicsOptionsLayout;
-    protected OptionSelectorLayout<Skill, SkillBonusOption> skillsOptionsLayout;
-    protected OptionSelectorLayout<Perk, PerkOption> perksOptionsLayout;
-    protected OptionSelectorLayout<Equipment, EquipmentOption> materialAwardsLayout;
+public abstract class MultiCharacterDefinitionFragment<T extends CharacterDefinitionStep> extends CharacterCustomFragment {
+    protected Map<T, OptionSelectorLayout<Capability, CapabilityOption>> capabilityOptionsLayouts;
+    protected Map<T, OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption>> characteristicsOptionsLayouts;
+    protected Map<T, OptionSelectorLayout<Skill, SkillBonusOption>> skillsOptionsLayouts;
+    protected Map<T, OptionSelectorLayout<Perk, PerkOption>> perksOptionsLayouts;
+    protected Map<T, OptionSelectorLayout<Equipment, EquipmentOption>> materialAwardsLayouts;
 
     private CharacterDefinitionStepModel mViewModel;
+
+    private List<T> steps;
 
     private View root;
 
@@ -59,37 +62,39 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
         this.mViewModel = mViewModel;
     }
 
-    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection) {
+    protected void populateElements(T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection) {
         lazyInitData();
+        initData(definitionStep);
+
         if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && mViewModel.getCharacterPlayer() != null) {
             noDataText.setVisibility(View.INVISIBLE);
             elements.forEach(element -> element.setVisibility(View.VISIBLE));
-            if (capabilityOptionsLayout != null) {
-                capabilityOptionsLayout.setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
+            if (capabilityOptionsLayouts != null && capabilityOptionsLayouts.get(definitionStep) != null) {
+                capabilityOptionsLayouts.get(definitionStep).setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
                         characterDefinitionStepSelection.getSelectedCapabilityOptions(), mViewModel.getCharacterPlayer());
             }
-            if (characteristicsOptionsLayout != null) {
-                characteristicsOptionsLayout.setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
+            if (characteristicsOptionsLayouts != null && characteristicsOptionsLayouts.get(definitionStep) != null) {
+                characteristicsOptionsLayouts.get(definitionStep).setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
                         characterDefinitionStepSelection.getSelectedCharacteristicOptions(), mViewModel.getCharacterPlayer());
-                characteristicsOptionsLayout.addElementsSelectedListener(selections ->
+                characteristicsOptionsLayouts.get(definitionStep).addElementsSelectedListener(selections ->
                         CharacterManager.launchCharacterCharacteristicsUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
-            if (skillsOptionsLayout != null) {
-                skillsOptionsLayout.setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
+            if (skillsOptionsLayouts != null && skillsOptionsLayouts.get(definitionStep) != null) {
+                skillsOptionsLayouts.get(definitionStep).setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
                         characterDefinitionStepSelection.getSelectedSkillOptions(), mViewModel.getCharacterPlayer());
             }
-            if (perksOptionsLayout != null) {
-                perksOptionsLayout.setElements(PerkOption.class, new ArrayList<>(definitionStep.getCharacterAvailablePerksOptions()),
+            if (perksOptionsLayouts != null && perksOptionsLayouts.get(definitionStep) != null) {
+                perksOptionsLayouts.get(definitionStep).setElements(PerkOption.class, new ArrayList<>(definitionStep.getCharacterAvailablePerksOptions()),
                         characterDefinitionStepSelection.getSelectedPerksOptions(), mViewModel.getCharacterPlayer());
-                perksOptionsLayout.addElementsSelectedListener(selections ->
+                perksOptionsLayouts.get(definitionStep).addElementsSelectedListener(selections ->
                         CharacterManager.launchPerkUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
-            if (materialAwardsLayout != null) {
+            if (materialAwardsLayouts != null && materialAwardsLayouts.get(definitionStep) != null) {
                 if (definitionStep.getMaterialAwards() != null && !definitionStep.getMaterialAwards().isEmpty() && characterDefinitionStepSelection.getSelectedMaterialAwards() != null) {
-                    materialAwardsLayout.setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
+                    materialAwardsLayouts.get(definitionStep).setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
                             new ArrayList<>(characterDefinitionStepSelection.getSelectedMaterialAwards()), mViewModel.getCharacterPlayer());
                 } else {
-                    materialAwardsLayout.removeAllViews();
+                    materialAwardsLayouts.get(definitionStep).removeAllViews();
                 }
             }
         } else {
@@ -216,20 +221,33 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     @Override
     protected void initData() {
         final LinearLayout rootLayout = getLayoutContainer();
+        elements.clear();
 
         noDataText = noDataText();
         noDataText.setVisibility(View.VISIBLE);
         rootLayout.addView(noDataText);
+    }
 
-        capabilityOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+    protected void initData(T step) {
+        final LinearLayout rootLayout = getLayoutContainer();
+        OptionSelectorLayout<Capability, CapabilityOption> capabilityOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        capabilityOptionsLayouts.put(step, capabilityOptionsLayout);
         elements.addAll(setCapabilitiesElements(capabilityOptionsLayout, rootLayout));
-        characteristicsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+
+        OptionSelectorLayout<CharacteristicDefinition, CharacteristicBonusOption> characteristicsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        characteristicsOptionsLayouts.put(step, characteristicsOptionsLayout);
         elements.addAll(setCharacteristicsElements(characteristicsOptionsLayout, rootLayout));
-        skillsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+
+        OptionSelectorLayout<Skill, SkillBonusOption> skillsOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        skillsOptionsLayouts.put(step, skillsOptionsLayout);
         elements.addAll(setSkillsElements(skillsOptionsLayout, rootLayout));
-        perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+
+        OptionSelectorLayout<Perk, PerkOption> perksOptionsLayout = new OptionSelectorLayout<>(getContext(), null);
+        perksOptionsLayouts.put(step, perksOptionsLayout);
         elements.addAll(setPerksElements(perksOptionsLayout, rootLayout));
-        materialAwardsLayout = new OptionSelectorLayout<>(getContext(), null);
+
+        OptionSelectorLayout<Equipment, EquipmentOption> materialAwardsLayout = new OptionSelectorLayout<>(getContext(), null);
+        materialAwardsLayouts.put(step, materialAwardsLayout);
         elements.addAll(setMaterialAwardsElements(materialAwardsLayout, rootLayout));
     }
 }

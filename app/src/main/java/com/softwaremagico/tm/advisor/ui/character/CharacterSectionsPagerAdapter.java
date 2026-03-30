@@ -25,6 +25,7 @@ import com.softwaremagico.tm.advisor.ui.character.description.CharacterDescripti
 import com.softwaremagico.tm.advisor.ui.character.equipment.EquipmentFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.faction.FactionFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.info.CharacterInfoFragmentCharacter;
+import com.softwaremagico.tm.advisor.ui.character.level.LevelFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.occultism.OccultismFragmentCharacter;
 import com.softwaremagico.tm.advisor.ui.character.upbringing.UpbringingFragmentCharacter;
 
@@ -35,7 +36,8 @@ import com.softwaremagico.tm.advisor.ui.character.upbringing.UpbringingFragmentC
 public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
 
     @StringRes
-    public static final int[] TAB_TITLES = new int[]{R.string.tab_character_info, R.string.tab_character_description, R.string.upbringing, R.string.faction, R.string.calling, R.string.tab_character_occultism, R.string.tab_character_cybernetics, R.string.tab_character_equipment};
+    public static final int[] TAB_TITLES = new int[]{R.string.tab_character_info, R.string.tab_character_description, R.string.upbringing,
+            R.string.faction, R.string.calling, R.string.tab_character_level, R.string.tab_character_occultism, R.string.tab_character_cybernetics, R.string.tab_character_equipment};
 
     CharacterSectionsPagerAdapter(FragmentActivity fa) {
         super(fa);
@@ -67,14 +69,18 @@ public class CharacterSectionsPagerAdapter extends FragmentStateAdapter {
         }
 
         if (position == 5) {
-            return OccultismFragmentCharacter.newInstance(position + 1);
+            return LevelFragmentCharacter.newInstance(position + 1);
         }
 
         if (position == 6) {
-            return CyberneticsFragmentCharacter.newInstance(position + 1);
+            return OccultismFragmentCharacter.newInstance(position + 1);
         }
 
         if (position == 7) {
+            return CyberneticsFragmentCharacter.newInstance(position + 1);
+        }
+
+        if (position == 8) {
             return EquipmentFragmentCharacter.newInstance(position + 1);
         }
 

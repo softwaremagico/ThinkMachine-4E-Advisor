@@ -10,6 +10,7 @@ import com.softwaremagico.tm.random.preferences.LegalStatusPreference;
 import com.softwaremagico.tm.random.preferences.OccultismPreference;
 import com.softwaremagico.tm.random.preferences.OperationalRolePreference;
 import com.softwaremagico.tm.random.preferences.OriginPreference;
+import com.softwaremagico.tm.random.preferences.PowerLevelPreference;
 import com.softwaremagico.tm.random.preferences.RankValueAssignationPreference;
 import com.softwaremagico.tm.random.preferences.TechPreference;
 import com.softwaremagico.tm.random.preferences.WealthPreference;
@@ -25,6 +26,7 @@ public enum PreferenceOption {
     OCCULTISM(null, OccultismPreference.values()),
     OPERATIONAL_ROLE(null, OperationalRolePreference.values()),
     ORIGIN(null, OriginPreference.values()),
+    POWER_LEVEL(null, PowerLevelPreference.values()),
     RANK_VALUE_ASSIGNATION(null, RankValueAssignationPreference.values()),
     TECH(null, TechPreference.values()),
     WEALTH(WealthPreference.MIDDLE_CLASS, WealthPreference.values());

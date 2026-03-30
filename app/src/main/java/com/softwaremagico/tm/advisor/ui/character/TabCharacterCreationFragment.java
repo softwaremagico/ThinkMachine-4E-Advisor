@@ -26,6 +26,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterDefinitionStepSelection;
+import com.softwaremagico.tm.character.level.LevelSelector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TabCharacterCreationFragment extends Fragment {
 

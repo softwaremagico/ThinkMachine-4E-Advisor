@@ -101,7 +101,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     @Override
     protected void initData() {
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
-
+        rootLayout.removeAllViews();
         addContent(rootLayout, CharacterManager.getSelectedCharacter());
         updateContent();
 

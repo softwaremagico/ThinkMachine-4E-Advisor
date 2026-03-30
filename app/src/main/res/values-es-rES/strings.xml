@@ -18,6 +18,7 @@
     <string name="tab_visualization_pdf_small">PDF (Reducido)</string>
     <string name="navigation_character">Personaje</string>
     <string name="navigation_visualization">Visualización</string>
+    <string name="tab_character_level">Nivel</string>
     <string name="tab_visualization_txt">Texto</string>
     <string name="share">Compartir</string>
     <string name="share_body">Hoja de personaje para \'${CHARACTER_NAME}\'.</string>
@@ -32,6 +33,8 @@
     <string name="settings_export">Exportar</string>
     <string name="message_character_saved_successfully">Personaje guardado.</string>
     <string name="message_character_saved_error">¡Error guardando el personaje!</string>
+    <string name="message_incomplete_level">Por favor, finaliza o corrige el nivel anterior primero.</string>
+    <string name="message_minimum_level_zero">El nivel mínimo es de uno.</string>
     <string name="loading">Cargando ...</string>
     <string name="character_card_details">Detalles ...</string>
     <string name="character_delete">Borrar</string>
@@ -72,6 +75,7 @@
     <string name="preference_group_equipment">Equipo</string>
     <string name="preference_group_cybernetics">Cibernética</string>
     <string name="preference_group_psi">Psí</string>
+    <string name="preference_group_the_occult">Lo Oculto</string>
     <string name="preference_group_character_creation">Creación del Personaje</string>
     <string name="preference_group_character_description">Descripción del Personaje</string>
     <string name="preference_weaponspreferences">Armas</string>
@@ -112,6 +116,7 @@
     <string name="preference_option_old">Viejo</string>
     <string name="preference_option_very_old">Muy Viejo</string>
     <string name="preference_option_none">Ninguno</string>
+    <string name="preference_option_energy">Armas de Energía</string>
     <string name="preference_option_low">Bajo</string>
     <string name="preference_option_medium">Medio</string>
     <string name="preference_option_high">Alto</string>
@@ -173,6 +178,7 @@
     <string name="preference_option_control">Control</string>
     <string name="message_random_character_success">Personaje finalizado aleatoriamente.</string>
     <string name="message_random_character_error">¡El personaje no ha podido finalizarse aleatoriamente!</string>
+    <string name="preference_option_elite">Élite</string>
     <string name="cost">Coste</string>
     <string name="agora">Agora</string>
     <string name="close">Cerrar</string>
@@ -236,7 +242,7 @@
     <string name="restricted_perks">Restringido a los beneficios:</string>
     <string name="restricted">Restringido</string>
     <string name="message_restricted_element">Este elemento está restringido para tu personaje.</string>
-    <string name="preference_option_no_accultist">No Ocultista</string>
+    <string name="preference_option_no_occultist">No Ocultista</string>
     <string name="preference_option_psi">Psí</string>
     <string name="preference_option_theurgy">Teúrgia</string>
     <string name="npc_minorguild_section">Gremios Menores</string>
@@ -247,6 +253,7 @@
     <string name="npc_minorchurch_section">Ordenes Religiosas Menores</string>
     <string name="preference_option_minor_church">Ordenes Religiosas Menores</string>
     <string name="preference_genderpreferences">Género</string>
+    <string name="preference_power_level">Nivel</string>
     <string name="preference_option_male">Varón</string>
     <string name="preference_option_female">Mujer</string>
     <string name="preference_option_probably_male">Probablemente Hombre</string>
@@ -273,6 +280,7 @@
     <string name="faction">Facción</string>
     <string name="upbringing">Educación</string>
     <string name="specie">Especie</string>
+    <string name="levels">Niveles</string>
     <string name="capabilities">Competencias</string>
     <string name="characteristics">Características</string>
     <string name="skills">Habilidades</string>
@@ -345,4 +353,8 @@
     <string name="agora_group_ascorbite">Ascrobitas</string>
     <string name="agora_group_vorox">Vorox</string>
     <string name="agora_group_obun">Ur-Obun</string>
+    <string name="preference_option_artist">Artista</string>
+    <string name="preference_option_searcher">Busqcador</string>
+    <string name="preference_option_standard">Estándar</string>
+    <string name="preference_option_veteran">Veterano</string>
 </resources>

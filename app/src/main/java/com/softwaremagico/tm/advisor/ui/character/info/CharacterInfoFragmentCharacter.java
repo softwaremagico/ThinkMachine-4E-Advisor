@@ -42,7 +42,6 @@ import com.softwaremagico.tm.character.Gender;
 import com.softwaremagico.tm.character.Surname;
 import com.softwaremagico.tm.character.callings.Calling;
 import com.softwaremagico.tm.character.callings.CallingFactory;
-import com.softwaremagico.tm.character.cybernetics.Cyberdevice;
 import com.softwaremagico.tm.character.factions.Faction;
 import com.softwaremagico.tm.character.factions.FactionFactory;
 import com.softwaremagico.tm.character.planets.Planet;
@@ -54,18 +53,19 @@ import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
 import com.softwaremagico.tm.exceptions.IncompleteSelectedElementException;
 import com.softwaremagico.tm.exceptions.InvalidCallingException;
 import com.softwaremagico.tm.exceptions.InvalidFactionException;
+import com.softwaremagico.tm.exceptions.InvalidLevelException;
 import com.softwaremagico.tm.exceptions.InvalidSpecieException;
 import com.softwaremagico.tm.exceptions.InvalidUpbringingException;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.exceptions.RestrictedElementException;
 import com.softwaremagico.tm.exceptions.UnofficialCharacterException;
 import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
+import com.softwaremagico.tm.log.MachineLog;
 import com.softwaremagico.tm.random.character.names.RandomName;
 import com.softwaremagico.tm.random.character.names.RandomSurname;
 import com.softwaremagico.tm.random.exceptions.InvalidRandomElementSelectedException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,6 +79,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     private ElementSpinner<Faction> factionsSelector;
     private ElementSpinner<Calling> callingSelector;
     private ElementSpinner<Planet> planetSelector;
+    private TranslatedEditText levelTextEditor;
     private boolean updatingCharacter = false;
 
     public static CharacterInfoFragmentCharacter newInstance(int index) {
@@ -114,8 +115,30 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                 CharacterManager.getSelectedCharacter().getInfo().setAge(null);
                 CharacterManager.launchCharacterAgeUpdatedListeners(CharacterManager.getSelectedCharacter());
             }
-
         });
+        updateTranslatedTextField(root, R.id.character_level, value -> {
+            try {
+                if (!Objects.equals(CharacterManager.getSelectedCharacter().getLevel() + "", value)) {
+                    try {
+                        CharacterManager.setCharacterLevel(Integer.parseInt(value));
+                        //Force to update all costs.
+                        if (!updatingCharacter) {
+                            CharacterManager.launchLevelUpdatedListeners(CharacterManager.getSelectedCharacter());
+                        }
+                    } catch (InvalidLevelException e) {
+                        SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
+                        levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                        AdvisorLog.errorMessage(this.getClass(), e);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                CharacterManager.launchLevelUpdatedListeners(CharacterManager.getSelectedCharacter());
+            }
+        });
+
+        setLevelButtonsActions();
+
         createGenderSpinner(root);
 
         populateElements(root, CharacterManager.getSelectedCharacter());
@@ -205,6 +228,11 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         factionsSelector = root.findViewById(R.id.character_faction);
         callingSelector = root.findViewById(R.id.character_calling);
         planetSelector = root.findViewById(R.id.character_planet);
+        levelTextEditor = root.findViewById(R.id.character_level);
+        levelTextEditor.setAsNumberEditor();
+        CharacterManager.addLevelUpdatedListeners((characterPlayer) -> {
+            levelTextEditor.setText(characterPlayer.getLevel() + "");
+        });
 
         nonOfficialEnabled = root.findViewById(R.id.official_selector);
         restrictionsIgnored = root.findViewById(R.id.restricted_selector);
@@ -261,6 +289,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         final EnumSpinner genderSelector = root.findViewById(R.id.character_gender);
         genderSelector.setSelection(character.getInfo().getGender());
         final TranslatedEditText ageTextEditor = root.findViewById(R.id.character_age);
+        ageTextEditor.setAsNumberEditor();
         if (CharacterManager.getSelectedCharacter().getInfo().getAge() != null) {
             ageTextEditor.setText(CharacterManager.getSelectedCharacter().getInfo().getAge().toString());
         } else {
@@ -275,6 +304,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         factionsSelector.setSelection(FactionFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getFaction()));
         callingSelector.setSelection(CallingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getCalling()));
         planetSelector.setSelection(PlanetFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getInfo().getPlanet()));
+        levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
 
         updateSettings(character);
 
@@ -570,6 +600,45 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                 updateSpinnersStatus();
             }
         });
+    }
+
+    private void setLevelButtonsActions() {
+        final ImageView addLevelButton = root.findViewById(R.id.button_add_level);
+        final ImageView removeLevelButton = root.findViewById(R.id.button_remove_level);
+        if (addLevelButton != null) {
+            addLevelButton.setOnClickListener(v -> {
+                try {
+                    updatingCharacter = true;
+                    CharacterManager.addCharacterLevel();
+                    removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+                    updatingCharacter = false;
+                } catch (InvalidLevelException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
+                    levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                    AdvisorLog.errorMessage(this.getClass(), e);
+                }
+            });
+        }
+
+        if (removeLevelButton != null) {
+            removeLevelButton.setOnClickListener(v -> {
+                try {
+                    if (CharacterManager.getSelectedCharacter().getLevel() > 1) {
+                        updatingCharacter = true;
+                        CharacterManager.removeCharacterLevel();
+                        removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+                        updatingCharacter = false;
+                    } else {
+                        SnackbarGenerator.getWarningMessage(root, R.string.message_minimum_level_zero);
+                    }
+                } catch (InvalidLevelException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
+                    levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                    AdvisorLog.errorMessage(this.getClass(), e);
+                }
+            });
+            removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+        }
     }
 
 

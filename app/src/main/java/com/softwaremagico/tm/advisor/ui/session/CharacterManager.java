@@ -51,6 +51,7 @@ public final class CharacterManager {
     private static final Set<CharacterSettingsUpdatedListener> CHARACTER_SETTINGS_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<PerkUpdatedListener> PERK_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CyberneticDeviceUpdatedListener> CYBERNETIC_DEVICE_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<LevelUpdatedListener> LEVEL_UPDATED_LISTENERS = new HashSet<>();
     private static boolean updatingCharacter = false;
 
     public interface CharacterSelectedListener {
@@ -105,12 +106,32 @@ public final class CharacterManager {
         void updated(CharacterPlayer characterPlayer);
     }
 
+    public interface LevelUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
     private CharacterManager() {
 
     }
 
     public static void updateSettings() {
         launchCharacterSettingsUpdateListeners(getSelectedCharacter());
+    }
+
+    public static void launchAllUpdateListeners(CharacterPlayer characterPlayer) {
+        launchCharacterSettingsUpdateListeners(characterPlayer);
+        launchSelectedCharacterListeners(characterPlayer);
+        launchCharacterUpdatedListeners(characterPlayer);
+        launchCharacterSpecieUpdatedListeners(characterPlayer);
+        launchCharacterAgeUpdatedListeners(characterPlayer);
+        launchCharacterPlanetUpdatedListeners(characterPlayer);
+        launchCharacterFactionUpdatedListeners(characterPlayer);
+        launchCharacterCallingsUpdatedListeners(characterPlayer);
+        launchCharacterUpbringingsUpdatedListeners(characterPlayer);
+        launchCharacterCharacteristicsUpdatedListeners(characterPlayer);
+        launchCyberneticDeviceUpdatedListeners(characterPlayer);
+        launchPerkUpdatedListeners(characterPlayer);
+        launchLevelUpdatedListeners(characterPlayer);
     }
 
     public static void launchCharacterSettingsUpdateListeners(CharacterPlayer characterPlayer) {
@@ -209,6 +230,14 @@ public final class CharacterManager {
         }
     }
 
+    public static void launchLevelUpdatedListeners(CharacterPlayer characterPlayer) {
+        if (!updatingCharacter) {
+            for (final LevelUpdatedListener listener : LEVEL_UPDATED_LISTENERS) {
+                listener.updated(characterPlayer);
+            }
+        }
+    }
+
     public static void addCharacterSettingsUpdateListeners(CharacterSettingsUpdatedListener listener) {
         CHARACTER_SETTINGS_UPDATED_LISTENERS.add(listener);
     }
@@ -253,6 +282,10 @@ public final class CharacterManager {
         CYBERNETIC_DEVICE_UPDATED_LISTENERS.add(listener);
     }
 
+    public static void addLevelUpdatedListeners(LevelUpdatedListener listener) {
+        LEVEL_UPDATED_LISTENERS.add(listener);
+    }
+
     public static PerkUpdatedListener addPerkUpdatedListeners(PerkUpdatedListener listener) {
         PERK_UPDATED_LISTENERS.add(listener);
         return listener;
@@ -283,13 +316,15 @@ public final class CharacterManager {
 
     private synchronized static void selectedCharacter(CharacterPlayer characterPlayer) {
         selectedCharacter = characterPlayer;
-        launchSelectedCharacterListeners(characterPlayer);
+        launchAllUpdateListeners(characterPlayer);
     }
 
     private static CharacterPlayer createNewCharacter() {
         final CharacterPlayer characterPlayer = new CharacterPlayer();
         characterPlayer.getInfo().setGender(Gender.MALE);
-        characterPlayer.getSettings().copy(SettingsHandler.getSettingsEntity().get());
+        if (SettingsHandler.getSettingsEntity() != null) {
+            characterPlayer.getSettings().copy(SettingsHandler.getSettingsEntity().get());
+        }
         characters.add(characterPlayer);
         return characterPlayer;
     }
@@ -370,6 +405,33 @@ public final class CharacterManager {
         final RandomizeCharacter randomizeCharacter = new RandomizeCharacter(getSelectedCharacter(), 0, randomPreferences.toArray(new IRandomPreference[0]));
         randomizeCharacter.createCharacter();
         setSelectedCharacter(getSelectedCharacter());
+    }
+
+    public static void addCharacterLevel() {
+        setCharacterLevel(getSelectedCharacter().getLevel() + 1);
+    }
+
+    public static void removeCharacterLevel() {
+        setCharacterLevel(getSelectedCharacter().getLevel() - 1);
+    }
+
+    public static void setCharacterLevel(int level) {
+        boolean modified = false;
+        //Adding missing levels.
+        for (int i = getSelectedCharacter().getLevel(); i < level; i++) {
+            getSelectedCharacter().addLevel();
+            modified = true;
+        }
+
+        //Removing levels
+        for (int i = getSelectedCharacter().getLevel(); i > level; i--) {
+            getSelectedCharacter().removeLevel(i);
+            modified = true;
+        }
+
+        if (modified) {
+            launchLevelUpdatedListeners(getSelectedCharacter());
+        }
     }
 
 }

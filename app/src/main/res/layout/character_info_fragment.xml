@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:divider="?android:dividerHorizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -45,6 +47,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_weight="0"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/ic_dice"
                 android:contentDescription="TODO"
                 android:gravity="bottom" />
@@ -68,6 +73,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_weight="0"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/ic_dice"
                 android:gravity="bottom" />
 
@@ -86,6 +94,41 @@
             android:layout_height="wrap_content"
             android:ems="10"
             custom:translation="age" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.softwaremagico.tm.advisor.ui.components.TranslatedEditText
+                android:id="@+id/character_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                custom:translation="level" />
+
+            <ImageView
+                android:id="@+id/button_add_level"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="0"
+                android:background="@drawable/add"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="end" />
+
+            <ImageView
+                android:id="@+id/button_remove_level"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_weight="0"
+                android:background="@drawable/remove"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom" />
+        </LinearLayout>
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/character_specie"

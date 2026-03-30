@@ -51,14 +51,14 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
         if (getContext() != null) {
-            final LinearLayout rootLayout = root.findViewById(R.id.root_container);
+            final LinearLayout rootLayout = root.findViewById(R.id.cyberdevices_root_container);
             setContent(rootLayout, character);
         }
     }
 
     @Override
     protected void initData() {
-        final LinearLayout rootLayout = root.findViewById(R.id.root_container);
+        final LinearLayout rootLayout = root.findViewById(R.id.cyberdevices_root_container);
         setContent(rootLayout, CharacterManager.getSelectedCharacter());
         populateElements(root, CharacterManager.getSelectedCharacter());
     }
@@ -66,7 +66,7 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
     @Override
     protected void updateSettings(CharacterPlayer characterPlayer) {
         if (getContext() != null) {
-            final LinearLayout linearLayout = root.findViewById(R.id.root_container);
+            final LinearLayout linearLayout = root.findViewById(R.id.cyberdevices_root_container);
             linearLayout.removeAllViews();
             setContent(linearLayout, characterPlayer);
             populateElements(root, characterPlayer);

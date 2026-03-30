@@ -20,6 +20,7 @@
     <string name="tab_character_equipment">Equipment</string>
     <string name="tab_character_cybernetics">Cybernetics</string>
     <string name="tab_character_occultism">Occultism</string>
+    <string name="tab_character_level">Level</string>
     <string name="tab_visualization_txt">Text</string>
     <string name="tab_visualization_pdf">PDF</string>
     <string name="tab_visualization_pdf_small">PDF (Small)</string>
@@ -54,6 +55,8 @@
     <string name="message_unofficial_element_not_allowed">Non-official elements are not allowed on this character. Check the settings for enabling it.</string>
     <string name="message_setting_unofficial_not_changed">Character is using some unofficial elements. Setting cannot be changed.</string>
     <string name="message_setting_restriction_not_changed">Character is using some restricted elements. Setting cannot be changed.</string>
+    <string name="message_incomplete_level">Please, finalize or correct previous level first.</string>
+    <string name="message_minimum_level_zero">Minimum level is one.</string>
     <string name="loading">Loading ...</string>
     <string name="character_card_details">Details ...</string>
     <string name="character_delete">Delete</string>
@@ -95,6 +98,7 @@
     <string name="preference_group_equipment">Equipment</string>
     <string name="preference_group_cybernetics">Cybernetics</string>
     <string name="preference_group_psi">Psi</string>
+    <string name="preference_group_the_occult">The Occult</string>
     <string name="preference_group_character_creation">Character Creation</string>
     <string name="preference_group_character_description">Character Description</string>
     <string name="preference_weaponspreferences">Weapons</string>
@@ -126,6 +130,7 @@
     <string name="preference_combatactionspreferences">Combat Actions</string>
     <string name="preference_combatactionsgrouppreferences">Combat Actions Preference</string>
     <string name="preference_genderpreferences">Gender</string>
+    <string name="preference_power_level">Level</string>
     <string name="preference_option_male">Male</string>
     <string name="preference_option_female">Female</string>
     <string name="preference_option_probably_male">Probably Male</string>
@@ -145,7 +150,6 @@
     <string name="preference_option_old">Old</string>
     <string name="preference_option_very_old">Very Old</string>
     <string name="preference_option_none">None</string>
-    <string name="preference_option_low">Low</string>
     <string name="preference_option_medium">Medium</string>
     <string name="preference_option_high">High</string>
     <string name="preference_option_very_high">Very High</string>
@@ -203,7 +207,7 @@
     <string name="preference_option_legal">Legal</string>
     <string name="preference_option_wanted">Wanted</string>
     <string name="preference_option_secretive">Secretive</string>
-    <string name="preference_option_no_accultist">No Occultist</string>
+    <string name="preference_option_no_occultist">No Occultist</string>
     <string name="preference_option_psi">Psi</string>
     <string name="preference_option_theurgy">Theurgy</string>
     <string name="preference_option_combat">Combat</string>
@@ -247,6 +251,13 @@
     <string name="preference_option_warlord">Warlord</string>
     <string name="preference_option_fight">Fight</string>
     <string name="preference_option_any">Any</string>
+    <string name="preference_option_artist">Artist</string>
+    <string name="preference_option_searcher">Searcher</string>
+    <string name="preference_option_energy">Energy Weapons</string>
+    <string name="preference_option_low">Low</string>
+    <string name="preference_option_standard">Standard</string>
+    <string name="preference_option_veteran">Veteran</string>
+    <string name="preference_option_elite">Elite</string>
     <string name="cost">Cost</string>
     <string name="agora">Agora</string>
     <string name="close">Close</string>
@@ -307,6 +318,7 @@
     <string name="calling">Calling</string>
     <string name="faction">Faction</string>
     <string name="specie">Specie</string>
+    <string name="levels">Levels</string>
     <string name="capabilities">Capabilities</string>
     <string name="characteristics">Characteristics</string>
     <string name="skills">Skills</string>
