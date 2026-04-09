@@ -63,7 +63,8 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
             addSection(ThinkMachineTranslator.getTranslatedText("level") + " " + i, rootLayout);
             addSpace(rootLayout);
             populateElements(root, LevelFactory.getInstance().getElement(character, i),
-                    mViewModel.getCharacterPlayer().getLevel(i - 1));
+                    mViewModel.getCharacterPlayer().getLevel(i - 1),
+                    character.getLevel() != i);
         }
     }
 }

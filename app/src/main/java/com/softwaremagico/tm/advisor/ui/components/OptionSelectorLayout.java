@@ -69,27 +69,27 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
 
 
     public void setElements(Class<O> clazz, List<OptionSelector<E, O>> optionSelectors,
-                            List<CharacterSelectedElement> selections, CharacterPlayer characterPlayer) {
+                            List<CharacterSelectedElement> selections, boolean disabled, boolean nullAllowed, CharacterPlayer characterPlayer) {
         super.removeAllViews();
         for (int i = 0; i < optionSelectors.size(); i++) {
             //selections.get(i).getSelections().clear();
-            super.addView(createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, characterPlayer));
+            super.addView(createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, disabled, nullAllowed, characterPlayer));
         }
         launchElementsSizeUpdatedListeners(optionSelectors);
     }
 
     //Currently only one option is allowed.
     private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, Collection<Selection> selections,
-                                            boolean nonOfficial, CharacterPlayer characterPlayer) {
+                                            boolean nonOfficial, boolean disabled, boolean nullAllowed, CharacterPlayer characterPlayer) {
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
         Collections.sort(options);
 
-        elementSelector.setAdapter(new ElementAdapter<>(getContext(), options, false, clazz) {
+        elementSelector.setAdapter(new ElementAdapter<>(getContext(), options, nullAllowed, clazz) {
             @Override
             public boolean isEnabled(int position) {
                 return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
+                        (!getItem(position).getRestrictions().isRestricted() && !getItem(position).getRestrictions().isRestricted(characterPlayer) && !disabled && getCount() != 1);
             }
         });
 
@@ -99,10 +99,14 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                 if (optionSelector.getTotalOptions() <= 1) {
                     selections.clear();
                 }
-                if (options.get(position) instanceof CapabilityOption) {
-                    selections.add(new Selection(options.get(position), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
+                if (options.get(position).getId() == null) {
+                    selections.clear();
                 } else {
-                    selections.add(new Selection(options.get(position)));
+                    if (options.get(position) instanceof CapabilityOption) {
+                        selections.add(new Selection(options.get(position), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
+                    } else {
+                        selections.add(new Selection(options.get(position)));
+                    }
                 }
                 launchElementsSelectedListener(selections);
             }

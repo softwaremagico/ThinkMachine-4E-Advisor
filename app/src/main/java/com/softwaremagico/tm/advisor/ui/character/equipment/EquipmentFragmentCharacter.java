@@ -76,10 +76,10 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
     public void populateElements(View root, CharacterPlayer character) {
         if (getContext() != null) {
             if (meleeWeaponsLayout != null) {
-                meleeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedRangedWeapons());
+                meleeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedMeleeWeapons());
             }
             if (rangeWeaponsLayout != null) {
-                rangeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedMeleeWeapons());
+                rangeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedRangedWeapons());
             }
             if (armorsLayout != null) {
                 armorsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedArmor());

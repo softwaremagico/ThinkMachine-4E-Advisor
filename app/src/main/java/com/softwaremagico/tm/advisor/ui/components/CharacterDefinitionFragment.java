@@ -46,6 +46,8 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
     private final List<View> elements = new ArrayList<>();
 
+    private final boolean nullAllowed = true;
+
     protected LinearLayout getLayoutContainer() {
         return root.findViewById(R.id.root_container);
     }
@@ -61,7 +63,7 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
         this.mViewModel = mViewModel;
     }
 
-    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection) {
+    protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection, boolean disabled) {
         lazyInitData();
         initData(definitionStep);
 
@@ -70,28 +72,28 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
             elements.forEach(element -> element.setVisibility(View.VISIBLE));
             if (capabilityOptionsLayouts != null && capabilityOptionsLayouts.get(definitionStep) != null) {
                 capabilityOptionsLayouts.get(definitionStep).setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
-                        characterDefinitionStepSelection.getSelectedCapabilityOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedCapabilityOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
             }
             if (characteristicsOptionsLayouts != null && characteristicsOptionsLayouts.get(definitionStep) != null) {
                 characteristicsOptionsLayouts.get(definitionStep).setElements(CharacteristicBonusOption.class, new ArrayList<>(definitionStep.getCharacteristicOptions()),
-                        characterDefinitionStepSelection.getSelectedCharacteristicOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedCharacteristicOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
                 characteristicsOptionsLayouts.get(definitionStep).addElementsSelectedListener(selections ->
                         CharacterManager.launchCharacterCharacteristicsUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (skillsOptionsLayouts != null && skillsOptionsLayouts.get(definitionStep) != null) {
                 skillsOptionsLayouts.get(definitionStep).setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
-                        characterDefinitionStepSelection.getSelectedSkillOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedSkillOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
             }
             if (perksOptionsLayouts != null && perksOptionsLayouts.get(definitionStep) != null) {
                 perksOptionsLayouts.get(definitionStep).setElements(PerkOption.class, new ArrayList<>(definitionStep.getCharacterAvailablePerksOptions()),
-                        characterDefinitionStepSelection.getSelectedPerksOptions(), mViewModel.getCharacterPlayer());
+                        characterDefinitionStepSelection.getSelectedPerksOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
                 perksOptionsLayouts.get(definitionStep).addElementsSelectedListener(selections ->
                         CharacterManager.launchPerkUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (materialAwardsLayouts != null && materialAwardsLayouts.get(definitionStep) != null) {
                 if (definitionStep.getMaterialAwards() != null && !definitionStep.getMaterialAwards().isEmpty() && characterDefinitionStepSelection.getSelectedMaterialAwards() != null) {
                     materialAwardsLayouts.get(definitionStep).setElements(EquipmentOption.class, new ArrayList<>(definitionStep.getMaterialAwards()),
-                            new ArrayList<>(characterDefinitionStepSelection.getSelectedMaterialAwards()), mViewModel.getCharacterPlayer());
+                            new ArrayList<>(characterDefinitionStepSelection.getSelectedMaterialAwards()), disabled, nullAllowed, mViewModel.getCharacterPlayer());
                 } else {
                     materialAwardsLayouts.get(definitionStep).removeAllViews();
                     materialAwardsLayouts.put(definitionStep, null);

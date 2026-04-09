@@ -48,6 +48,7 @@ public class FactionFragmentCharacter extends CharacterDefinitionFragment<Factio
     protected void populateElements(View root, CharacterPlayer character) {
         initData();
         populateElements(root, FactionFactory.getInstance().getElement(character.getFaction()),
-                mViewModel.getCharacterPlayer().getFaction());
+                mViewModel.getCharacterPlayer().getFaction(),
+                character.getLevel() != 1);
     }
 }

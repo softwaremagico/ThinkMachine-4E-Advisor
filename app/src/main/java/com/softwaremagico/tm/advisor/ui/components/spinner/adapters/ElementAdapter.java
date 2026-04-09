@@ -48,7 +48,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     public ElementAdapter(@NonNull Context context, @NonNull List<E> objects, boolean nullAllowed, Class<E> clazz) {
         super(context, android.R.layout.simple_spinner_dropdown_item, objects);
         this.elements = new ArrayList<>(objects);
-        if (nullAllowed) {
+        if (nullAllowed && this.elements.size() != 1) {
             addNullValue(clazz);
         }
         positionEnabled = new HashMap<>();

@@ -48,6 +48,7 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
     protected void populateElements(View root, CharacterPlayer character) {
         initData();
         populateElements(root, UpbringingFactory.getInstance().getElement(character.getUpbringing()),
-                mViewModel.getCharacterPlayer().getUpbringing());
+                mViewModel.getCharacterPlayer().getUpbringing(),
+                character.getLevel() != 1);
     }
 }
