@@ -44,7 +44,7 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
 
     private TextView noDataText;
 
-    private final List<View> elements = new ArrayList<>();
+    protected final List<View> elements = new ArrayList<>();
 
     private final boolean nullAllowed = true;
 
@@ -66,12 +66,15 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
     protected void populateElements(View root, T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection, boolean disabled) {
         lazyInitData();
         initData(definitionStep);
+        addElements(definitionStep, characterDefinitionStepSelection, disabled);
+    }
 
+    protected void addElements(T definitionStep, CharacterDefinitionStepSelection characterDefinitionStepSelection, boolean disabled) {
         if (getContext() != null && definitionStep != null && characterDefinitionStepSelection != null && mViewModel.getCharacterPlayer() != null) {
             noDataText.setVisibility(View.INVISIBLE);
             elements.forEach(element -> element.setVisibility(View.VISIBLE));
             if (capabilityOptionsLayouts != null && capabilityOptionsLayouts.get(definitionStep) != null) {
-                capabilityOptionsLayouts.get(definitionStep).setElements(CapabilityOption.class, new ArrayList<>(definitionStep.getCapabilityOptions()),
+                capabilityOptionsLayouts.get(definitionStep).setElements(CapabilityOption.class, new ArrayList<>(characterDefinitionStepSelection.getNotRepeatedCapabilityOptions()),
                         characterDefinitionStepSelection.getSelectedCapabilityOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
             }
             if (characteristicsOptionsLayouts != null && characteristicsOptionsLayouts.get(definitionStep) != null) {
@@ -81,7 +84,7 @@ public abstract class CharacterDefinitionFragment<T extends CharacterDefinitionS
                         CharacterManager.launchCharacterCharacteristicsUpdatedListeners(mViewModel.getCharacterPlayer()));
             }
             if (skillsOptionsLayouts != null && skillsOptionsLayouts.get(definitionStep) != null) {
-                skillsOptionsLayouts.get(definitionStep).setElements(SkillBonusOption.class, new ArrayList<>(definitionStep.getSkillOptions()),
+                skillsOptionsLayouts.get(definitionStep).setElements(SkillBonusOption.class, new ArrayList<>(characterDefinitionStepSelection.getSkillOptions()),
                         characterDefinitionStepSelection.getSelectedSkillOptions(), disabled, nullAllowed, mViewModel.getCharacterPlayer());
             }
             if (perksOptionsLayouts != null && perksOptionsLayouts.get(definitionStep) != null) {
