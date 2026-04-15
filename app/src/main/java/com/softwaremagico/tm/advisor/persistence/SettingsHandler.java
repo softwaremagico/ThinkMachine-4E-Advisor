@@ -14,6 +14,9 @@ package com.softwaremagico.tm.advisor.persistence;
 
 import android.content.Context;
 
+import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
+import com.softwaremagico.tm.file.modules.ModuleManager;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,7 +62,8 @@ public final class SettingsHandler {
             AppDatabase.getInstance(context).getSettingsEntityDao().persist(settingsEntity);
             SettingsHandler.settingsEntity = settingsEntity;
         } else {
-            AppDatabase.getInstance(context).getSettingsEntityDao().update(settingsEntity);
+            AppDatabase.getInstance(context).getSettingsEntityDao().delete(settingsEntity);
+            AppDatabase.getInstance(context).getSettingsEntityDao().persist(settingsEntity);
         }
     }
 
@@ -77,5 +81,25 @@ public final class SettingsHandler {
 
     public static void setSettingsEntity(Context context) {
         SettingsHandler.settingsEntity = load(context);
+    }
+
+    public static void setModulesBySettings() {
+        if (getSettingsEntity().isPlayerGuideEnabled()) {
+            ModuleManager.enableModule(ModuleManager.FADING_SUNS_PLAYER_GUIDE_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.FADING_SUNS_PLAYER_GUIDE_MODULE);
+        }
+        if (getSettingsEntity().isFactionsBookEnabled()) {
+            ModuleManager.enableModule(ModuleManager.FACTION_BOOK_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.FACTION_BOOK_MODULE);
+        }
+        ModuleManager.resetModules();
+        updateCharacterSettings();
+    }
+
+    public static void updateCharacterSettings(){
+        CharacterManager.getSelectedCharacter().getSettings().copy(SettingsHandler.getSettingsEntity().get());
+        CharacterManager.updateSettings();
     }
 }

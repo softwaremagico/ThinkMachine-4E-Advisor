@@ -172,7 +172,45 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_title_module"
+                style="@style/SettingsTitle"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/module_player_guide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/module_player_guide" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/module_factions_book"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/module_factions_book" />
+
+        </LinearLayout>
+
+        <View style="@style/Divider.Horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_title"
+                style="@style/SettingsTitle"
+                />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/official_selector"

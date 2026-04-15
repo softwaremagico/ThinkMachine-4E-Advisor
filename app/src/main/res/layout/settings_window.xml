@@ -30,6 +30,27 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/setting_title_module"
+            style="@style/SettingsTitle"
+            />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_player_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_player_guide" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_factions_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_factions_book" />
+
+        <View style="@style/Divider.Horizontal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/setting_title_new_characters"
             style="@style/SettingsTitle"
             />
@@ -47,5 +68,7 @@
             android:text="@string/allow_restricted" />
 
     </LinearLayout>
+
+
 
 </ScrollView>

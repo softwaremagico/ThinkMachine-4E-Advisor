@@ -21,7 +21,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "ThinkMachine Database";
 
@@ -36,8 +36,10 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
                     instance = Room.databaseBuilder(context,
-                            AppDatabase.class, DATABASE_NAME).allowMainThreadQueries()
-                            .addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3).build();
+                                    AppDatabase.class, DATABASE_NAME).allowMainThreadQueries()
+                            .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_2_3)
+                            .addMigrations(MIGRATION_3_4).build();
                 }
             }
         }
@@ -58,6 +60,16 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("CREATE TABLE IF NOT EXISTS " + SettingsEntity.SETTINGS_TABLE + " "
                     + "(`creation_time` INTEGER DEFAULT CURRENT_TIMESTAMP, `update_time` INTEGER DEFAULT CURRENT_TIMESTAMP, `only_official_allowed` BOOLEAN, `restrictions_checked` BOOLEAN, " +
                     "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)");
+        }
+    };
+
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `player_guide_module` BOOLEAN");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `faction_book_module` BOOLEAN");
         }
     };
 }

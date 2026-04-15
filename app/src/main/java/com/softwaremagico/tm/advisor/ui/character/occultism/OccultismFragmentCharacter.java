@@ -236,6 +236,9 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void createOccultismInfo(LinearLayout linearLayout, OccultismType occultismType) {
+        if (occultismType == null || occultismType.getId() == null) {
+            return;
+        }
         final TranslatedEditText occultismLevelText = new TranslatedEditText(getContext(), null);
         occultismLevelFields.put(occultismType, occultismLevelText);
 

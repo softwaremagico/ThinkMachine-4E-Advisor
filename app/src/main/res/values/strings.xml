@@ -46,6 +46,7 @@
     <string name="settings_import">Import</string>
     <string name="settings_export">Export</string>
     <string name="settings_global">Global Settings</string>
+    <string name="settings_title">Settings</string>
     <string name="message_character_saved_successfully">Character saved.</string>
     <string name="message_character_saved_error">Character save error!</string>
     <string name="message_random_character_success">Character finished randomly.</string>
@@ -359,5 +360,8 @@
     <string name="agora_group_ascorbite">Ascorbite</string>
     <string name="agora_group_vorox">Vorox</string>
     <string name="agora_group_obun">Ur-Obun</string>
+    <string name="setting_title_module">Modules</string>
+    <string name="module_player_guide">Player Guide</string>
+    <string name="module_factions_book">Factions Book</string>
 </resources>
 

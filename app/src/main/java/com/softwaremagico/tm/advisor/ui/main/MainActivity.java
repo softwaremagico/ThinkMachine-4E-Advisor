@@ -43,6 +43,7 @@ import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.persistence.CharacterHandler;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.advisor.ui.about.AboutWindow;
+import com.softwaremagico.tm.advisor.ui.about.SettingsWindow;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SettingsHandler.setSettingsEntity(this.getBaseContext());
+        SettingsHandler.setModulesBySettings();
 
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -270,6 +272,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void globalSettings() {
-//        new SettingsWindow().show(getSupportFragmentManager(), "");
+        new SettingsWindow().show(getSupportFragmentManager(), "");
     }
 }

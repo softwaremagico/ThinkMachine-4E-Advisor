@@ -60,7 +60,6 @@ import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.exceptions.RestrictedElementException;
 import com.softwaremagico.tm.exceptions.UnofficialCharacterException;
 import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
-import com.softwaremagico.tm.log.MachineLog;
 import com.softwaremagico.tm.random.character.names.RandomName;
 import com.softwaremagico.tm.random.character.names.RandomSurname;
 import com.softwaremagico.tm.random.exceptions.InvalidRandomElementSelectedException;
@@ -74,6 +73,8 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     private View root;
     private SwitchCompat nonOfficialEnabled;
     private SwitchCompat restrictionsIgnored;
+    private SwitchCompat playerGuideModule;
+    private SwitchCompat factionBookModule;
     private ElementSpinner<Specie> specieSelector;
     private ElementSpinner<Upbringing> upbringingSelector;
     private ElementSpinner<Faction> factionsSelector;
@@ -185,34 +186,43 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
 
         nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked) {
-                try {
+            try {
+                if (!isChecked) {
                     CharacterManager.getSelectedCharacter().checkIsOfficial();
-                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
-                    CharacterManager.updateSettings();
-                } catch (UnofficialCharacterException e) {
-                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_unofficial_not_changed).show();
-                    CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(false);
-                    nonOfficialEnabled.setChecked(true);
                 }
-            } else {
                 CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
+                CharacterManager.updateSettings();
+            } catch (UnofficialCharacterException e) {
+                SnackbarGenerator.getErrorMessage(root, R.string.message_setting_unofficial_not_changed).show();
+                CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(false);
+                nonOfficialEnabled.setChecked(true);
             }
         });
 
         restrictionsIgnored.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked) {
-                try {
+            try {
+                if (!isChecked) {
                     CharacterManager.getSelectedCharacter().checkIsNotRestricted();
-                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
-                    CharacterManager.updateSettings();
-                } catch (RestrictedElementException e) {
-                    SnackbarGenerator.getErrorMessage(root, R.string.message_setting_restriction_not_changed).show();
-                    CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(false);
-                    restrictionsIgnored.setChecked(true);
                 }
-            } else {
                 CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
+                CharacterManager.updateSettings();
+            } catch (RestrictedElementException e) {
+                SnackbarGenerator.getErrorMessage(root, R.string.message_setting_restriction_not_changed).show();
+                CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(false);
+                restrictionsIgnored.setChecked(true);
+            }
+        });
+
+        playerGuideModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!updatingCharacter) {
+                CharacterManager.getSelectedCharacter().getSettings().setPlayerGuideEnabled(isChecked);
+                CharacterManager.updateSettings();
+            }
+        });
+        factionBookModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!updatingCharacter) {
+                CharacterManager.getSelectedCharacter().getSettings().setFactionsBookEnabled(isChecked);
+                CharacterManager.updateSettings();
             }
         });
     }
@@ -236,6 +246,8 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         nonOfficialEnabled = root.findViewById(R.id.official_selector);
         restrictionsIgnored = root.findViewById(R.id.restricted_selector);
+        playerGuideModule = root.findViewById(R.id.module_player_guide);
+        factionBookModule = root.findViewById(R.id.module_factions_book);
 
         CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
 
@@ -272,6 +284,12 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             factionsSelector.setSelection(selectedFaction);
             callingSelector.setSelection(selectedCalling);
             planetSelector.setSelection(selectedPlanet);
+
+            nonOfficialEnabled.setChecked(!characterPlayer.getSettings().isOnlyOfficialAllowed());
+            restrictionsIgnored.setChecked(!characterPlayer.getSettings().isRestrictionsChecked());
+            playerGuideModule.setChecked(true);
+            playerGuideModule.setEnabled(false);
+            factionBookModule.setChecked(characterPlayer.getSettings().isFactionsBookEnabled());
         }
     }
 
@@ -298,6 +316,9 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         nonOfficialEnabled.setChecked(!character.getSettings().isOnlyOfficialAllowed());
         restrictionsIgnored.setChecked(!character.getSettings().isRestrictionsChecked());
+        playerGuideModule.setChecked(true);
+        playerGuideModule.setEnabled(false);
+        factionBookModule.setChecked(character.getSettings().isFactionsBookEnabled());
 
         specieSelector.setSelection(SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()));
         upbringingSelector.setSelection(UpbringingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getUpbringing()));
