@@ -420,7 +420,12 @@ public final class CharacterManager {
 
     public static void randomizeCharacter(Set<IRandomPreference> randomPreferences) throws InvalidXmlElementException,
             InvalidRandomElementSelectedException {
-        final RandomizeCharacter randomizeCharacter = new RandomizeCharacter(getSelectedCharacter(), 0, randomPreferences.toArray(new IRandomPreference[0]));
+        randomizeCharacter(randomPreferences, 0);
+    }
+
+    public static void randomizeCharacter(Set<IRandomPreference> randomPreferences, int desiredLevel) throws InvalidXmlElementException,
+            InvalidRandomElementSelectedException {
+        final RandomizeCharacter randomizeCharacter = new RandomizeCharacter(getSelectedCharacter(), desiredLevel, randomPreferences.toArray(new IRandomPreference[0]));
         randomizeCharacter.createCharacter();
         setSelectedCharacter(getSelectedCharacter());
     }

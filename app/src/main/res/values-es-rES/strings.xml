@@ -179,6 +179,7 @@
     <string name="preference_option_control">Control</string>
     <string name="message_random_character_success">Personaje finalizado aleatoriamente.</string>
     <string name="message_random_character_error">¡El personaje no ha podido finalizarse aleatoriamente!</string>
+    <string name="message_invalid_level">Nivel inválido. Introduce un número mayor que 0.</string>
     <string name="preference_option_elite">Élite</string>
     <string name="cost">Coste</string>
     <string name="agora">Agora</string>
@@ -255,6 +256,7 @@
     <string name="preference_option_minor_church">Ordenes Religiosas Menores</string>
     <string name="preference_genderpreferences">Género</string>
     <string name="preference_power_level">Nivel</string>
+    <string name="preference_option_custom">Personalizado</string>
     <string name="preference_option_male">Varón</string>
     <string name="preference_option_female">Mujer</string>
     <string name="preference_option_probably_male">Probablemente Hombre</string>

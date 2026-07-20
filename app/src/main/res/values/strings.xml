@@ -53,6 +53,7 @@
     <string name="message_random_character_already_started">Character has been started already. All changes will be lost.</string>
     <string name="message_random_character_already_finished">Character is already finished.</string>
     <string name="message_random_character_error">Character cannot be randomly finished!</string>
+    <string name="message_invalid_level">Invalid level. Enter a number greater than 0.</string>
     <string name="message_unofficial_element_not_allowed">Non-official elements are not allowed on this character. Check the settings for enabling it.</string>
     <string name="message_setting_unofficial_not_changed">Character is using some unofficial elements. Setting cannot be changed.</string>
     <string name="message_setting_restriction_not_changed">Character is using some restricted elements. Setting cannot be changed.</string>
@@ -132,6 +133,7 @@
     <string name="preference_combatactionsgrouppreferences">Combat Actions Preference</string>
     <string name="preference_genderpreferences">Gender</string>
     <string name="preference_power_level">Level</string>
+    <string name="preference_option_custom">Custom</string>
     <string name="preference_option_male">Male</string>
     <string name="preference_option_female">Female</string>
     <string name="preference_option_probably_male">Probably Male</string>

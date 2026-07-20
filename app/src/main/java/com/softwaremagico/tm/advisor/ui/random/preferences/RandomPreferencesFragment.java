@@ -14,9 +14,12 @@ package com.softwaremagico.tm.advisor.ui.random.preferences;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -29,6 +32,7 @@ import com.softwaremagico.tm.advisor.core.random.PreferenceOption;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.components.CharacterCustomFragment;
 import com.softwaremagico.tm.advisor.ui.components.EnumSpinner;
+import com.softwaremagico.tm.advisor.ui.components.TranslatedEditText;
 import com.softwaremagico.tm.advisor.ui.main.SnackbarGenerator;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -45,6 +49,12 @@ import java.util.Set;
 public class RandomPreferencesFragment extends CharacterCustomFragment {
     private View root;
     private final Set<EnumSpinner> optionsAvailable = new HashSet<>();
+    private EnumSpinner powerLevelSelector;
+    private TranslatedEditText customLevelInput;
+
+    private enum CustomLevelOption {
+        CUSTOM
+    }
 
     public static RandomPreferencesFragment newInstance(int index) {
         final RandomPreferencesFragment fragment = new RandomPreferencesFragment();
@@ -66,11 +76,18 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
                         getContext().getPackageName())), linearLayout);
                 for (PreferenceOption preferenceOption : preferenceGroup.getOptions()) {
                     final EnumSpinner optionsSelector = new EnumSpinner(getContext(), null);
-                    final List<IRandomPreference> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
-                    if (preferenceOption.getRandomPreferences().length == 0 || preferenceOption.getDefaultOption() == null) {
+                    if (preferenceOption == PreferenceOption.POWER_LEVEL) {
+                        final List<Object> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
                         options.add(0, null);
+                        options.add(CustomLevelOption.CUSTOM);
+                        optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
+                    } else {
+                        final List<IRandomPreference> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
+                        if (preferenceOption.getRandomPreferences().length == 0 || preferenceOption.getDefaultOption() == null) {
+                            options.add(0, null);
+                        }
+                        optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
                     }
-                    optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
                     try {
                         optionsSelector.setText(getResources().getString(getResources().getIdentifier(getPreferenceStringResource(preferenceOption), "string",
                                 getContext().getPackageName())));
@@ -84,6 +101,13 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
                     }
                     linearLayout.addView(optionsSelector);
                     optionsAvailable.add(optionsSelector);
+
+                    if (preferenceOption == PreferenceOption.POWER_LEVEL) {
+                        powerLevelSelector = optionsSelector;
+                        addCustomLevelInput(linearLayout);
+                        setupPowerLevelListener();
+                        updateCustomLevelVisibility();
+                    }
                 }
                 addSpace(linearLayout);
             } catch (Resources.NotFoundException e) {
@@ -144,7 +168,22 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
 
     private void generateCharacter() {
         try {
-            CharacterManager.randomizeCharacter(getSelectedOptions());
+            int desiredLevel = 0;
+            if (isCustomLevelSelected()) {
+                final String levelText = customLevelInput == null ? "" : customLevelInput.getText().trim();
+                try {
+                    desiredLevel = Integer.parseInt(levelText);
+                    if (desiredLevel < 1) {
+                        SnackbarGenerator.getErrorMessage(root, R.string.message_invalid_level).show();
+                        return;
+                    }
+                } catch (RuntimeException e) {
+                    SnackbarGenerator.getErrorMessage(root, R.string.message_invalid_level).show();
+                    return;
+                }
+            }
+
+            CharacterManager.randomizeCharacter(getSelectedOptions(), desiredLevel);
             SnackbarGenerator.getInfoMessage(root, R.string.message_random_character_success).show();
         } catch (InvalidXmlElementException | InvalidRandomElementSelectedException e) {
             SnackbarGenerator.getErrorMessage(root, R.string.message_random_character_error).show();
@@ -155,14 +194,74 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
     public Set<IRandomPreference> getSelectedOptions() {
         Set<IRandomPreference> selectedPreferences = new HashSet<>();
         for (EnumSpinner optionSelected : optionsAvailable) {
-            if (optionSelected.getSelectedItem() != null) {
-                PreferenceOption optionGroup = PreferenceOption.get(optionSelected.<IRandomPreference>getSelectedItem());
-                if (optionGroup != null && optionGroup.getDefaultOption() != optionSelected.<IRandomPreference>getSelectedItem()) {
-                    selectedPreferences.add(optionSelected.getSelectedItem());
-                }
+            final Object selectedItem = optionSelected.getSelectedItem();
+            if (!(selectedItem instanceof IRandomPreference)) {
+                continue;
+            }
+            final IRandomPreference selectedPreference = (IRandomPreference) selectedItem;
+            PreferenceOption optionGroup = PreferenceOption.get(selectedPreference);
+            if (optionGroup != null && optionGroup.getDefaultOption() != selectedPreference) {
+                selectedPreferences.add(selectedPreference);
             }
         }
         return selectedPreferences;
+    }
+
+    private void setupPowerLevelListener() {
+        if (powerLevelSelector == null) {
+            return;
+        }
+        powerLevelSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateCustomLevelVisibility();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                updateCustomLevelVisibility();
+            }
+        });
+    }
+
+    private void addCustomLevelInput(LinearLayout linearLayout) {
+        customLevelInput = new TranslatedEditText(getContext(), null);
+        customLevelInput.setLabel(getString(R.string.preference_option_custom));
+        customLevelInput.setAsNumberEditor();
+        customLevelInput.setText("");
+        customLevelInput.setVisibility(View.GONE);
+        customLevelInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Unused.
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Unused.
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Unused.
+            }
+        });
+        linearLayout.addView(customLevelInput);
+    }
+
+    private boolean isCustomLevelSelected() {
+        return powerLevelSelector != null && powerLevelSelector.getSelectedItem() == CustomLevelOption.CUSTOM;
+    }
+
+    private void updateCustomLevelVisibility() {
+        if (customLevelInput == null) {
+            return;
+        }
+        final boolean customSelected = isCustomLevelSelected();
+        customLevelInput.setVisibility(customSelected ? View.VISIBLE : View.GONE);
+        if (!customSelected) {
+            customLevelInput.setText("");
+        }
     }
 
 
