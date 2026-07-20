@@ -34,6 +34,14 @@
             style="@style/SettingsTitle"
             />
 
+        <!-- Official Modules -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_section_official"
+            style="@style/SettingsSubtitle"
+            />
+
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/module_player_guide"
             android:layout_width="match_parent"
@@ -45,6 +53,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/module_factions_book" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_lost_worlds_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_lost_worlds_book" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_brother_battle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_brother_battle" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_charioteers_guild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_charioteers_guild" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_house_hawkwood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_house_hawkwood" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_reeves_guild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_reeves_guild" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_vuldrok_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_vuldrok_space" />
+
+            <!-- Custom Modules -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/module_section_custom"
+                style="@style/SettingsSubtitle"
+                />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_revised_edition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_revised_edition" />
 
         <View style="@style/Divider.Horizontal" />
 

@@ -94,6 +94,41 @@ public final class SettingsHandler {
         } else {
             ModuleManager.disableModule(ModuleManager.FACTION_BOOK_MODULE);
         }
+        if (getSettingsEntity().isRevisedEditionEnabled()) {
+            ModuleManager.enableModule(ModuleManager.FADING_SUNS_REVISED_EDITION_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.FADING_SUNS_REVISED_EDITION_MODULE);
+        }
+        if (getSettingsEntity().isLostWorldsBookEnabled()) {
+            ModuleManager.enableModule(ModuleManager.LOST_WORLDS_BOOK_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.LOST_WORLDS_BOOK_MODULE);
+        }
+        if (getSettingsEntity().isImperialDossierBrotherBattleEnabled()) {
+            ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_BROTHER_BATTLE_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_BROTHER_BATTLE_MODULE);
+        }
+        if (getSettingsEntity().isImperialDossierCharioteersGuildEnabled()) {
+            ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_CHARIOTEERS_GUILD_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_CHARIOTEERS_GUILD_MODULE);
+        }
+        if (getSettingsEntity().isImperialDossierHouseHawkwoodEnabled()) {
+            ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_HOUSE_HAWKWOOD_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_HOUSE_HAWKWOOD_MODULE);
+        }
+        if (getSettingsEntity().isImperialDossierReevesGuildEnabled()) {
+            ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_REEVES_GUILD_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_REEVES_GUILD_MODULE);
+        }
+        if (getSettingsEntity().isVuldrokSpaceEnabled()) {
+            ModuleManager.enableModule(ModuleManager.VULDROK_SPACE_MODULE);
+        } else {
+            ModuleManager.disableModule(ModuleManager.VULDROK_SPACE_MODULE);
+        }
         ModuleManager.resetModules();
         updateCharacterSettings();
     }

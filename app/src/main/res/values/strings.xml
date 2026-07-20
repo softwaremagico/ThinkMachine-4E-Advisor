@@ -363,7 +363,16 @@
     <string name="agora_group_vorox">Vorox</string>
     <string name="agora_group_obun">Ur-Obun</string>
     <string name="setting_title_module">Modules</string>
+    <string name="module_section_official">Official</string>
+    <string name="module_section_custom">Custom</string>
     <string name="module_player_guide">Player Guide</string>
     <string name="module_factions_book">Factions Book</string>
+    <string name="module_revised_edition">Revised Edition</string>
+    <string name="module_lost_worlds_book">Lost Worlds Book</string>
+    <string name="module_imperial_dossier_brother_battle">Imperial Dossier - Brother Battle</string>
+    <string name="module_imperial_dossier_charioteers_guild">Imperial Dossier - Charioteers Guild</string>
+    <string name="module_imperial_dossier_house_hawkwood">Imperial Dossier - House Hawkwood</string>
+    <string name="module_imperial_dossier_reeves_guild">Imperial Dossier - Reeves Guild</string>
+    <string name="module_vuldrok_space">Vuldrok Space</string>
 </resources>
 

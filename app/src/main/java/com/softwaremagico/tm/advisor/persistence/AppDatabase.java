@@ -21,7 +21,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 4, exportSchema = false)
+@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "ThinkMachine Database";
 
@@ -39,7 +39,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class, DATABASE_NAME).allowMainThreadQueries()
                             .addMigrations(MIGRATION_1_2)
                             .addMigrations(MIGRATION_2_3)
-                            .addMigrations(MIGRATION_3_4).build();
+                            .addMigrations(MIGRATION_3_4)
+                            .addMigrations(MIGRATION_4_5).build();
                 }
             }
         }
@@ -70,6 +71,26 @@ public abstract class AppDatabase extends RoomDatabase {
                     + "ADD COLUMN `player_guide_module` BOOLEAN");
             database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
                     + "ADD COLUMN `faction_book_module` BOOLEAN");
+        }
+    };
+
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `revised_edition_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `lost_worlds_book_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `imperial_dossier_brother_battle_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `imperial_dossier_charioteers_guild_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `imperial_dossier_house_hawkwood_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `imperial_dossier_reeves_guild_module` INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `vuldrok_space_module` INTEGER NOT NULL DEFAULT 1");
         }
     };
 }

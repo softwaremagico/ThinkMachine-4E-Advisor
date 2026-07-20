@@ -361,6 +361,15 @@
     <string name="preference_option_standard">Estándar</string>
     <string name="preference_option_veteran">Veterano</string>
     <string name="setting_title_module">Módulos</string>
+    <string name="module_section_official">Oficiales</string>
+    <string name="module_section_custom">Personalizado</string>
     <string name="module_player_guide">Guía del Jugador</string>
     <string name="module_factions_book">Libro de Facciones</string>
+    <string name="module_revised_edition">Edición Revisada</string>
+    <string name="module_lost_worlds_book">Libro de Mundos Perdidos</string>
+    <string name="module_imperial_dossier_brother_battle">Dossier Imperial - Hermano Batalla</string>
+    <string name="module_imperial_dossier_charioteers_guild">Dossier Imperial - Gremio de Aurigas</string>
+    <string name="module_imperial_dossier_house_hawkwood">Dossier Imperial - Casa Hawkwood</string>
+    <string name="module_imperial_dossier_reeves_guild">Dossier Imperial - Gremio de Magistrados</string>
+    <string name="module_vuldrok_space">Espacio Vuldrok</string>
 </resources>
