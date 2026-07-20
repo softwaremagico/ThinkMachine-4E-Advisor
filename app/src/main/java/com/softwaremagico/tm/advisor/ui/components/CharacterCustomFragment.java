@@ -35,6 +35,11 @@ public abstract class CharacterCustomFragment extends CustomFragment {
                 populateElements(getView().getRootView(), characterPlayer);
             }
         });
+        CharacterManager.addBookContentUpdatedListener(characterPlayer -> {
+            if (getView() != null) {
+                refresh();
+            }
+        });
     }
 
 
@@ -71,7 +76,7 @@ public abstract class CharacterCustomFragment extends CustomFragment {
         return null;
     }
 
-    protected TextView noDataText(){
+    protected TextView noDataText() {
         final TextView textView = new TextView(getContext(), null);
         textView.setText(R.string.no_data);
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -154,5 +159,8 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
     protected abstract void updateSettings(CharacterPlayer characterPlayer);
 
+    protected void refresh() {
+        this.initData();
+    }
 
 }

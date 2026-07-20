@@ -49,6 +49,7 @@ public final class CharacterManager {
     private static final Set<CharacterUpbringingUpdatedListener> CHARACTER_UPBRINGING_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CharacterCharacteristicsUpdatedListener> CHARACTER_CHARACTERISTICS_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CharacterSettingsUpdatedListener> CHARACTER_SETTINGS_UPDATED_LISTENERS = new HashSet<>();
+    private static final Set<BookContentUpdatedListener> BOOK_CONTENT_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<PerkUpdatedListener> PERK_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<CyberneticDeviceUpdatedListener> CYBERNETIC_DEVICE_UPDATED_LISTENERS = new HashSet<>();
     private static final Set<LevelUpdatedListener> LEVEL_UPDATED_LISTENERS = new HashSet<>();
@@ -110,12 +111,17 @@ public final class CharacterManager {
         void updated(CharacterPlayer characterPlayer);
     }
 
+    public interface BookContentUpdatedListener {
+        void updated(CharacterPlayer characterPlayer);
+    }
+
     private CharacterManager() {
 
     }
 
     public static void updateSettings() {
         launchCharacterSettingsUpdateListeners(getSelectedCharacter());
+        launchBookContentUpdatedListener(getSelectedCharacter());
     }
 
     public static void launchAllUpdateListeners(CharacterPlayer characterPlayer) {
@@ -137,6 +143,14 @@ public final class CharacterManager {
     public static void launchCharacterSettingsUpdateListeners(CharacterPlayer characterPlayer) {
         if (!updatingCharacter) {
             for (final CharacterSettingsUpdatedListener listener : CHARACTER_SETTINGS_UPDATED_LISTENERS) {
+                listener.updated(characterPlayer);
+            }
+        }
+    }
+
+    public static void launchBookContentUpdatedListener(CharacterPlayer characterPlayer) {
+        if (!updatingCharacter) {
+            for (final BookContentUpdatedListener listener : BOOK_CONTENT_UPDATED_LISTENERS) {
                 listener.updated(characterPlayer);
             }
         }
@@ -240,6 +254,10 @@ public final class CharacterManager {
 
     public static void addCharacterSettingsUpdateListeners(CharacterSettingsUpdatedListener listener) {
         CHARACTER_SETTINGS_UPDATED_LISTENERS.add(listener);
+    }
+
+    public static void addBookContentUpdatedListener(BookContentUpdatedListener listener) {
+        BOOK_CONTENT_UPDATED_LISTENERS.add(listener);
     }
 
     public static void addSelectedCharacterListener(CharacterSelectedListener listener) {
