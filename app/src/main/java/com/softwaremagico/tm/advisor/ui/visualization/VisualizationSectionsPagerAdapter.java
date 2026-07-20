@@ -19,6 +19,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.visualization.pdf.CompletePdfVisualizationFragment;
+import com.softwaremagico.tm.advisor.ui.visualization.pdf.SmallPdfVisualizationFragment;
 import com.softwaremagico.tm.advisor.ui.visualization.txt.TextVisualizationFragment;
 
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ import java.util.List;
 public class VisualizationSectionsPagerAdapter extends FragmentStateAdapter {
 
     @StringRes
-    //public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf, R.string.tab_visualization_pdf_small};
-    public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf};
+    public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf, R.string.tab_visualization_pdf_small};
+    //public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf};
     private static List<Fragment> fragments = new ArrayList<>();
 
     public VisualizationSectionsPagerAdapter(FragmentActivity fa) {
@@ -54,9 +55,11 @@ public class VisualizationSectionsPagerAdapter extends FragmentStateAdapter {
             fragments.add(fragment);
             return fragment;
         }
-//        if (position == 2) {
-//            return SmallPdfVisualizationFragment.newInstance(position + 1);
-//        }
+        if (position == 2) {
+            Fragment fragment = SmallPdfVisualizationFragment.newInstance(position + 1);
+            fragments.add(fragment);
+            return fragment;
+        }
 
         return null;
     }

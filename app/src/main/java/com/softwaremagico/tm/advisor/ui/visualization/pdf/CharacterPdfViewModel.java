@@ -20,11 +20,22 @@ import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.pdf.complete.CharacterSheet;
 import com.softwaremagico.tm.pdf.complete.EmptyPdfBodyException;
+import com.softwaremagico.tm.pdf.small.SmallCharacterSheet;
 
 public class CharacterPdfViewModel extends ViewModel {
 
     protected byte[] generatePdf() {
         final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
+        try {
+            return (characterSheet.generate());
+        } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        }
+        return new byte[0];
+    }
+
+    protected byte[] generateSmallPdf() {
+        final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
         try {
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {

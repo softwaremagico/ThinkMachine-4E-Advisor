@@ -50,7 +50,7 @@ import java.util.List;
 public abstract class PdfVisualizationFragment extends Fragment implements VisualizationFragment {
     protected static final String ARG_SECTION_NUMBER = "section_number";
     private static final int FILE_IDENTIFICATION = 42;
-    private CharacterPdfViewModel mViewModel;
+    protected CharacterPdfViewModel mViewModel;
     private File characterSheetAsPdf;
     private View root;
     private LinearLayout layout;
