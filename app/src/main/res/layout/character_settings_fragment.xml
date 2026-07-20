@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2024 Softwaremagico
+  ~
+  ~  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it under  the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/character_settings_frame"
+    style="@style/LayoutPadding"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    tools:context="com.softwaremagico.tm.advisor.ui.character.settings.CharacterSettingsFragmentCharacter">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
+
+        <TextView
+            style="@style/SettingsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_title_module" />
+
+        <TextView
+            style="@style/SettingsSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_section_official" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_player_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_player_guide" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_factions_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_factions_book" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_lost_worlds_book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_lost_worlds_book" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_brother_battle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_brother_battle" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_charioteers_guild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_charioteers_guild" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_house_hawkwood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_house_hawkwood" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_imperial_dossier_reeves_guild"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_imperial_dossier_reeves_guild" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_vuldrok_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_vuldrok_space" />
+
+        <TextView
+            style="@style/SettingsSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_section_custom" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/module_revised_edition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/module_revised_edition" />
+
+        <View style="@style/Divider.Horizontal" />
+
+        <TextView
+            style="@style/SettingsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="@string/settings_title" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/official_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allow_nonofficial" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/restricted_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allow_restricted" />
+
+    </LinearLayout>
+
+</ScrollView>
+

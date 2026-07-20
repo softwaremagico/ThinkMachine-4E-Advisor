@@ -22,14 +22,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
-import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.advisor.ui.components.CharacterCustomFragment;
 import com.softwaremagico.tm.advisor.ui.components.ElementSpinner;
 import com.softwaremagico.tm.advisor.ui.components.EnumSpinner;
@@ -59,7 +57,6 @@ import com.softwaremagico.tm.exceptions.InvalidSpecieException;
 import com.softwaremagico.tm.exceptions.InvalidUpbringingException;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.exceptions.RestrictedElementException;
-import com.softwaremagico.tm.exceptions.UnofficialCharacterException;
 import com.softwaremagico.tm.exceptions.UnofficialElementNotAllowedException;
 import com.softwaremagico.tm.random.character.names.RandomName;
 import com.softwaremagico.tm.random.character.names.RandomSurname;
@@ -72,17 +69,6 @@ import java.util.Objects;
 public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     private CharacterInfoViewModel mViewModel;
     private View root;
-    private SwitchCompat nonOfficialEnabled;
-    private SwitchCompat restrictionsIgnored;
-    private SwitchCompat playerGuideModule;
-    private SwitchCompat factionBookModule;
-    private SwitchCompat revisedEditionModule;
-    private SwitchCompat lostWorldsBookModule;
-    private SwitchCompat imperialDossierBrotherBattleModule;
-    private SwitchCompat imperialDossierCharioteersGuildModule;
-    private SwitchCompat imperialDossierHousehawkwoodModule;
-    private SwitchCompat imperialDossierReevessguildModule;
-    private SwitchCompat vuldrokSpaceModule;
     private ElementSpinner<Specie> specieSelector;
     private ElementSpinner<Upbringing> upbringingSelector;
     private ElementSpinner<Faction> factionsSelector;
@@ -193,95 +179,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         }
 
 
-        nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            try {
-                if (!isChecked) {
-                    CharacterManager.getSelectedCharacter().checkIsOfficial();
-                }
-                CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(!isChecked);
-                CharacterManager.updateSettings();
-            } catch (UnofficialCharacterException e) {
-                SnackbarGenerator.getErrorMessage(root, R.string.message_setting_unofficial_not_changed).show();
-                CharacterManager.getSelectedCharacter().getSettings().setOnlyOfficialAllowed(false);
-                nonOfficialEnabled.setChecked(true);
-            }
-        });
-
-        restrictionsIgnored.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            try {
-                if (!isChecked) {
-                    CharacterManager.getSelectedCharacter().checkIsNotRestricted();
-                }
-                CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(!isChecked);
-                CharacterManager.updateSettings();
-            } catch (RestrictedElementException e) {
-                SnackbarGenerator.getErrorMessage(root, R.string.message_setting_restriction_not_changed).show();
-                CharacterManager.getSelectedCharacter().getSettings().setRestrictionsChecked(false);
-                restrictionsIgnored.setChecked(true);
-            }
-        });
-
-        playerGuideModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                CharacterManager.getSelectedCharacter().getSettings().setPlayerGuideEnabled(isChecked);
-                CharacterManager.updateSettings();
-            }
-        });
-        factionBookModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                CharacterManager.getSelectedCharacter().getSettings().setFactionsBookEnabled(isChecked);
-                CharacterManager.updateSettings();
-            }
-        });
-        revisedEditionModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setRevisedEditionEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        lostWorldsBookModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setLostWorldsBookEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        imperialDossierBrotherBattleModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setImperialDossierBrotherBattleEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        imperialDossierCharioteersGuildModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setImperialDossierCharioteersGuildEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        imperialDossierHousehawkwoodModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setImperialDossierHouseHawkwoodEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        imperialDossierReevessguildModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setImperialDossierReevesGuildEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
-        vuldrokSpaceModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!updatingCharacter) {
-                SettingsHandler.getSettingsEntity().setVuldrokSpaceEnabled(isChecked);
-                SettingsHandler.save(getContext());
-                SettingsHandler.setModulesBySettings();
-            }
-        });
     }
 
     @Override
@@ -300,20 +197,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         CharacterManager.addLevelUpdatedListeners((characterPlayer) -> {
             levelTextEditor.setText(characterPlayer.getLevel() + "");
         });
-
-        nonOfficialEnabled = root.findViewById(R.id.official_selector);
-        restrictionsIgnored = root.findViewById(R.id.restricted_selector);
-        playerGuideModule = root.findViewById(R.id.module_player_guide);
-        factionBookModule = root.findViewById(R.id.module_factions_book);
-        revisedEditionModule = root.findViewById(R.id.module_revised_edition);
-        lostWorldsBookModule = root.findViewById(R.id.module_lost_worlds_book);
-        imperialDossierBrotherBattleModule = root.findViewById(R.id.module_imperial_dossier_brother_battle);
-        imperialDossierCharioteersGuildModule = root.findViewById(R.id.module_imperial_dossier_charioteers_guild);
-        imperialDossierHousehawkwoodModule = root.findViewById(R.id.module_imperial_dossier_house_hawkwood);
-        imperialDossierReevessguildModule = root.findViewById(R.id.module_imperial_dossier_reeves_guild);
-        vuldrokSpaceModule = root.findViewById(R.id.module_vuldrok_space);
-
-        CharacterManager.addCharacterSettingsUpdateListeners(this::updateSettings);
 
         return root;
     }
@@ -348,19 +231,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             factionsSelector.setSelection(selectedFaction);
             callingSelector.setSelection(selectedCalling);
             planetSelector.setSelection(selectedPlanet);
-
-            nonOfficialEnabled.setChecked(!characterPlayer.getSettings().isOnlyOfficialAllowed());
-            restrictionsIgnored.setChecked(!characterPlayer.getSettings().isRestrictionsChecked());
-            playerGuideModule.setChecked(characterPlayer.getSettings().isPlayerGuideEnabled());
-            playerGuideModule.setEnabled(true);
-            factionBookModule.setChecked(characterPlayer.getSettings().isFactionsBookEnabled());
-            revisedEditionModule.setChecked(SettingsHandler.getSettingsEntity().isRevisedEditionEnabled());
-            lostWorldsBookModule.setChecked(SettingsHandler.getSettingsEntity().isLostWorldsBookEnabled());
-            imperialDossierBrotherBattleModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierBrotherBattleEnabled());
-            imperialDossierCharioteersGuildModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierCharioteersGuildEnabled());
-            imperialDossierHousehawkwoodModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierHouseHawkwoodEnabled());
-            imperialDossierReevessguildModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierReevesGuildEnabled());
-            vuldrokSpaceModule.setChecked(SettingsHandler.getSettingsEntity().isVuldrokSpaceEnabled());
         }
     }
 
@@ -385,18 +255,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             ageTextEditor.setText("");
         }
 
-        nonOfficialEnabled.setChecked(!character.getSettings().isOnlyOfficialAllowed());
-        restrictionsIgnored.setChecked(!character.getSettings().isRestrictionsChecked());
-        playerGuideModule.setChecked(character.getSettings().isPlayerGuideEnabled());
-        playerGuideModule.setEnabled(true);
-        factionBookModule.setChecked(character.getSettings().isFactionsBookEnabled());
-        revisedEditionModule.setChecked(SettingsHandler.getSettingsEntity().isRevisedEditionEnabled());
-        lostWorldsBookModule.setChecked(SettingsHandler.getSettingsEntity().isLostWorldsBookEnabled());
-        imperialDossierBrotherBattleModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierBrotherBattleEnabled());
-        imperialDossierCharioteersGuildModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierCharioteersGuildEnabled());
-        imperialDossierHousehawkwoodModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierHouseHawkwoodEnabled());
-        imperialDossierReevessguildModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierReevesGuildEnabled());
-        vuldrokSpaceModule.setChecked(SettingsHandler.getSettingsEntity().isVuldrokSpaceEnabled());
 
         specieSelector.setSelection(SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()));
         upbringingSelector.setSelection(UpbringingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getUpbringing()));

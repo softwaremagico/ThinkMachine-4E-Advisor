@@ -19,6 +19,7 @@
     <string name="navigation_character">Personaje</string>
     <string name="navigation_visualization">Visualización</string>
     <string name="tab_character_level">Nivel</string>
+    <string name="tab_character_settings">Ajustes</string>
     <string name="tab_visualization_txt">Texto</string>
     <string name="share">Compartir</string>
     <string name="share_body">Hoja de personaje para \'${CHARACTER_NAME}\'.</string>
