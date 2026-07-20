@@ -1,6 +1,5 @@
 [versions]
 agp = "9.2.1"
-androidAwt = "1.0.0"
 coreSplashscreen = "1.2.0-alpha02"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,7 +14,6 @@ thinkMachine = { strictly = "4.3.0-SNAPSHOT"}
 cardview = "1.0.0"
 
 [libraries]
-android-awt = { module = "com.github.andob:android-awt", version.ref = "androidAwt" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
