@@ -59,6 +59,7 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         mViewModel = new ViewModelProvider(this).get(CharacterDefinitionStepModel.class);
         setCharacterDefinitionStepModel(mViewModel);
         CharacterManager.addLevelUpdatedListeners(this::updateLevels);
+        CharacterManager.addCharacterCallingUpdatedListener(this::updateLevels);
         updateLevels(CharacterManager.getSelectedCharacter());
         return root;
     }
@@ -103,12 +104,14 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         callingSelector.setAdapter(new ElementAdapter<>(requireContext(), options, false, Calling.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        (!getItem(position).getRestrictions().isRestricted() && !getItem(position).getRestrictions().isRestricted(character) && !disabled);
+                final Calling calling = getItem(position);
+                return calling == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                        (calling.getRestrictions() != null && !calling.getRestrictions().isRestricted()
+                                && !calling.getRestrictions().isRestricted(character) && !disabled);
             }
         });
 
-        final String selectedCallingId = ensureSelectedCalling(levelSelector, character, level);
+        final String selectedCallingId = resolveSelectedCallingId(levelSelector, character, level);
         if (selectedCallingId != null) {
             callingSelector.setSelection(options.stream().filter(calling -> calling != null && Objects.equals(calling.getId(), selectedCallingId)).findFirst().orElse(null));
         } else {
@@ -143,16 +146,15 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         rootLayout.addView(callingSelector);
     }
 
-    private String ensureSelectedCalling(LevelSelector levelSelector, CharacterPlayer character, int level) {
-        if (levelSelector.getCallingId() != null) {
-            return levelSelector.getCallingId();
+    static String getSelectedCallingId(String explicitCallingId, String inheritedCallingId) {
+        if (explicitCallingId != null) {
+            return explicitCallingId;
         }
+        return inheritedCallingId;
+    }
 
-        final String latestCallingId = getLatestCallingId(character, level);
-        if (latestCallingId != null) {
-            levelSelector.setCalling(latestCallingId);
-        }
-        return latestCallingId;
+    private String resolveSelectedCallingId(LevelSelector levelSelector, CharacterPlayer character, int level) {
+        return getSelectedCallingId(levelSelector.getCallingId(), getLatestCallingId(character, level));
     }
 
     private String getLatestCallingId(CharacterPlayer character, int level) {
