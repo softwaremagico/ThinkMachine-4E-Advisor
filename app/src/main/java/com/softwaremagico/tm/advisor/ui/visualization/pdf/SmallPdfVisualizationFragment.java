@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.lowagie.text.ExceptionConverter;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
@@ -50,6 +51,8 @@ public class SmallPdfVisualizationFragment extends PdfVisualizationFragment {
         try {
             final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
             characterSheet.createFile(path);
+        } catch (ExceptionConverter e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
         } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }

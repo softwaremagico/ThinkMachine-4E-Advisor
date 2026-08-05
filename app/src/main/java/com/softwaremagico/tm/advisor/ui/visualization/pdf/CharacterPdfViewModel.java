@@ -15,6 +15,7 @@ package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 import androidx.lifecycle.ViewModel;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.ExceptionConverter;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
@@ -30,6 +31,8 @@ public class CharacterPdfViewModel extends ViewModel {
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (ExceptionConverter e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
         } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
@@ -41,6 +44,8 @@ public class CharacterPdfViewModel extends ViewModel {
             final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (ExceptionConverter e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);

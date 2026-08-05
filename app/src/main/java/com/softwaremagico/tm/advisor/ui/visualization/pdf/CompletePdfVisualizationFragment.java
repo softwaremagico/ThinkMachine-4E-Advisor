@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.ExceptionConverter;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
@@ -46,9 +47,21 @@ public class CompletePdfVisualizationFragment extends PdfVisualizationFragment {
     @Override
     protected byte[] generatePdf() {
         try {
-            final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
+            final var selectedCharacter = CharacterManager.getSelectedCharacter();
+            AdvisorLog.info(this.getClass(),
+                    "Generating complete PDF in-memory. name='{}', level={}, faction={}, calling={}, upbringing={}, restrictionsChecked={}",
+                    selectedCharacter.getCompleteNameRepresentation(),
+                    selectedCharacter.getLevel(),
+                    selectedCharacter.getFaction(),
+                    selectedCharacter.getCalling(),
+                    selectedCharacter.getUpbringing(),
+                    selectedCharacter.getSettings().isRestrictionsChecked());
+
+            final CharacterSheet characterSheet = new CharacterSheet(selectedCharacter);
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (ExceptionConverter e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
@@ -59,8 +72,20 @@ public class CompletePdfVisualizationFragment extends PdfVisualizationFragment {
     @Override
     protected void generatePdfFile(String path) {
         try {
-            final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
+            final var selectedCharacter = CharacterManager.getSelectedCharacter();
+            AdvisorLog.info(this.getClass(),
+                    "Generating complete PDF file. name='{}', level={}, faction={}, calling={}, upbringing={}, path='{}'",
+                    selectedCharacter.getCompleteNameRepresentation(),
+                    selectedCharacter.getLevel(),
+                    selectedCharacter.getFaction(),
+                    selectedCharacter.getCalling(),
+                    selectedCharacter.getUpbringing(),
+                    path);
+
+            final CharacterSheet characterSheet = new CharacterSheet(selectedCharacter);
             characterSheet.createFile(path);
+        } catch (ExceptionConverter e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
         } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
