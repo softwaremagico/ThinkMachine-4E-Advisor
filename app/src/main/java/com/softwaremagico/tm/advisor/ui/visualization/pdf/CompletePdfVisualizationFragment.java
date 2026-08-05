@@ -45,10 +45,12 @@ public class CompletePdfVisualizationFragment extends PdfVisualizationFragment {
 
     @Override
     protected byte[] generatePdf() {
-        final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
         try {
+            final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
         return new byte[0];
@@ -56,7 +58,11 @@ public class CompletePdfVisualizationFragment extends PdfVisualizationFragment {
 
     @Override
     protected void generatePdfFile(String path) {
-        final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
-        characterSheet.createFile(path);
+        try {
+            final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
+            characterSheet.createFile(path);
+        } catch (LinkageError e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        }
     }
 }

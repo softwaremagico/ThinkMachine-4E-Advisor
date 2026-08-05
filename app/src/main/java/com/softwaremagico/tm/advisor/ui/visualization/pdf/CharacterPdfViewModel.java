@@ -25,20 +25,24 @@ import com.softwaremagico.tm.pdf.small.SmallCharacterSheet;
 public class CharacterPdfViewModel extends ViewModel {
 
     protected byte[] generatePdf() {
-        final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
         try {
+            final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
         return new byte[0];
     }
 
     protected byte[] generateSmallPdf() {
-        final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
         try {
+            final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
             return (characterSheet.generate());
         } catch (EmptyPdfBodyException | DocumentException | InvalidXmlElementException e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        } catch (LinkageError e) {
             AdvisorLog.errorMessage(this.getClass().getName(), e);
         }
         return new byte[0];

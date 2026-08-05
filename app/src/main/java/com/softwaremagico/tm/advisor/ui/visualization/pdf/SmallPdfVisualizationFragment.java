@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.pdf.small.SmallCharacterSheet;
 
@@ -46,7 +47,11 @@ public class SmallPdfVisualizationFragment extends PdfVisualizationFragment {
 
     @Override
     protected void generatePdfFile(String path) {
-        final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
-        characterSheet.createFile(path);
+        try {
+            final SmallCharacterSheet characterSheet = new SmallCharacterSheet(CharacterManager.getSelectedCharacter());
+            characterSheet.createFile(path);
+        } catch (LinkageError e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+        }
     }
 }

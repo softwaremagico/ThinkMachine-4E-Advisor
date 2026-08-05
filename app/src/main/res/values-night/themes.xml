@@ -54,5 +54,9 @@
         <item name="colorOnInfo">@color/colorOnInfo</item>
         <item name="colorInfoContainer">@color/colorInfoContainer</item>
         <item name="colorOnInfoContainer">@color/colorOnInfoContainer</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>

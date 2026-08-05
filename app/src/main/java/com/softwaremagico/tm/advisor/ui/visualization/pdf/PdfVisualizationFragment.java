@@ -44,6 +44,7 @@ import com.softwaremagico.tm.log.MachineLog;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,23 +72,36 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
         final FloatingActionButton fab = root.findViewById(R.id.share);
         fab.setOnClickListener(view -> sharePdf());
 
+        // Render when the view has a measured width to avoid empty/blank bitmaps.
+        root.post(this::initData);
         return root;
     }
 
     protected void initData() {
         try {
+            if (!isAdded() || layout == null) {
+                return;
+            }
             layout.removeAllViews();
-            final List<Bitmap> images = pdfRender(mViewModel.generatePdf(), root.getWidth());
+            byte[] pdfBytes = generatePdf();
+            if (pdfBytes == null || pdfBytes.length == 0) {
+                AdvisorLog.warning(this.getClass(), "Empty PDF generated in memory. Falling back to temp file generation.");
+                pdfBytes = generatePdfFromFile();
+            }
+            if (pdfBytes.length == 0) {
+                AdvisorLog.warning(this.getClass(), "Unable to render PDF. Generated PDF is empty.");
+                return;
+            }
+
+            final int targetWidth = layout.getWidth() > 0 ? layout.getWidth() : root.getResources().getDisplayMetrics().widthPixels;
+            final List<Bitmap> images = pdfRender(pdfBytes, targetWidth);
             for (Bitmap image : images) {
                 if (image != null) {
                     final ImageView imageView = new ImageView(getContext());
                     imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT));
-                    if (root.getWidth() > 0) {
-                        imageView.setImageBitmap(Bitmap.createScaledBitmap(image, root.getWidth(), root.getHeight(), false));
-                    } else {
-                        imageView.setImageBitmap(image);
-                    }
+                    imageView.setAdjustViewBounds(true);
+                    imageView.setImageBitmap(image);
                     layout.addView(imageView);
                 }
             }
@@ -141,7 +155,9 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
 
     @Override
     public void updateData() {
-        initData();
+        if (root != null) {
+            root.post(this::initData);
+        }
     }
 
 
@@ -161,6 +177,21 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
         renderer.close();
 
         return gallery;
+    }
+
+    private byte[] generatePdfFromFile() throws IOException {
+        final File tempPdf = File.createTempFile("temp_sheet_fallback", ".pdf", requireContext().getCacheDir());
+        generatePdfFile(tempPdf.getAbsolutePath());
+
+        if (!tempPdf.exists() || tempPdf.length() == 0) {
+            return new byte[0];
+        }
+
+        final byte[] content = Files.readAllBytes(tempPdf.toPath());
+        if (!tempPdf.delete()) {
+            MachineLog.debug(this.getClass().getName(), "Temp PDF fallback file not deleted: {}", tempPdf.getAbsolutePath());
+        }
+        return content;
     }
 
     private Bitmap pdfRender(PdfRenderer renderer, int pageNum, int width) {
@@ -185,7 +216,7 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     }
 
     private ParcelFileDescriptor getFileDescriptor(byte[] byteArray) throws IOException {
-        File file = File.createTempFile("temp_sheet", "pdf");
+        File file = File.createTempFile("temp_sheet", ".pdf", requireContext().getCacheDir());
         try (FileOutputStream output = new FileOutputStream(file, true)) {
             output.write(byteArray);
         }

@@ -24,10 +24,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.MenuCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
 
         setContentView(R.layout.activity_main);
 
@@ -79,6 +83,21 @@ public class MainActivity extends AppCompatActivity {
         SettingsHandler.setModulesBySettings();
 
         final BottomNavigationView navView = findViewById(R.id.nav_view);
+        final View navHostFragment = findViewById(R.id.nav_host_fragment);
+        final View container = findViewById(R.id.container);
+        final int navViewTopPadding = navView.getPaddingTop();
+
+        ViewCompat.setOnApplyWindowInsetsListener(container, (view, windowInsets) -> {
+            final androidx.core.graphics.Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            navHostFragment.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
+            navView.setPadding(systemBars.left, navViewTopPadding, systemBars.right, systemBars.bottom);
+
+            return windowInsets;
+        });
+
+        ViewCompat.requestApplyInsets(container);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
