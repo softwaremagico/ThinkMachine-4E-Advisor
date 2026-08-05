@@ -47,6 +47,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class PdfVisualizationFragment extends Fragment implements VisualizationFragment {
     protected static final String ARG_SECTION_NUMBER = "section_number";
@@ -55,6 +57,8 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     private File characterSheetAsPdf;
     private View root;
     private LinearLayout layout;
+    private final ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
+    private int latestRenderRequestId = 0;
 
     protected abstract View getFragmentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container);
 
@@ -78,40 +82,53 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     }
 
     protected void initData() {
-        try {
-            if (!isAdded() || layout == null) {
-                return;
-            }
-            layout.removeAllViews();
-            byte[] pdfBytes = generatePdf();
-            if (pdfBytes == null || pdfBytes.length == 0) {
-                AdvisorLog.warning(this.getClass(), "Empty PDF generated in memory. Falling back to temp file generation.");
-                pdfBytes = generatePdfFromFile();
-            }
-            if (pdfBytes.length == 0) {
-                AdvisorLog.warning(this.getClass(), "Unable to render PDF. Generated PDF is empty.");
-                return;
-            }
-
-            final int targetWidth = layout.getWidth() > 0 ? layout.getWidth() : root.getResources().getDisplayMetrics().widthPixels;
-            final List<Bitmap> images = pdfRender(pdfBytes, targetWidth);
-            for (Bitmap image : images) {
-                if (image != null) {
-                    final ImageView imageView = new ImageView(getContext());
-                    imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
-                    imageView.setAdjustViewBounds(true);
-                    imageView.setImageBitmap(image);
-                    layout.addView(imageView);
-                }
-            }
-        } catch (IOException e) {
-            AdvisorLog.errorMessage(this.getClass(), e);
+        if (!isAdded() || layout == null) {
+            return;
         }
+
+        layout.removeAllViews();
+        final int targetWidth = layout.getWidth() > 0 ? layout.getWidth() : root.getResources().getDisplayMetrics().widthPixels;
+        final int requestId = ++latestRenderRequestId;
+
+        backgroundExecutor.execute(() -> {
+            try {
+                byte[] pdfBytes = generatePdf();
+                if (pdfBytes == null || pdfBytes.length == 0) {
+                    AdvisorLog.warning(this.getClass(), "Empty PDF generated in memory. Falling back to temp file generation.");
+                    pdfBytes = generatePdfFromFile();
+                }
+                if (pdfBytes.length == 0) {
+                    AdvisorLog.warning(this.getClass(), "Unable to render PDF. Generated PDF is empty.");
+                    return;
+                }
+
+                final List<Bitmap> images = pdfRender(pdfBytes, targetWidth);
+                root.post(() -> {
+                    if (!isAdded() || layout == null || requestId != latestRenderRequestId) {
+                        return;
+                    }
+                    for (Bitmap image : images) {
+                        if (image != null) {
+                            final ImageView imageView = new ImageView(getContext());
+                            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT));
+                            imageView.setAdjustViewBounds(true);
+                            imageView.setImageBitmap(image);
+                            layout.addView(imageView);
+                        }
+                    }
+                });
+            } catch (IOException e) {
+                AdvisorLog.errorMessage(this.getClass(), e);
+            }
+        });
     }
 
 
     private void sharePdf() {
+        if (getContext() == null) {
+            return;
+        }
         final File imagePath = new File(getContext().getCacheDir(), "pdf");
         characterSheetAsPdf = new File(imagePath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
                 CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet.pdf" :
@@ -121,25 +138,37 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
         if (contentUri != null) {
             imagePath.mkdirs();
             characterSheetAsPdf.getParentFile().mkdirs();
-            generatePdfFile(characterSheetAsPdf.getAbsolutePath());
+            backgroundExecutor.execute(() -> {
+                generatePdfFile(characterSheetAsPdf.getAbsolutePath());
+                root.post(() -> {
+                    if (!isAdded() || getContext() == null || getActivity() == null) {
+                        return;
+                    }
+                    final Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+                    shareIntent.setType(getActivity().getContentResolver().getType(contentUri));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().length() > 0 ?
+                            ": " + CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() : ""));
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body)));
 
-            final Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-            shareIntent.setType(getActivity().getContentResolver().getType(contentUri));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().length() > 0 ?
-                    ": " + CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() : ""));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body)));
-
-            final Intent chooser = Intent.createChooser(shareIntent, "Share File");
-            final List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
-            for (final ResolveInfo resolveInfo : resInfoList) {
-                final String packageName = resolveInfo.activityInfo.packageName;
-                getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            startActivity(chooser);
+                    final Intent chooser = Intent.createChooser(shareIntent, "Share File");
+                    final List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+                    for (final ResolveInfo resolveInfo : resInfoList) {
+                        final String packageName = resolveInfo.activityInfo.packageName;
+                        getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
+                    startActivity(chooser);
+                });
+            });
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        backgroundExecutor.shutdownNow();
     }
 
     @Override

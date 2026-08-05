@@ -67,7 +67,7 @@ public final class SettingsHandler {
         }
     }
 
-    private static SettingsEntity load(Context context) {
+    public static SettingsEntity loadSettingsEntity(Context context) {
         SettingsEntity settingsEntity = AppDatabase.getInstance(context).getSettingsEntityDao().get();
         if (settingsEntity == null) {
             settingsEntity = new SettingsEntity();
@@ -80,7 +80,11 @@ public final class SettingsHandler {
     }
 
     public static void setSettingsEntity(Context context) {
-        SettingsHandler.settingsEntity = load(context);
+        SettingsHandler.settingsEntity = loadSettingsEntity(context);
+    }
+
+    public static void setSettingsEntity(SettingsEntity settingsEntity) {
+        SettingsHandler.settingsEntity = settingsEntity;
     }
 
     public static void setModulesBySettings() {

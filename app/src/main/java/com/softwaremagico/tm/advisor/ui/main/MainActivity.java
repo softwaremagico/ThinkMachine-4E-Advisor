@@ -44,6 +44,7 @@ import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.advisor.core.FileUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.persistence.CharacterHandler;
+import com.softwaremagico.tm.advisor.persistence.SettingsEntity;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.advisor.ui.about.AboutWindow;
 import com.softwaremagico.tm.advisor.ui.about.SettingsWindow;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_TMA_FILE = 0;
     private static final int CHARACTERS_SELECTOR_GROUP = 10;
     private static final int CHARACTERS_INDEX = 1000;
+    private final java.util.concurrent.ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        SettingsHandler.setSettingsEntity(this.getBaseContext());
-        SettingsHandler.setModulesBySettings();
+        backgroundExecutor.execute(() -> {
+            final SettingsEntity loadedSettings = SettingsHandler.loadSettingsEntity(getBaseContext());
+            runOnUiThread(() -> {
+                SettingsHandler.setSettingsEntity(loadedSettings);
+                SettingsHandler.setModulesBySettings();
+            });
+        });
 
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         final View navHostFragment = findViewById(R.id.nav_host_fragment);
@@ -198,16 +205,25 @@ public class MainActivity extends AppCompatActivity {
                 // The result data contains a URI for the document or directory that
                 // the user selected.
                 Uri uri = resultData.getData();
-                try {
-                    if (uri != null) {
-                        CharacterManager.setSelectedCharacter(CharacterJsonManager.fromJson(FileUtils.readFile(this.getBaseContext(), uri)));
-                    }
-                } catch (InvalidJsonException e) {
-                    AdvisorLog.errorMessage(this.getClass().getName(), e);
-                    SnackbarGenerator.getErrorMessage(parentLayout, R.string.invalid_json_file).show();
+                if (uri != null) {
+                    backgroundExecutor.execute(() -> {
+                        try {
+                            final CharacterPlayer character = CharacterJsonManager.fromJson(FileUtils.readFile(getBaseContext(), uri));
+                            runOnUiThread(() -> CharacterManager.setSelectedCharacter(character));
+                        } catch (InvalidJsonException e) {
+                            AdvisorLog.errorMessage(this.getClass().getName(), e);
+                            runOnUiThread(() -> SnackbarGenerator.getErrorMessage(parentLayout, R.string.invalid_json_file).show());
+                        }
+                    });
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        backgroundExecutor.shutdownNow();
     }
 
 
