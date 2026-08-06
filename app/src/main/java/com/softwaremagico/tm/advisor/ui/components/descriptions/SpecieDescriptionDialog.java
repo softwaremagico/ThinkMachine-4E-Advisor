@@ -5,8 +5,6 @@ import com.softwaremagico.tm.character.perks.PerkOption;
 import com.softwaremagico.tm.character.specie.ElementValues;
 import com.softwaremagico.tm.character.specie.Specie;
 
-import java.util.stream.Collectors;
-
 public class SpecieDescriptionDialog extends CharacterDefinitionStepDescriptionDialog<Specie> {
 
     public SpecieDescriptionDialog(Specie element) {
@@ -49,10 +47,10 @@ public class SpecieDescriptionDialog extends CharacterDefinitionStepDescriptionD
 
         // Starting perks
         if (specie.getPerks() != null && !specie.getPerks().isEmpty()) {
-            sb.append("<br><b>").append(getString(com.softwaremagico.tm.advisor.R.string.perks)).append(":</b> ");
-            sb.append(specie.getPerks().stream()
-                    .map(PerkOption::toString)
-                    .collect(Collectors.joining(", ")));
+            sb.append("<br><b>").append(getString(com.softwaremagico.tm.advisor.R.string.perks)).append(":</b>");
+            for (PerkOption perkOption : specie.getPerks()) {
+                sb.append("<br>&nbsp;&nbsp;&bull; ").append(translatedPerkOptionName(perkOption));
+            }
         }
 
         // Common CharacterDefinitionStep fields

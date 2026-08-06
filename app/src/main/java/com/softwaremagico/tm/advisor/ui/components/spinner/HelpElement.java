@@ -56,7 +56,7 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
                 R.styleable.TranslatedEditText, 0, 0);
         final String tag = attributes.getString(R.styleable.TranslatedEditText_translation);
         if (tag != null) {
-            tagText.setText(ThinkMachineTranslator.getTranslatedText(tag) + " ");
+            tagText.setText(resolveTagText(tag) + " ");
         }
         tagText.setTextAppearance(R.style.CharacterInfo);
         attributes.recycle();
@@ -69,6 +69,19 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
 
     protected ImageView getHelpButton() {
         return helpButton;
+    }
+
+    private String resolveTagText(String tag) {
+        try {
+            return ThinkMachineTranslator.getTranslatedText(tag);
+        } catch (Exception ignored) {
+            // Fallback for wiki labels backed by Android strings instead of TextFactory keys.
+            final int stringId = getContext().getResources().getIdentifier(tag, "string", getContext().getPackageName());
+            if (stringId != 0) {
+                return getContext().getString(stringId);
+            }
+            return tag;
+        }
     }
 
     public abstract E getSelection();

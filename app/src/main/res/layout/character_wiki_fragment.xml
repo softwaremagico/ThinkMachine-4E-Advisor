@@ -111,60 +111,35 @@
             android:layout_height="wrap_content"
             android:text="@string/wiki_group_equipment" />
 
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/preference_option_melee" />
-
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_melee_weapon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/preference_option_ranged" />
+            custom:translation="preference_option_melee" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_ranged_weapon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/preference_option_armor" />
+            custom:translation="preference_option_ranged" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_armor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wiki_handheld_shield" />
+            custom:translation="preference_option_armor" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_handheld_shield"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/preference_option_shield" />
+            custom:translation="wiki_handheld_shield" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_shield"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            custom:translation="preference_option_shield" />
 
         <TextView
             style="@style/WikiGroupTitle"
@@ -172,27 +147,17 @@
             android:layout_height="wrap_content"
             android:text="@string/wiki_group_occultism" />
 
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wiki_occultism_paths" />
-
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_occultism_path"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            style="@style/WikiGroupTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wiki_occultism_powers" />
+            custom:translation="wiki_occultism_paths" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
             android:id="@+id/wiki_occultism_power"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            custom:translation="wiki_occultism_powers" />
 
     </LinearLayout>
 

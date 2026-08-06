@@ -139,7 +139,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
     }
 
     /** Devuelve el nombre traducido de un PerkOption. */
-    private String translatedPerkOptionName(PerkOption opt) {
+    protected String translatedPerkOptionName(PerkOption opt) {
         try {
             if (opt.getElement() != null && opt.getElement().getName() != null) {
                 return opt.getElement().getName().getTranslatedText();
