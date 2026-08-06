@@ -51,15 +51,16 @@ android {
         applicationId "com.softwaremagico.tm"
         minSdk 31
         targetSdk 37
-        versionCode 13
-        versionName "0.5.1"
+        versionCode 14
+        versionName "0.6.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             ndk {
@@ -124,8 +125,8 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-    androidTestImplementation 'androidx.fragment:fragment-testing:1.8.9'
-    debugImplementation 'androidx.fragment:fragment-testing-manifest:1.8.9'
+    androidTestImplementation libs.fragment.testing
+    debugImplementation libs.fragment.testing.manifest
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
     implementation libs.think.machine.pdf
@@ -138,5 +139,5 @@ dependencies {
     implementation libs.android.awt
 
     // Soporte desugering para APIs Java 15+
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    coreLibraryDesugaring libs.desugar.jdk.libs
 }

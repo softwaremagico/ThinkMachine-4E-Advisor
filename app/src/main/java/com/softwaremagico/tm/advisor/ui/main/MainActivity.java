@@ -12,7 +12,6 @@
 
 package com.softwaremagico.tm.advisor.ui.main;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -122,49 +121,54 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         final View parentLayout = findViewById(android.R.id.content);
-        switch (menuItem.getItemId()) {
-            case R.id.settings_load:
-                showDialog();
-                return true;
-            case R.id.settings_save:
-                saveCurrentCharacter(parentLayout);
-                return true;
-            case R.id.settings_new:
-                newCharacter();
-                return true;
-            case R.id.settings_global_settings:
-                globalSettings();
-                return true;
-            case R.id.settings_export_file:
-                try {
-                    exportJson(parentLayout);
-                } catch (IOException e) {
-                    AdvisorLog.errorMessage(this.getClass().getName(), e);
-                }
-                return true;
-            case R.id.settings_import_file:
-                importJson();
-                return true;
-            case R.id.settings_remove_character:
-                removeSelectedCharacter(parentLayout);
-                return true;
-            case R.id.settings_about:
-                new AboutWindow().show(getSupportFragmentManager(), "");
-                return super.onOptionsItemSelected(menuItem);
-            default:
-                //Select an existing character
-                if (menuItem.getItemId() >= CHARACTERS_INDEX) {
-                    CharacterManager.setSelectedCharacter(CharacterManager.getCharacters()
-                            .get(menuItem.getItemId() - CHARACTERS_INDEX));
-                    return true;
-                } else {
-                    return super.onOptionsItemSelected(menuItem);
-                }
+        final int itemId = menuItem.getItemId();
+        if (itemId == R.id.settings_load) {
+            showDialog();
+            return true;
         }
+        if (itemId == R.id.settings_save) {
+            saveCurrentCharacter(parentLayout);
+            return true;
+        }
+        if (itemId == R.id.settings_new) {
+            newCharacter();
+            return true;
+        }
+        if (itemId == R.id.settings_global_settings) {
+            globalSettings();
+            return true;
+        }
+        if (itemId == R.id.settings_export_file) {
+            try {
+                exportJson(parentLayout);
+            } catch (IOException e) {
+                AdvisorLog.errorMessage(this.getClass().getName(), e);
+            }
+            return true;
+        }
+        if (itemId == R.id.settings_import_file) {
+            importJson();
+            return true;
+        }
+        if (itemId == R.id.settings_remove_character) {
+            removeSelectedCharacter(parentLayout);
+            return true;
+        }
+        if (itemId == R.id.settings_about) {
+            new AboutWindow().show(getSupportFragmentManager(), "");
+            return super.onOptionsItemSelected(menuItem);
+        }
+
+        // Select an existing character from dynamic options.
+        if (itemId >= CHARACTERS_INDEX) {
+            CharacterManager.setSelectedCharacter(CharacterManager.getCharacters()
+                    .get(itemId - CHARACTERS_INDEX));
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     /**
