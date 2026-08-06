@@ -113,5 +113,5 @@ It also displays the installed app version for traceability and support.
 
 The source code is hosted in this repository. The production application is available on Google Play:
 
-[Google Play - ThinkMachine-4E-Advisor](https://play.google.com/store/apps/details?id=com.softwaremagico.tm.advisor)
+[Google Play - ThinkMachine-4E-Advisor](https://play.google.com/store/apps/details?id=com.softwaremagico.tm)
 
