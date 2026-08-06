@@ -12,106 +12,106 @@
 [![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=softwaremagico_ThinkMachine-4E-Advisor&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=softwaremagico_ThinkMachine-4E-Advisor)
 [![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=softwaremagico_ThinkMachine-4E-Advisor&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=softwaremagico_ThinkMachine-4E-Advisor)
 
-ThinkMachine-4E-Advisor es una aplicación Android construida sobre la librería Java
-[ThinkMachine 4E](https://github.com/softwaremagico/ThinkMachine-4E).
-Su objetivo es ofrecer un asistente completo para la creación y gestión de hojas de personaje
-de **Fading Suns 4ª Edición**, tanto para jugadores como para directores de juego.
+ThinkMachine-4E-Advisor is an Android application built on top of the
+[ThinkMachine 4E](https://github.com/softwaremagico/ThinkMachine-4E) Java library.
+Its goal is to provide a complete assistant for creating and managing character sheets
+for **Fading Suns 4th Edition**, for both players and game masters.
 
-## Alcance funcional
+## Functional scope
 
-La aplicación se organiza en cuatro áreas principales:
+The application is organized into four main areas:
 
-- **Creación de personaje**
-- **Generación aleatoria**
-- **Visualización de ficha**
-- **Wiki de reglas y contenidos**
+- **Character creation**
+- **Random generation**
+- **Sheet visualization**
+- **Rules and content wiki**
 
-Adicionalmente, incorpora gestión avanzada de personajes, configuración global y secciones legales e informativas.
+In addition, it includes advanced character management, global settings, and legal/informational sections.
 
-## Funcionalidades principales
+## Main features
 
-### 1) Creación y edición de personaje
+### 1) Character creation and editing
 
-El editor de personaje se estructura en pestañas especializadas que cubren el flujo completo de creación:
+The character editor is organized into specialized tabs that cover the full creation flow:
 
-- Datos básicos de identidad y perfil.
-- Información descriptiva y trasfondo.
-- Selección de upbringing, facción y calling.
-- Configuración de nivel y progresión.
-- Configuración de ocultismo y cibernética.
-- Gestión de equipo e inventario.
-- Ajustes adicionales de personaje.
+- Basic identity and profile data.
+- Descriptive information and background.
+- Upbringing, faction, and calling selection.
+- Level and progression setup.
+- Occultism and cybernetics configuration.
+- Equipment and inventory management.
+- Additional character adjustments.
 
-Este enfoque permite pasar de una idea inicial a una hoja plenamente configurada de forma guiada y coherente.
+This approach allows users to move from an initial concept to a fully configured character sheet in a guided and coherent way.
 
-### 2) Generador aleatorio
+### 2) Random generator
 
-La sección de generación aleatoria proporciona herramientas para acelerar la creación mediante:
+The random generation section provides tools to speed up character creation through:
 
-- Generación de perfiles aleatorios.
-- Opciones orientadas a NPC.
-- Preferencias de aleatorización configurables.
+- Random profile generation.
+- NPC-oriented options.
+- Configurable randomization preferences.
 
-Resulta especialmente útil para preparación rápida de partidas y creación dinámica de contenido.
+It is especially useful for quick session preparation and dynamic content creation.
 
-### 3) Modos de visualización de ficha
+### 3) Character sheet visualization modes
 
-La aplicación ofrece distintos formatos para consultar el resultado final:
+The application offers different formats to review the final result:
 
-- **Vista de texto** para revisión directa.
-- **Vista PDF completa** para salida detallada.
-- **Vista PDF reducida** para escenarios de consulta compacta.
+- **Text view** for direct review.
+- **Full PDF view** for detailed output.
+- **Compact PDF view** for concise consultation scenarios.
 
-Estos modos facilitan la consulta durante la sesión y la preparación de material para compartir o imprimir.
+These modes make it easier to consult information during sessions and prepare material for sharing or printing.
 
-### 4) Wiki integrada y consulta de contenido
+### 4) Integrated wiki and content reference
 
-La wiki incluye un catálogo interno de elementos del juego, entre ellos:
+The wiki includes an internal catalog of game elements, including:
 
-- Especies, upbringings, facciones y callings.
-- Capacidades, habilidades y perks.
-- Armas, escudos, armaduras y cibernética.
-- Poderes de ocultismo y referencias planetarias.
+- Species, upbringings, factions, and callings.
+- Capabilities, skills, and perks.
+- Weapons, shields, armor, and cybernetics.
+- Occult powers and planetary references.
 
-Esto permite consultar reglas y contenido sin abandonar el flujo de creación.
+This allows users to consult rules and content without leaving the character creation flow.
 
-### 5) Gestión de personajes y ficheros
+### 5) Character and file management
 
-La aplicación cubre el ciclo de vida completo del personaje:
+The application covers the full character lifecycle:
 
-- Crear personaje nuevo.
-- Guardar personaje actual.
-- Cargar personaje existente.
-- Eliminar personaje seleccionado.
-- Exportar personaje a JSON.
-- Importar personaje desde JSON.
-- Selección dinámica de personajes desde menú.
+- Create a new character.
+- Save the current character.
+- Load an existing character.
+- Delete the selected character.
+- Export a character to JSON.
+- Import a character from JSON.
+- Dynamically select characters from the menu.
 
-La importación y exportación en JSON simplifica copias de seguridad, transferencia y continuidad entre dispositivos.
+JSON import/export simplifies backups, transfer, and continuity across devices.
 
-### 6) Configuración global y control de módulos
+### 6) Global settings and module control
 
-El panel de ajustes incluye controles para adaptar el comportamiento de la aplicación:
+The settings panel includes controls to adapt application behavior:
 
-- Activación/desactivación de contenido no oficial.
-- Activación/desactivación de comprobación de restricciones.
-- Habilitación o deshabilitación de módulos concretos de reglas.
+- Enable/disable non-official content.
+- Enable/disable restriction checks.
+- Enable or disable specific rules modules.
 
-De este modo, cada mesa puede ajustar la experiencia a su marco de campaña y fuentes permitidas.
+This allows each table to adapt the experience to its campaign framework and allowed sources.
 
-### 7) Información de aplicación, licencia y privacidad
+### 7) Application, license, and privacy information
 
-La sección informativa se presenta en pestañas diferenciadas para:
+The informational section is presented in separate tabs for:
 
-- Información general de la aplicación.
-- Detalles de licencia.
-- Política de privacidad.
+- General application information.
+- License details.
+- Privacy policy.
 
-También muestra la versión instalada para trazabilidad y soporte.
+It also displays the installed app version for traceability and support.
 
-## Disponibilidad
+## Availability
 
-El código fuente se aloja en este repositorio. La aplicación para uso final está disponible en Google Play:
+The source code is hosted in this repository. The production application is available on Google Play:
 
 [Google Play - ThinkMachine-4E-Advisor](https://play.google.com/store/apps/details?id=com.softwaremagico.tm.advisor)
 
