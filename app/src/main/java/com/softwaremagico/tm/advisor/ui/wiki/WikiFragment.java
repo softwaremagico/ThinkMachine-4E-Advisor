@@ -92,6 +92,7 @@ public class WikiFragment extends Fragment {
         setupSpinner(view, R.id.wiki_armor, loadArmors(), Armor.class);
         setupSpinner(view, R.id.wiki_handheld_shield, loadHandheldShields(), HandheldShield.class);
         setupSpinner(view, R.id.wiki_shield, loadShields(), Shield.class);
+        setupSpinner(view, R.id.wiki_cyberdevice, loadCyberdevicePerks(), Perk.class);
 
         setupSpinner(view, R.id.wiki_occultism_path, loadOccultismPaths(), OccultismPath.class);
         setupSpinner(view, R.id.wiki_occultism_power, loadOccultismPowers(), OccultismPower.class);
@@ -241,6 +242,30 @@ public class WikiFragment extends Fragment {
             MachineLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
+    }
+
+    private List<Perk> loadCyberdevicePerks() {
+        try {
+            return PerkFactory.getInstance().getSelectableElements().stream()
+                    .filter(Objects::nonNull)
+                    .filter(this::isCyberdevicePerk)
+                    .sorted(Comparator.comparing(Perk::getNameRepresentation))
+                    .collect(Collectors.toList());
+        } catch (InvalidXmlElementException | NullPointerException e) {
+            MachineLog.errorMessage(this.getClass().getName(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    private boolean isCyberdevicePerk(Perk perk) {
+        if (perk.getType() == null) {
+            return false;
+        }
+        final String typeName = perk.getType().name();
+        return "CYBERDEVICE".equalsIgnoreCase(typeName)
+                || "CYBERDEVICES".equalsIgnoreCase(typeName)
+                || "CYBERNETIC".equalsIgnoreCase(typeName)
+                || "CYBERNETICS".equalsIgnoreCase(typeName);
     }
 
     private List<OccultismPath> loadOccultismPaths() {

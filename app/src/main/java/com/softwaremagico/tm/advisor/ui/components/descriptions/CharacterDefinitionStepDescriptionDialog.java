@@ -13,6 +13,8 @@ import com.softwaremagico.tm.character.perks.PerkOptions;
 import com.softwaremagico.tm.character.skills.SkillBonusOption;
 import com.softwaremagico.tm.character.skills.SkillBonusOptions;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +46,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getCharacteristicOptions() == null || step.getCharacteristicOptions().isEmpty()) {
             return;
         }
+        appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.characteristics)).append(":</b>");
         sb.append("<br>");
         for (CharacteristicBonusOptions opts : step.getCharacteristicOptions()) {
@@ -63,6 +66,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getSkillOptions() == null || step.getSkillOptions().isEmpty()) {
             return;
         }
+        appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.skills)).append(":</b>");
         sb.append("<br>");
         for (SkillBonusOptions opts : step.getSkillOptions()) {
@@ -82,6 +86,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getSourcePerks() == null || step.getSourcePerks().isEmpty()) {
             return;
         }
+        appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.perks)).append(":</b><br>");
         for (PerkOptions opts : step.getSourcePerks()) {
             if (opts.getOptions() == null || opts.getOptions().isEmpty()) continue;
@@ -91,7 +96,10 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
                   .append(safeTranslateTextTag("choose", "Choose")).append(" ").append(total)
                   .append(":</i><br>");
             }
-            for (PerkOption opt : opts.getOptions()) {
+            List<PerkOption> sortedPerks = opts.getOptions().stream()
+                    .sorted(Comparator.comparing(this::translatedPerkOptionName, String.CASE_INSENSITIVE_ORDER))
+                    .collect(Collectors.toList());
+            for (PerkOption opt : sortedPerks) {
                 String name = translatedPerkOptionName(opt);
                 sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&bull; ").append(name).append("<br>");
             }
@@ -102,6 +110,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getCapabilityOptions() == null || step.getCapabilityOptions().isEmpty()) {
             return;
         }
+        appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.capabilities)).append(":</b><br>");
         for (CapabilityOptions opts : step.getCapabilityOptions()) {
             if (opts.getOptions() == null || opts.getOptions().isEmpty()) continue;
@@ -111,8 +120,11 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
                   .append(safeTranslateTextTag("choose", "Choose")).append(" ").append(total)
                   .append(":</i><br>");
             }
-            for (CapabilityOption opt : opts.getOptions()) {
-                String name = (opt.getName() != null) ? opt.getName().getTranslatedText() : opt.getId();
+            List<CapabilityOption> sortedCapabilities = opts.getOptions().stream()
+                    .sorted(Comparator.comparing(this::translatedCapabilityOptionName, String.CASE_INSENSITIVE_ORDER))
+                    .collect(Collectors.toList());
+            for (CapabilityOption opt : sortedCapabilities) {
+                String name = translatedCapabilityOptionName(opt);
                 sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&bull; ").append(name).append("<br>");
             }
         }
@@ -122,6 +134,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getMaterialAwards() == null || step.getMaterialAwards().isEmpty()) {
             return;
         }
+        appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.material_awards)).append(":</b><br>");
         for (EquipmentOptions opts : step.getMaterialAwards()) {
             if (opts.getOptions() == null || opts.getOptions().isEmpty()) continue;
@@ -138,6 +151,12 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         }
     }
 
+    private void appendSectionBreak(StringBuilder sb) {
+        if (sb.length() > 0) {
+            sb.append("<br>");
+        }
+    }
+
     /** Devuelve el nombre traducido de un PerkOption. */
     protected String translatedPerkOptionName(PerkOption opt) {
         try {
@@ -145,6 +164,14 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
                 return opt.getElement().getName().getTranslatedText();
             }
         } catch (Exception ignored) { /* elemento no resuelto */ }
+        if (opt.getName() != null && opt.getName().getTranslatedText() != null
+                && !opt.getName().getTranslatedText().isBlank()) {
+            return opt.getName().getTranslatedText();
+        }
+        return opt.getId() != null ? opt.getId() : opt.toString();
+    }
+
+    private String translatedCapabilityOptionName(CapabilityOption opt) {
         if (opt.getName() != null && opt.getName().getTranslatedText() != null
                 && !opt.getName().getTranslatedText().isBlank()) {
             return opt.getName().getTranslatedText();

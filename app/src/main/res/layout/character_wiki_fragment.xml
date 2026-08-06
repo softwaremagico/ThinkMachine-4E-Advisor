@@ -145,6 +145,18 @@
             style="@style/WikiGroupTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/wiki_group_cybernetics" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_cyberdevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="cyberdevices" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/wiki_group_occultism" />
 
         <com.softwaremagico.tm.advisor.ui.components.ElementSpinner

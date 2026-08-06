@@ -5,6 +5,10 @@ import com.softwaremagico.tm.character.perks.PerkOption;
 import com.softwaremagico.tm.character.specie.ElementValues;
 import com.softwaremagico.tm.character.specie.Specie;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SpecieDescriptionDialog extends CharacterDefinitionStepDescriptionDialog<Specie> {
 
     public SpecieDescriptionDialog(Specie element) {
@@ -39,7 +43,10 @@ public class SpecieDescriptionDialog extends CharacterDefinitionStepDescriptionD
         }
 
         // Size and vitality
-        sb.append("<br><b>").append(safeTranslateTextTag("size", "Size")).append(":</b> ").append(specie.getSize());
+        if (sb.length() > 0) {
+            sb.append("<br><br>");
+        }
+        sb.append("<b>").append(safeTranslateTextTag("size", "Size")).append(":</b> ").append(specie.getSize());
         if (specie.getVitalityBonus() != 0) {
             sb.append("&nbsp;&nbsp;<b>").append(safeTranslateTextTag("vitality", "Vitality")).append(":</b> +")
                     .append(specie.getVitalityBonus());
@@ -47,14 +54,20 @@ public class SpecieDescriptionDialog extends CharacterDefinitionStepDescriptionD
 
         // Starting perks
         if (specie.getPerks() != null && !specie.getPerks().isEmpty()) {
-            sb.append("<br><b>").append(getString(com.softwaremagico.tm.advisor.R.string.perks)).append(":</b>");
-            for (PerkOption perkOption : specie.getPerks()) {
+            sb.append("<br><br><b>").append(getString(com.softwaremagico.tm.advisor.R.string.perks)).append(":</b>");
+            List<PerkOption> sortedPerks = specie.getPerks().stream()
+                    .sorted(Comparator.comparing(this::translatedPerkOptionName, String.CASE_INSENSITIVE_ORDER))
+                    .collect(Collectors.toList());
+            for (PerkOption perkOption : sortedPerks) {
                 sb.append("<br>&nbsp;&nbsp;&bull; ").append(translatedPerkOptionName(perkOption));
             }
         }
 
         // Common CharacterDefinitionStep fields
-        sb.append(buildDefinitionStepDetails(specie));
+        final String commonDetails = buildDefinitionStepDetails(specie);
+        if (!commonDetails.isBlank()) {
+            sb.append("<br>").append(commonDetails);
+        }
 
         return sb.toString();
     }

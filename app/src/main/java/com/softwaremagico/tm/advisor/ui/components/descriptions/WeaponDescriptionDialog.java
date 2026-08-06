@@ -21,4 +21,8 @@ public abstract class WeaponDescriptionDialog extends ElementDescriptionDialog<W
         }
         return stringBuilder.toString();
     }
+
+    protected String normalizeWeaponFeatures(String features) {
+        return WeaponFeaturesFormatter.format(features);
+    }
 }

@@ -21,6 +21,7 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
         boolean costLimited = CharacterManager.getSelectedCharacter().getRemainingCash() < weapon.getCost();
         boolean costProhibited = CharacterManager.getSelectedCharacter().getCashMoney() < weapon.getCost();
         final boolean hasAgoraGroups = weapon.getAgoraGroups() != null && !weapon.getAgoraGroups().isEmpty();
+        final String weaponFeatures = normalizeWeaponFeatures(weapon.getWeaponOthersText());
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">");
         stringBuilder.append("<tr>");
         if (weapon.getWeaponDamages().size() > 1) {
@@ -58,9 +59,9 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                     "</tr>");
         }
         stringBuilder.append("</table>" +
-                (!weapon.getWeaponOthersText().isEmpty() ?
+                (!weaponFeatures.isEmpty() ?
                         "<br><b>" + safeTranslateTextTag("weaponsOthers", "Others") + ":</b> " +
-                                weapon.getWeaponOthersText() : "") +
+                                weaponFeatures : "") +
                 "<br><b>" + getString(R.string.cost) + "</b> " +
                 (costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
                         (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")) +
