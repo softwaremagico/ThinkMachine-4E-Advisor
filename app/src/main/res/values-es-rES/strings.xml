@@ -384,4 +384,5 @@
     <string name="module_imperial_dossier_house_hawkwood">Dossier Imperial - Casa Hawkwood</string>
     <string name="module_imperial_dossier_reeves_guild">Dossier Imperial - Gremio de Magistrados</string>
     <string name="module_vuldrok_space">Espacio Vuldrok</string>
+    <string name="book">Libro</string>
 </resources>

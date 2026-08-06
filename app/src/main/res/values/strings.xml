@@ -386,5 +386,6 @@
     <string name="module_imperial_dossier_house_hawkwood">Imperial Dossier - House Hawkwood</string>
     <string name="module_imperial_dossier_reeves_guild">Imperial Dossier - Reeves Guild</string>
     <string name="module_vuldrok_space">Vuldrok Space</string>
+    <string name="book">Book</string>
 </resources>
 
