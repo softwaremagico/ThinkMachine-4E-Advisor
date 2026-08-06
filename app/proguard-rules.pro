@@ -10,11 +10,6 @@
 -dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify
--verbose
--dump class_files.txt
--printseeds seeds.txt
--printusage unused.txt
--printmapping mapping.txt
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
 -allowaccessmodification
@@ -68,9 +63,6 @@
     public static ** valueOf(java.lang.String);
 }
 
--keep public class * {
-    public protected *;
-}
 
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
@@ -88,7 +80,7 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 # Software Magico
--keep class com.softwaremagico.*.** { *; }
+# Keep rules should be as specific as possible to let R8 shrink effectively.
 -keep class com.itextpdf.*.** { *; }
 -keep class com.lowagie.*.** { *; }
 

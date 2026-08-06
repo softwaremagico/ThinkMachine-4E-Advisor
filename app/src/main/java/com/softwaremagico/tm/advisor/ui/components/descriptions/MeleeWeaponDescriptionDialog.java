@@ -49,11 +49,12 @@ public class MeleeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                     "<td style=\"text-align:center\" >" + (weapon.getSize() != null ? weapon.getSize().toString() : "") + "</td>" +
                     "</tr>");
         }
+        final String weaponFeatures = normalizeWeaponFeatures(weapon.getWeaponOthersText());
         stringBuilder.append(
                 "</table>" +
-                        (!weapon.getWeaponOthersText().isEmpty() ?
+                        (!weaponFeatures.isEmpty() ?
                                 "<br><b>" + ThinkMachineTranslator.getTranslatedText("weaponsOthers") + ":</b> " +
-                                        weapon.getWeaponOthersText() : "") +
+                                        weaponFeatures : "") +
                         "<br><b>" + getString(R.string.cost) + "</b> " +
                         (costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
                                 (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")) +

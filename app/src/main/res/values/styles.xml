@@ -77,6 +77,14 @@
         <item name="android:paddingBottom">8sp</item>
     </style>
 
+    <style name="WikiGroupTitle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/md_theme_onSecondaryContainer</item>
+        <item name="android:paddingTop">14sp</item>
+        <item name="android:paddingBottom">6sp</item>
+    </style>
+
     <style name="CheckboxData">
         <item name="android:fontFamily">@font/selection</item>
     </style>

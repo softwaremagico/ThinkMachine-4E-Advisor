@@ -27,4 +27,9 @@
         android:icon="@drawable/ic_sheet_icon"
         android:title="@string/navigation_visualization" />
 
+    <item
+        android:id="@+id/navigation_wiki"
+        android:icon="@drawable/ic_help"
+        android:title="@string/navigation_wiki" />
+
 </menu>
