@@ -37,6 +37,7 @@ import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
 import com.softwaremagico.tm.restrictions.RestrictedCapability;
 import com.softwaremagico.tm.restrictions.RestrictedCharacteristic;
 import com.softwaremagico.tm.restrictions.RestrictedSkill;
+import com.softwaremagico.tm.txt.TextFactory;
 
 import java.util.stream.Collectors;
 
@@ -202,31 +203,47 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
         return text.replaceAll("\\\\n", "<br><br>").trim().replaceAll(" +", " ");
     }
 
+    protected String safeTranslateTextTag(String tag, String fallback) {
+        if (tag == null || tag.isBlank()) {
+            return fallback == null ? "" : fallback;
+        }
+        try {
+            return TextFactory.getInstance().getElement(tag).getNameRepresentation();
+        } catch (Exception e) {
+            return fallback == null || fallback.isBlank() ? tag : fallback;
+        }
+    }
+
+    protected String safeTranslateTextTag(String tag) {
+        return safeTranslateTextTag(tag, tag);
+    }
+
     protected String translateAgora(Agora agora) {
         return "agora_" + agora.name().toLowerCase();
     }
 
     protected String translateAgoraGroup(AgoraGroup agoraGroup) {
+        final String id = agoraGroup.name().toLowerCase();
         //It is a faction
-        final Faction faction = FactionFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
-        if (faction != null) {
-            return faction.getNameRepresentation();
-        }
+        try {
+            final Faction faction = FactionFactory.getInstance().getElement(id);
+            if (faction != null) return faction.getNameRepresentation();
+        } catch (Exception ignored) { }
         //It is a upbringing
-        final Upbringing upbringing = UpbringingFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
-        if (upbringing != null) {
-            return upbringing.getNameRepresentation();
-        }
+        try {
+            final Upbringing upbringing = UpbringingFactory.getInstance().getElement(id);
+            if (upbringing != null) return upbringing.getNameRepresentation();
+        } catch (Exception ignored) { }
         //It is a planet
-        final Planet planet = PlanetFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
-        if (planet != null) {
-            return planet.getNameRepresentation();
-        }
+        try {
+            final Planet planet = PlanetFactory.getInstance().getElement(id);
+            if (planet != null) return planet.getNameRepresentation();
+        } catch (Exception ignored) { }
         //It is a specie
-        final Specie specie = SpecieFactory.getInstance().getElement(agoraGroup.name().toLowerCase());
-        if (specie != null) {
-            return specie.getNameRepresentation();
-        }
-        return "agora_group_" + agoraGroup.name().toLowerCase();
+        try {
+            final Specie specie = SpecieFactory.getInstance().getElement(id);
+            if (specie != null) return specie.getNameRepresentation();
+        } catch (Exception ignored) { }
+        return id;
     }
 }

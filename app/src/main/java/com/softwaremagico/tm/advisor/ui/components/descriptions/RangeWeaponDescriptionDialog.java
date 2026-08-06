@@ -3,7 +3,6 @@ package com.softwaremagico.tm.advisor.ui.components.descriptions;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
-import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
 import com.softwaremagico.tm.character.equipment.weapons.WeaponDamage;
 
@@ -21,19 +20,20 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                 weapon.getTechLevel();
         boolean costLimited = CharacterManager.getSelectedCharacter().getRemainingCash() < weapon.getCost();
         boolean costProhibited = CharacterManager.getSelectedCharacter().getCashMoney() < weapon.getCost();
+        final boolean hasAgoraGroups = weapon.getAgoraGroups() != null && !weapon.getAgoraGroups().isEmpty();
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">");
         stringBuilder.append("<tr>");
         if (weapon.getWeaponDamages().size() > 1) {
-            stringBuilder.append("<th>" + ThinkMachineTranslator.getTranslatedText("weapon") + "</th>");
+            stringBuilder.append("<th>" + safeTranslateTextTag("weapon", "Weapon") + "</th>");
         }
-        stringBuilder.append("<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("weaponGoal") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("weaponDamage") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("weaponRange") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("weaponShots") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("weaponRate") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("size") + "</th>" +
-                "<th>" + ThinkMachineTranslator.getTranslatedText("agora") + "</th>" +
+        stringBuilder.append("<th>" + safeTranslateTextTag("techLevel", "Tech") + "</th>" +
+                "<th>" + safeTranslateTextTag("weaponGoal", "Goal") + "</th>" +
+                "<th>" + safeTranslateTextTag("weaponDamage", "Damage") + "</th>" +
+                "<th>" + safeTranslateTextTag("weaponRange", "Range") + "</th>" +
+                "<th>" + safeTranslateTextTag("weaponShots", "Shots") + "</th>" +
+                "<th>" + safeTranslateTextTag("weaponRate", "Rate") + "</th>" +
+                "<th>" + safeTranslateTextTag("size", "Size") + "</th>" +
+                "<th>" + getString(R.string.agora) + "</th>" +
                 "</tr>");
         for (WeaponDamage weaponDamage : weapon.getWeaponDamages()) {
             boolean techDamageLimited = weaponDamage.getDamageTechLevel() != null &&
@@ -59,23 +59,23 @@ public class RangeWeaponDescriptionDialog extends WeaponDescriptionDialog {
         }
         stringBuilder.append("</table>" +
                 (!weapon.getWeaponOthersText().isEmpty() ?
-                        "<br><b>" + ThinkMachineTranslator.getTranslatedText("weaponsOthers") + ":</b> " +
+                        "<br><b>" + safeTranslateTextTag("weaponsOthers", "Others") + ":</b> " +
                                 weapon.getWeaponOthersText() : "") +
                 "<br><b>" + getString(R.string.cost) + "</b> " +
                 (costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
                         (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")) +
                 Numbers.PRICE_FORMAT.format(weapon.getCost()) +
                 (costLimited || costProhibited ? "</font>" : "") +
-                " " + ThinkMachineTranslator.getTranslatedText("firebirds") +
-                ((weapon.getAgora() != null || !weapon.getAgoraGroups().isEmpty())
+                " " + safeTranslateTextTag("firebirds", "firebirds") +
+                ((weapon.getAgora() != null || hasAgoraGroups)
                         //Title
                         ? "<br><b>" + getString(R.string.agora) + "</b> "
                         //Agora
                         + (weapon.getAgora() != null ? translateAgora(weapon.getAgora()) : "")
                         //Comma separator if both agora and agora group.
-                        + (weapon.getAgora() != null && !weapon.getAgoraGroups().isEmpty() ? ", " : "")
+                        + (weapon.getAgora() != null && hasAgoraGroups ? ", " : "")
                         //Agora Groups
-                        + ((weapon.getAgoraGroups() != null && !weapon.getAgoraGroups().isEmpty()
+                        + ((hasAgoraGroups
                         ? weapon.getAgoraGroups().stream().map(this::translateAgoraGroup).collect(Collectors.joining(", "))
                         : ""))
                         : ""));
