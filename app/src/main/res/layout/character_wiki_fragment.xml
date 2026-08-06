@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2026 Softwaremagico
+  ~
+  ~  This software is designed by Jorge Hortelano Otero. Jorge Hortelano Otero  <softwaremagico@gmail.com> Valencia (Spain).
+  ~
+  ~  This program is free software; you can redistribute it and/or modify it under  the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  ~
+  ~  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU General Public License along with this Program; If not, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutPadding"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    tools:context="com.softwaremagico.tm.advisor.ui.wiki.WikiFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/SettingsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="@string/wiki_hint" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_group_identity" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_specie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="specie" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_upbringing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="upbringing" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_faction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="faction" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_calling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="calling" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_planet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="planet" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_group_traits" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_perk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="perks" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_capability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="capabilities" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_characteristic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="characteristics" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_skill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:translation="skills" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_group_equipment" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preference_option_melee" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_melee_weapon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preference_option_ranged" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_ranged_weapon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preference_option_armor" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_armor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_handheld_shield" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_handheld_shield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preference_option_shield" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_shield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_group_occultism" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_occultism_paths" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_occultism_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/WikiGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wiki_occultism_powers" />
+
+        <com.softwaremagico.tm.advisor.ui.components.ElementSpinner
+            android:id="@+id/wiki_occultism_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>
+
+
+
+

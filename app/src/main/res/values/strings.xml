@@ -31,6 +31,16 @@
     <string name="navigation_character">Character</string>
     <string name="navigation_visualization">Visualization</string>
     <string name="navigation_random">Random</string>
+    <string name="navigation_wiki">Wiki</string>
+    <string name="wiki_title">Wiki</string>
+    <string name="wiki_hint">Select any element and use the help icon to view full details.</string>
+    <string name="wiki_group_identity">Identity and origin</string>
+    <string name="wiki_group_traits">Traits and progression</string>
+    <string name="wiki_group_equipment">Combat and equipment</string>
+    <string name="wiki_group_occultism">Occultism</string>
+    <string name="wiki_handheld_shield">Handheld shield</string>
+    <string name="wiki_occultism_paths">Occultism paths</string>
+    <string name="wiki_occultism_powers">Occultism powers</string>
     <string name="share">Share</string>
     <string name="share_body">Character \'${CHARACTER_NAME}\' sheet page.</string>
     <string name="message_too_many_blessings">Exceeding the maximum number of blessings allowed.</string>

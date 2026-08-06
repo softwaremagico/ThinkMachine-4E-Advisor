@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_wiki">Wiki</string>
+    <string name="wiki_title">Wiki</string>
+    <string name="wiki_hint">Selecciona cualquier elemento y usa el icono de ayuda para ver todos sus detalles.</string>
+    <string name="wiki_group_identity">Identidad y origen</string>
+    <string name="wiki_group_traits">Rasgos y progresion</string>
+    <string name="wiki_group_equipment">Combate y equipo</string>
+    <string name="wiki_group_occultism">Ocultismo</string>
+    <string name="wiki_handheld_shield">Escudo de mano</string>
+    <string name="wiki_occultism_paths">Caminos de ocultismo</string>
+    <string name="wiki_occultism_powers">Poderes de ocultismo</string>
+</resources>
+

@@ -18,6 +18,7 @@
     <string name="tab_visualization_pdf_small">PDF (Reducido)</string>
     <string name="navigation_character">Personaje</string>
     <string name="navigation_visualization">Visualización</string>
+    <string name="navigation_wiki">Wiki</string>
     <string name="tab_character_level">Nivel</string>
     <string name="tab_character_settings">Ajustes</string>
     <string name="tab_visualization_txt">Texto</string>
@@ -74,6 +75,15 @@
     <string name="firebird_abbrev">fnx</string>
     <string name="tab_random_preferences">Preferencias</string>
     <string name="navigation_random">Aleatorio</string>
+    <string name="wiki_title">Wiki</string>
+    <string name="wiki_hint">Selecciona cualquier elemento y usa el icono de ayuda para ver todos sus detalles.</string>
+    <string name="wiki_group_identity">Identidad y origen</string>
+    <string name="wiki_group_traits">Rasgos y progresión</string>
+    <string name="wiki_group_equipment">Combate y equipo</string>
+    <string name="wiki_group_occultism">Ocultismo</string>
+    <string name="wiki_handheld_shield">Escudo de mano</string>
+    <string name="wiki_occultism_paths">Caminos de ocultismo</string>
+    <string name="wiki_occultism_powers">Poderes de ocultismo</string>
     <string name="preference_group_equipment">Equipo</string>
     <string name="preference_group_cybernetics">Cibernética</string>
     <string name="preference_group_psi">Psí</string>
