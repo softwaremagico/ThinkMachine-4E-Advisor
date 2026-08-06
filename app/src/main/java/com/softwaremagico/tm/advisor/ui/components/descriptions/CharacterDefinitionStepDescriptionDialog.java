@@ -14,7 +14,10 @@ import com.softwaremagico.tm.character.skills.SkillBonusOption;
 import com.softwaremagico.tm.character.skills.SkillBonusOptions;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -86,6 +89,7 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
         if (step.getSourcePerks() == null || step.getSourcePerks().isEmpty()) {
             return;
         }
+        final Set<String> shownPerks = new HashSet<>();
         appendSectionBreak(sb);
         sb.append("<br><b>").append(getString(R.string.perks)).append(":</b><br>");
         for (PerkOptions opts : step.getSourcePerks()) {
@@ -101,6 +105,10 @@ public abstract class CharacterDefinitionStepDescriptionDialog<T extends Charact
                     .collect(Collectors.toList());
             for (PerkOption opt : sortedPerks) {
                 String name = translatedPerkOptionName(opt);
+                final String key = name.trim().toLowerCase(Locale.ROOT);
+                if (!shownPerks.add(key)) {
+                    continue;
+                }
                 sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&bull; ").append(name).append("<br>");
             }
         }
