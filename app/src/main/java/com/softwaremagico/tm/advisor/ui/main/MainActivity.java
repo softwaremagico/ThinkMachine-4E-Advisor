@@ -245,9 +245,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void exportJson(View view) throws IOException {
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            SnackbarGenerator.getErrorMessage(view, R.string.message_character_saved_error).show();
+            return;
+        }
         final File exportsPath = new File(view.getContext().getCacheDir(), "export");
-        File characterExport = new File(exportsPath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
-                CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
+        File characterExport = new File(exportsPath, !selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
+                selectedCharacter.getCompleteNameRepresentation() + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
                 "export_sheet." + FileUtils.CHARACTER_FILE_EXTENSION);
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", characterExport);
 
@@ -255,18 +260,18 @@ public class MainActivity extends AppCompatActivity {
             if (exportsPath.mkdir()) {
                 MachineLog.debug(this.getClass().getName(), "Default folder '{}' created.", exportsPath);
             }
-            String jsonContent = CharacterJsonManager.toJson(CharacterManager.getSelectedCharacter());
+            String jsonContent = CharacterJsonManager.toJson(selectedCharacter);
             try (FileOutputStream stream = new FileOutputStream(characterExport)) {
                 stream.write(jsonContent.getBytes());
             }
 
             final Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.setType(this.getContentResolver().getType(contentUri));
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
-                    ": " + CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() : ""));
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
+                    ": " + selectedCharacter.getCompleteNameRepresentation() : ""));
             shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_body)));
 
             final Intent chooser = Intent.createChooser(shareIntent, "Share File");
@@ -280,9 +285,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveCurrentCharacter(View parentLayout) {
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_saved_error).show();
+            return;
+        }
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                CharacterHandler.getInstance().save(getApplicationContext(), CharacterManager.getSelectedCharacter());
+                CharacterHandler.getInstance().save(getApplicationContext(), selectedCharacter);
                 SnackbarGenerator.getInfoMessage(parentLayout, R.string.message_character_saved_successfully).show();
             } catch (Exception e) {
                 SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_saved_error).show();

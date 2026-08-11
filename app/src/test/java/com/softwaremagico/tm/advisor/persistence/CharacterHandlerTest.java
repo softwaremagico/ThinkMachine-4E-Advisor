@@ -20,4 +20,11 @@ public class CharacterHandlerTest {
 
         assertTrue(mappedEntities.isEmpty());
     }
+
+    @Test
+    public void mapEntitiesByCharacter_withNullList_returnsEmptyMap() {
+        final Map<?, CharacterEntity> mappedEntities = CharacterHandler.mapEntitiesByCharacter(null);
+
+        assertTrue(mappedEntities.isEmpty());
+    }
 }

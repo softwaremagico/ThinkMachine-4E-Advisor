@@ -1,6 +1,7 @@
 package com.softwaremagico.tm.advisor.ui.components.spinner;
 
 import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.SearchManager;
@@ -61,16 +62,22 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams
-                .SOFT_INPUT_STATE_HIDDEN);
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams
+                    .SOFT_INPUT_STATE_HIDDEN);
+        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final Activity activity = getActivity();
+        if (activity == null || getContext() == null) {
+            return super.onCreateDialog(savedInstanceState);
+        }
 
         // Getting the layout inflater to inflate the view in an alert dialog.
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        LayoutInflater inflater = LayoutInflater.from(activity);
 
         // Crash on orientation change #7
         // Change Start
@@ -84,10 +91,10 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
         View rootView = inflater.inflate(R.layout.searchable_list_dialog, null);
         setData(rootView);
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity, R.style.AlertDialogTheme);
         alertDialog.setView(rootView);
 
-        String closeButton = getContext().getString(R.string.close);
+        String closeButton = activity.getString(R.string.close);
         alertDialog.setPositiveButton(closeButton, onClickListener);
 
         final AlertDialog dialog = alertDialog.create();
@@ -118,22 +125,29 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
     }
 
     private void setData(View rootView) {
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context
+        final Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        SearchManager searchManager = (SearchManager) activity.getSystemService(Context
                 .SEARCH_SERVICE);
 
         searchView = rootView.findViewById(R.id.search);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(activity.getComponentName
                 ()));
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
         searchView.clearFocus();
-        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context
                 .INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
 
 
         listViewItems = rootView.findViewById(R.id.listItems);
+        if (listAdapter == null || searchableItem == null) {
+            return;
+        }
 
         //attach the adapter to the list
         listViewItems.setAdapter(listAdapter);
@@ -154,6 +168,9 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
 
     @Override
     public boolean onClose() {
+        if (listViewItems == null || listViewItems.getAdapter() == null) {
+            return false;
+        }
         ((ArrayAdapter<E>) listViewItems.getAdapter()).getFilter().filter(null);
         return false;
     }
@@ -161,7 +178,9 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
     @Override
     public void onPause() {
         super.onPause();
-        ((ArrayAdapter<E>) listViewItems.getAdapter()).getFilter().filter(null);
+        if (listViewItems != null && listViewItems.getAdapter() != null) {
+            ((ArrayAdapter<E>) listViewItems.getAdapter()).getFilter().filter(null);
+        }
         dismiss();
     }
 
@@ -173,6 +192,9 @@ public class SearchableListDialog<E extends Element> extends DialogFragment impl
 
     @Override
     public boolean onQueryTextChange(String s) {
+        if (listViewItems == null || listViewItems.getAdapter() == null) {
+            return false;
+        }
         if (TextUtils.isEmpty(s)) {
             ((ArrayAdapter<E>) listViewItems.getAdapter()).getFilter().filter(null);
         } else {

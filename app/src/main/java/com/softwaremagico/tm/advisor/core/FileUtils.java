@@ -30,9 +30,16 @@ public final class FileUtils {
     }
 
     public static String readFile(final Context context, Uri uri) {
+        if (context == null || uri == null) {
+            return "";
+        }
         //Get the text file
         if (Objects.equals(uri.getHost(), GOOGLE_DRIVE_HOST)) {
-            return readFile(Uri.fromFile(downloadFile(context, uri)).getPath(), true);
+            final File downloadedFile = downloadFile(context, uri);
+            if (downloadedFile == null) {
+                return "";
+            }
+            return readFile(Uri.fromFile(downloadedFile).getPath(), true);
         }
         return readFile(uri.getPath());
     }
@@ -42,6 +49,9 @@ public final class FileUtils {
     }
 
     public static String readFile(String path, boolean deleteOnRead) {
+        if (path == null || path.isEmpty()) {
+            return "";
+        }
         //Get the text file
         File file = new File(path);
 
@@ -76,44 +86,48 @@ public final class FileUtils {
      * @return a temporal file, or null if download failed.
      */
     public static File downloadFile(final Context context, final Uri uri) {
+        if (context == null || uri == null) {
+            return null;
+        }
         ContentResolver contentResolver = context.getContentResolver();
+        Cursor returnCursor = null;
         try {
-            Cursor returnCursor =
-                    contentResolver.query(uri, null, null, new String[]{
-                            MimeTypeMap.getSingleton().getExtensionFromMimeType("jpg")}, null);
+            returnCursor = contentResolver.query(uri, null, null, new String[]{
+                    MimeTypeMap.getSingleton().getExtensionFromMimeType("jpg")}, null);
             if (returnCursor == null) {
                 AdvisorLog.warning(FileUtils.class.getName(), "Cursor is null for URI: " + uri);
                 return null;
             }
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             returnCursor.moveToFirst();
             String fileName = returnCursor.getString(nameIndex);
-            InputStream inputStream = contentResolver.openInputStream(uri);
-            returnCursor.close();
-
-            if (inputStream == null) {
-                AdvisorLog.warning(FileUtils.class.getName(), "InputStream is null for URI: " + uri);
-                return null;
-            }
-
-            File tempFile = File.createTempFile(fileName, "");
-            tempFile.deleteOnExit();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                FileOutputStream out = new FileOutputStream(tempFile);
-                byte[] buffer = new byte[102400];
-                int len;
-                while ((len = inputStream.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
+            try (InputStream inputStream = contentResolver.openInputStream(uri)) {
+                if (inputStream == null) {
+                    AdvisorLog.warning(FileUtils.class.getName(), "InputStream is null for URI: " + uri);
+                    return null;
                 }
-                inputStream.close();
-                out.close();
+
+                File tempFile = File.createTempFile(fileName, "");
+                tempFile.deleteOnExit();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    try (FileOutputStream out = new FileOutputStream(tempFile)) {
+                        byte[] buffer = new byte[102400];
+                        int len;
+                        while ((len = inputStream.read(buffer)) != -1) {
+                            out.write(buffer, 0, len);
+                        }
+                    }
+                }
+                return tempFile;
             }
-            return tempFile;
         } catch (Exception e) {
             AdvisorLog.errorMessage(FileUtils.class.getName(), e);
+        } finally {
+            if (returnCursor != null) {
+                returnCursor.close();
+            }
         }
         return null;
     }

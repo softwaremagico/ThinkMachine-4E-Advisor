@@ -43,14 +43,18 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
         if (getContext() == null) {
             return;
         }
-        updateTranslatedTextField(root, R.id.character_player, value -> CharacterManager.getSelectedCharacter().getInfo().setPlayer(value));
-        updateTranslatedTextField(root, R.id.character_hair, value -> CharacterManager.getSelectedCharacter().getInfo().setHair(value));
-        updateTranslatedTextField(root, R.id.character_eyes, value -> CharacterManager.getSelectedCharacter().getInfo().setEyes(value));
-        updateTranslatedTextField(root, R.id.character_complexion, value -> CharacterManager.getSelectedCharacter().getInfo().setComplexion(value));
-        updateTranslatedTextField(root, R.id.character_weight, value -> CharacterManager.getSelectedCharacter().getInfo().setWeight(value));
-        updateTextField(root, R.id.character_description, value -> CharacterManager.getSelectedCharacter().getInfo().setCharacterDescription(value));
-        updateTextField(root, R.id.character_background, value -> CharacterManager.getSelectedCharacter().getInfo().setBackgroundDescription(value));
-        populateElements(root, CharacterManager.getSelectedCharacter());
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
+        updateTranslatedTextField(root, R.id.character_player, value -> selectedCharacter.getInfo().setPlayer(value));
+        updateTranslatedTextField(root, R.id.character_hair, value -> selectedCharacter.getInfo().setHair(value));
+        updateTranslatedTextField(root, R.id.character_eyes, value -> selectedCharacter.getInfo().setEyes(value));
+        updateTranslatedTextField(root, R.id.character_complexion, value -> selectedCharacter.getInfo().setComplexion(value));
+        updateTranslatedTextField(root, R.id.character_weight, value -> selectedCharacter.getInfo().setWeight(value));
+        updateTextField(root, R.id.character_description, value -> selectedCharacter.getInfo().setCharacterDescription(value));
+        updateTextField(root, R.id.character_background, value -> selectedCharacter.getInfo().setBackgroundDescription(value));
+        populateElements(root, selectedCharacter);
     }
 
     @Override

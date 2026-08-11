@@ -79,7 +79,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
             listItem = LayoutInflater.from(ctx).inflate(R.layout.element_list, parent, false);
         }
 
-        final E element = elements.get(position);
+        final E element = getSafeItem(position);
 
         if (element != null) {
             final TextView name = listItem.findViewById(R.id.selected_item);
@@ -92,7 +92,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
 
     protected void setElementColor(TextView elementRepresentation, E element, int position) {
         Context ctx = getContext();
-        if (ctx == null) {
+        if (ctx == null || element == null) {
             AdvisorLog.warning(ElementAdapter.class, "Context is null in setElementColor");
             return;
         }
@@ -108,6 +108,9 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     }
 
     public String getElementRepresentation(E element) {
+        if (element == null) {
+            return "";
+        }
         if (element.getId() == null || Objects.equals(element.getId(), Element.DEFAULT_NULL_ID)) {
             return "";
         }
@@ -126,11 +129,15 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(getContext()).inflate(R.layout.element_list, parent, false);
+            final Context ctx = getContext();
+            if (ctx == null) {
+                return new View(parent.getContext());
+            }
+            listItem = LayoutInflater.from(ctx).inflate(R.layout.element_list, parent, false);
         }
 
         try {
-            final E element = getItem(position);
+            final E element = getSafeItem(position);
             final TextView elementName = listItem.findViewById(R.id.selected_item);
             if (element != null) {
                 elementName.setText(getElementRepresentation(element));
@@ -152,7 +159,7 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
 
     @Override
     public E getItem(int position) {
-        return elements.get(position);
+        return getSafeItem(position);
     }
 
     @Override
@@ -256,11 +263,19 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     @Override
     public boolean isEnabled(int position) {
         if (positionEnabled.get(position) == null) {
-            positionEnabled.put(position, getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                    (getItem(position).getRestrictions() == null
-                            || !getItem(position).getRestrictions().isRestricted(CharacterManager.getSelectedCharacter())));
+            final E element = getSafeItem(position);
+            positionEnabled.put(position, element == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                    (element.getRestrictions() == null
+                            || !element.getRestrictions().isRestricted(CharacterManager.getSelectedCharacter())));
         }
         return positionEnabled.get(position);
+    }
+
+    private E getSafeItem(int position) {
+        if (elements == null || position < 0 || position >= elements.size()) {
+            return null;
+        }
+        return elements.get(position);
     }
 
 }

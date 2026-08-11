@@ -12,6 +12,7 @@
 
 package com.softwaremagico.tm.advisor.ui.character.equipment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -74,21 +75,21 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     public void populateElements(View root, CharacterPlayer character) {
-        if (getContext() != null) {
+        if (getContext() != null && character != null) {
             if (meleeWeaponsLayout != null) {
-                meleeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedMeleeWeapons());
+                meleeWeaponsLayout.setElements(character.getPurchasedMeleeWeapons());
             }
             if (rangeWeaponsLayout != null) {
-                rangeWeaponsLayout.setElements(CharacterManager.getSelectedCharacter().getPurchasedRangedWeapons());
+                rangeWeaponsLayout.setElements(character.getPurchasedRangedWeapons());
             }
             if (armorsLayout != null) {
-                armorsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedArmor());
+                armorsLayout.setElement(character.getPurchasedArmor());
             }
             if (handheldShieldsLayout != null) {
-                handheldShieldsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedHandheldShield());
+                handheldShieldsLayout.setElement(character.getPurchasedHandheldShield());
             }
             if (shieldsLayout != null) {
-                shieldsLayout.setElement(CharacterManager.getSelectedCharacter().getPurchasedShield());
+                shieldsLayout.setElement(character.getPurchasedShield());
             }
             firebirdsCounter.setCharacter(character);
         }
@@ -174,7 +175,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
         @Override
         protected ElementAdapter<Shield> createElementAdapter(boolean nonOfficial) {
-            return new ShieldAdapter(getActivity(), mViewModel.getAvailableShields(nonOfficial), isNullAllowed());
+            final Activity activity = getActivity();
+            if (activity == null) {
+                return null;
+            }
+            return new ShieldAdapter(activity, mViewModel.getAvailableShields(nonOfficial), isNullAllowed());
         }
 
         private void setShield(List<ElementSpinner<Shield>> spinners) {
@@ -236,7 +241,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
         @Override
         protected ElementAdapter<Armor> createElementAdapter(boolean nonOfficial) {
-            return new ArmorAdapter(getActivity(), mViewModel.getAvailableArmors(nonOfficial), isNullAllowed());
+            final Activity activity = getActivity();
+            if (activity == null) {
+                return null;
+            }
+            return new ArmorAdapter(activity, mViewModel.getAvailableArmors(nonOfficial), isNullAllowed());
         }
 
         private void setArmor(List<ElementSpinner<Armor>> spinners) {
@@ -289,7 +298,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
         @Override
         protected ElementAdapter<HandheldShield> createElementAdapter(boolean nonOfficial) {
-            return new HandheldShieldAdapter(getActivity(), mViewModel.getAvailableHandheldShields(nonOfficial), isNullAllowed());
+            final Activity activity = getActivity();
+            if (activity == null) {
+                return null;
+            }
+            return new HandheldShieldAdapter(activity, mViewModel.getAvailableHandheldShields(nonOfficial), isNullAllowed());
         }
 
         private void setHandheldShield(List<ElementSpinner<HandheldShield>> spinners) {
@@ -366,7 +379,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
         @Override
         protected ElementAdapter<Weapon> createElementAdapter(boolean nonOfficial) {
-            return new WeaponAdapter(getActivity(), mViewModel.getAvailableMeleeWeapons(nonOfficial), isNullAllowed());
+            final Activity activity = getActivity();
+            if (activity == null) {
+                return null;
+            }
+            return new WeaponAdapter(activity, mViewModel.getAvailableMeleeWeapons(nonOfficial), isNullAllowed());
         }
 
         @Override
@@ -387,7 +404,11 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
         @Override
         protected ElementAdapter<Weapon> createElementAdapter(boolean nonOfficial) {
-            return new WeaponAdapter(getActivity(), mViewModel.getAvailableRangedWeapons(nonOfficial), isNullAllowed());
+            final Activity activity = getActivity();
+            if (activity == null) {
+                return null;
+            }
+            return new WeaponAdapter(activity, mViewModel.getAvailableRangedWeapons(nonOfficial), isNullAllowed());
         }
 
         @Override

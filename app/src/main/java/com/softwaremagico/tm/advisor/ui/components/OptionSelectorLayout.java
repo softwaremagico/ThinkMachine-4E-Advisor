@@ -73,7 +73,10 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         super.removeAllViews();
         for (int i = 0; i < optionSelectors.size(); i++) {
             //selections.get(i).getSelections().clear();
-            super.addView(createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, disabled, nullAllowed, characterPlayer));
+            final ElementSpinner<O> spinner = createSpinner(clazz, optionSelectors.get(i), selections.get(i).getSelections(), false, disabled, nullAllowed, characterPlayer);
+            if (spinner != null) {
+                super.addView(spinner);
+            }
         }
         launchElementsSizeUpdatedListeners(optionSelectors);
     }
@@ -81,6 +84,9 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
     //Currently only one option is allowed.
     private ElementSpinner<O> createSpinner(Class<O> clazz, OptionSelector<E, O> optionSelector, Collection<Selection> selections,
                                             boolean nonOfficial, boolean disabled, boolean nullAllowed, CharacterPlayer characterPlayer) {
+        if (getContext() == null || optionSelector == null) {
+            return null;
+        }
         ElementSpinner<O> elementSelector = new ElementSpinner<>(getContext());
         final List<O> options = new ArrayList<>(optionSelector.getOptions());
         Collections.sort(options);
@@ -88,24 +94,45 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
         elementSelector.setAdapter(new ElementAdapter<>(getContext(), options, nullAllowed, clazz) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        (!getItem(position).getRestrictions().isRestricted() && !getItem(position).getRestrictions().isRestricted(characterPlayer) && !disabled && getCount() != 1);
+                final O item = getItem(position);
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter == null) {
+                    return item == null;
+                }
+                return item == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
+                        (!item.getRestrictions().isRestricted() && !item.getRestrictions().isRestricted(characterPlayer) && !disabled && getCount() != 1);
             }
         });
 
         elementSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (optionSelector.getTotalOptions() <= 1) {
-                    selections.clear();
+                if (position < 0 || position >= options.size()) {
+                    if (selections != null) {
+                        selections.clear();
+                    }
+                    launchElementsSelectedListener(selections);
+                    return;
                 }
-                if (options.get(position).getId() == null) {
-                    selections.clear();
+                if (optionSelector.getTotalOptions() <= 1) {
+                    if (selections != null) {
+                        selections.clear();
+                    }
+                }
+                final O selectedOption = options.get(position);
+                if (selectedOption == null || selectedOption.getId() == null) {
+                    if (selections != null) {
+                        selections.clear();
+                    }
                 } else {
-                    if (options.get(position) instanceof CapabilityOption) {
-                        selections.add(new Selection(options.get(position), ((CapabilityOption) options.get(position)).getSelectedSpecialization()));
+                    if (selectedOption instanceof CapabilityOption) {
+                        if (selections != null) {
+                            selections.add(new Selection(selectedOption, ((CapabilityOption) selectedOption).getSelectedSpecialization()));
+                        }
                     } else {
-                        selections.add(new Selection(options.get(position)));
+                        if (selections != null) {
+                            selections.add(new Selection(selectedOption));
+                        }
                     }
                 }
                 launchElementsSelectedListener(selections);

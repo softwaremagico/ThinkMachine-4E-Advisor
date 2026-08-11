@@ -53,6 +53,9 @@ public class CharacterHandler {
     }
 
     public void save(Context context, CharacterEntity characterEntity) {
+        if (characterEntity == null) {
+            return;
+        }
         if (!entities.values().contains(characterEntity)) {
             AppDatabase.getInstance(context).getCharacterEntityDao().persist(characterEntity);
             entities.put(characterEntity.getCharacterPlayer(), characterEntity);
@@ -68,12 +71,19 @@ public class CharacterHandler {
 
     public List<CharacterEntity> load(Context context) {
         List<CharacterEntity> loadedCharacters = AppDatabase.getInstance(context).getCharacterEntityDao().getAll();
+        if (loadedCharacters == null) {
+            entities = new HashMap<>();
+            return new java.util.ArrayList<>();
+        }
         entities = mapEntitiesByCharacter(loadedCharacters);
         return loadedCharacters;
     }
 
     static Map<CharacterPlayer, CharacterEntity> mapEntitiesByCharacter(List<CharacterEntity> loadedCharacters) {
         final Map<CharacterPlayer, CharacterEntity> mappedEntities = new HashMap<>();
+        if (loadedCharacters == null) {
+            return mappedEntities;
+        }
         for (final CharacterEntity characterEntity : loadedCharacters) {
             if (characterEntity == null) {
                 AdvisorLog.warning(CharacterHandler.class, "Skipping null persisted character entry.");

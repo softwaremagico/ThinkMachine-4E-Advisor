@@ -53,10 +53,13 @@ public final class SettingsHandler {
     }
 
     public static void save(Context context) {
-        save(context, SettingsHandler.settingsEntity);
+        save(context, getOrCreateSettingsEntity());
     }
 
     public static void save(Context context, SettingsEntity settingsEntity) {
+        if (context == null || settingsEntity == null) {
+            return;
+        }
         launchSettingsUpdateListeners();
         if (SettingsHandler.settingsEntity == null) {
             AppDatabase.getInstance(context).getSettingsEntityDao().persist(settingsEntity);
@@ -146,7 +149,9 @@ public final class SettingsHandler {
     }
 
     public static void updateCharacterSettings() {
-        CharacterManager.getSelectedCharacter().getSettings().copy(getOrCreateSettingsEntity().get());
-        CharacterManager.updateSettings();
+        if (CharacterManager.getSelectedCharacter() != null && CharacterManager.getSelectedCharacter().getSettings() != null) {
+            CharacterManager.getSelectedCharacter().getSettings().copy(getOrCreateSettingsEntity().get());
+            CharacterManager.updateSettings();
+        }
     }
 }

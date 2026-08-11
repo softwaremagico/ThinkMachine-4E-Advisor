@@ -100,12 +100,16 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     protected void initData() {
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
         rootLayout.removeAllViews();
-        addContent(rootLayout, CharacterManager.getSelectedCharacter());
+        addContent(rootLayout, selectedCharacter);
         updateContent();
 
-        populateElements(root, CharacterManager.getSelectedCharacter());
+        populateElements(root, selectedCharacter);
     }
 
     @Override
@@ -158,10 +162,15 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
             final ElementSelector<OccultismPower> occultismPowerSelector = new ElementSelector<>(getContext(), occultismPower);
             occultismLayout.addView(occultismPowerSelector);
             occultismPowerSelector.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter == null) {
+                    occultismPowerSelector.setChecked(false);
+                    return;
+                }
                 if (enabled) {
                     if (isChecked) {
                         try {
-                            CharacterManager.getSelectedCharacter().addOccultismPower(occultismPowerSelector.getSelection());
+                            selectedCharacter.addOccultismPower(occultismPowerSelector.getSelection());
                         } catch (InvalidOccultismPowerException e) {
                             occultismPowerSelector.setChecked(false);
                         } catch (UnofficialElementNotAllowedException e) {
@@ -169,7 +178,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
                             occultismPowerSelector.setChecked(false);
                         }
                     } else {
-                        CharacterManager.getSelectedCharacter().removeOccultismPower(occultismPowerSelector.getSelection());
+                        selectedCharacter.removeOccultismPower(occultismPowerSelector.getSelection());
                     }
                     enableOccultismPowers(occultismPath);
                 }
@@ -189,14 +198,16 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void enableOccultismPowers(OccultismPath occultismPath) {
-        if (selectors.get(occultismPath) != null) {
-            for (ElementSelector<OccultismPower> occultismPowerElementSelector : selectors.get(occultismPath)) {
-                if (occultismPowerElementSelector != null) {
-                    try {
-                        occultismPowerElementSelector.setEnabled(CharacterManager.getSelectedCharacter().canAddOccultismPower(occultismPowerElementSelector.getSelection()));
-                    } catch (InvalidPsiqueLevelException e) {
-                        occultismPowerElementSelector.setEnabled(false);
-                    }
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null || selectors.get(occultismPath) == null) {
+            return;
+        }
+        for (ElementSelector<OccultismPower> occultismPowerElementSelector : selectors.get(occultismPath)) {
+            if (occultismPowerElementSelector != null) {
+                try {
+                    occultismPowerElementSelector.setEnabled(selectedCharacter.canAddOccultismPower(occultismPowerElementSelector.getSelection()));
+                } catch (InvalidPsiqueLevelException e) {
+                    occultismPowerElementSelector.setEnabled(false);
                 }
             }
         }
@@ -221,7 +232,11 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
 
 
     private void updateVisibility() {
-        final OccultismType characterOccultismType = CharacterManager.getSelectedCharacter().getOccultismType();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
+        final OccultismType characterOccultismType = selectedCharacter.getOccultismType();
         occultismLevelFields.forEach((key, value) -> {
             if (characterOccultismType == null || Objects.equals(key, characterOccultismType)) {
                 value.setVisibility(View.VISIBLE);
@@ -245,6 +260,10 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
         if (getContext() == null) {
             return;
         }
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
         final TranslatedEditText occultismLevelText = new TranslatedEditText(getContext(), null);
         occultismLevelFields.put(occultismType, occultismLevelText);
 
@@ -259,7 +278,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
 
         occultismLevelText.setFocusable(false);
 
-        occultismLevelText.setText(String.valueOf(CharacterManager.getSelectedCharacter().getOccultismLevel(occultismType)));
+        occultismLevelText.setText(String.valueOf(selectedCharacter.getOccultismLevel(occultismType)));
         CharacterManager.addCharacterCharacteristicsUpdatedListener(characterPlayer ->
                 occultismLevelText.setText(String.valueOf(characterPlayer.getOccultismLevel(occultismType))));
         CharacterManager.addCharacterSpecieUpdatedListener(characterPlayer ->

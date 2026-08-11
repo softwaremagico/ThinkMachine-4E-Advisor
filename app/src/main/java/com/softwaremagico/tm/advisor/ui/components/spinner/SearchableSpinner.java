@@ -74,6 +74,9 @@ public class SearchableSpinner<E extends Element> extends androidx.appcompat.wid
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (context == null || searchableListDialog == null) {
+            return false;
+        }
         if (searchableListDialog.isAdded()) {
             return true;
         }
@@ -89,7 +92,11 @@ public class SearchableSpinner<E extends Element> extends androidx.appcompat.wid
                     items.add(arrayAdapter.getItem(i));
                 }
                 // Change end.
-                searchableListDialog.show(scanForActivity(context).getFragmentManager(), "TAG");
+                final Activity activity = scanForActivity(context);
+                if (activity == null) {
+                    return true;
+                }
+                searchableListDialog.show(activity.getFragmentManager(), "TAG");
                 searchableListDialog.setAdapter((ArrayAdapter<E>) getAdapter());
             }
         }
@@ -98,6 +105,9 @@ public class SearchableSpinner<E extends Element> extends androidx.appcompat.wid
 
     @Override
     public void setAdapter(SpinnerAdapter adapter) {
+        if (adapter == null) {
+            return;
+        }
         if (!isFromInit) {
             arrayAdapter = (ArrayAdapter<E>) adapter;
             if (!TextUtils.isEmpty(hintText) && !isDirty) {
@@ -115,17 +125,26 @@ public class SearchableSpinner<E extends Element> extends androidx.appcompat.wid
     }
 
     public void notifyDataSetChanged() {
-        arrayAdapter.notifyDataSetChanged();
+        if (arrayAdapter != null) {
+            arrayAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onSearchableItemClicked(E item, int position) {
-        setSelection(items.indexOf(item));
+        if (item == null || position < 0) {
+            return;
+        }
+        final int selectedIndex = items.indexOf(item);
+        if (selectedIndex < 0) {
+            return;
+        }
+        setSelection(selectedIndex);
 
         if (!isDirty) {
             isDirty = true;
             setAdapter(arrayAdapter);
-            setSelection(items.indexOf(item));
+            setSelection(selectedIndex);
         }
     }
 

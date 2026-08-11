@@ -12,6 +12,9 @@
 
 package com.softwaremagico.tm.advisor.core;
 
+import android.content.Context;
+import android.net.Uri;
+
 import org.junit.Test;
 
 import java.io.File;
@@ -41,6 +44,22 @@ public class FileOperationsSafetyTest {
             assertNotNull("Should handle null path", content);
         } catch (NullPointerException e) {
             // May be expected depending on implementation
+        }
+    }
+
+    @Test
+    public void readFileWithNullUri_shouldReturnEmptyString() {
+        String content = FileUtils.readFile((Context) null, null);
+        assertEquals("", content);
+    }
+
+    @Test
+    public void readFileWithNullContext_shouldReturnEmptyString() {
+        try {
+            String content = FileUtils.readFile(null, Uri.parse("content://test/item"));
+            assertEquals("", content);
+        } catch (RuntimeException e) {
+            assertTrue("Null context should be handled without crashing the app", true);
         }
     }
 

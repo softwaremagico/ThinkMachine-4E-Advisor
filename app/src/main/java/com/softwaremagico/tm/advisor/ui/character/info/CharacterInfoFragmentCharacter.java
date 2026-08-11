@@ -99,21 +99,32 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         });
         updateTranslatedTextField(root, R.id.character_age, value -> {
             try {
-                if (!Objects.equals(CharacterManager.getSelectedCharacter().getInfo().getAge() + "", value)) {
-                    CharacterManager.getSelectedCharacter().getInfo().setAge(Integer.parseInt(value));
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter == null) {
+                    return;
+                }
+                if (!Objects.equals(selectedCharacter.getInfo().getAge() + "", value)) {
+                    selectedCharacter.getInfo().setAge(Integer.parseInt(value));
                     //Force to update all costs.
                     if (!updatingCharacter) {
-                        CharacterManager.launchCharacterAgeUpdatedListeners(CharacterManager.getSelectedCharacter());
+                        CharacterManager.launchCharacterAgeUpdatedListeners(selectedCharacter);
                     }
                 }
             } catch (NumberFormatException e) {
-                CharacterManager.getSelectedCharacter().getInfo().setAge(null);
-                CharacterManager.launchCharacterAgeUpdatedListeners(CharacterManager.getSelectedCharacter());
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter != null) {
+                    selectedCharacter.getInfo().setAge(null);
+                    CharacterManager.launchCharacterAgeUpdatedListeners(selectedCharacter);
+                }
             }
         });
         updateTranslatedTextField(root, R.id.character_level, value -> {
             try {
-                if (!Objects.equals(CharacterManager.getSelectedCharacter().getLevel() + "", value)) {
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter == null) {
+                    return;
+                }
+                if (!Objects.equals(selectedCharacter.getLevel() + "", value)) {
                     try {
                         CharacterManager.setCharacterLevel(Integer.parseInt(value));
                         //Force to update all costs.
@@ -122,13 +133,19 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                         }
                     } catch (InvalidLevelException e) {
                         SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
-                        levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                        final CharacterPlayer selected = CharacterManager.getSelectedCharacter();
+                        if (selected != null) {
+                            levelTextEditor.setText(selected.getLevel() + "");
+                        }
                         AdvisorLog.errorMessage(this.getClass(), e);
                     }
                 }
             } catch (NumberFormatException e) {
-                levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
-                CharacterManager.launchLevelUpdatedListeners(CharacterManager.getSelectedCharacter());
+                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                if (selectedCharacter != null) {
+                    levelTextEditor.setText(selectedCharacter.getLevel() + "");
+                    CharacterManager.launchLevelUpdatedListeners(selectedCharacter);
+                }
             }
         });
 

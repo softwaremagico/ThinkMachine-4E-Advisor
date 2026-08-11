@@ -17,4 +17,12 @@ public class SettingsHandlerTest {
         assertNotNull(SettingsHandler.getSettingsEntity());
         assertNotNull(CharacterManager.getSelectedCharacter().getSettings());
     }
+
+    @Test
+    public void save_withNullInputs_returnsWithoutCrash() {
+        SettingsHandler.save(null, null);
+        SettingsHandler.save(null);
+
+        assertNotNull(SettingsHandler.getSettingsEntity());
+    }
 }

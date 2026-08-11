@@ -108,15 +108,15 @@ public class WikiFragment extends Fragment {
             return;
         }
 
-        final List<E> options = (elements == null ? new ArrayList<>() : elements).stream().filter(Objects::nonNull)
-                .sorted(Comparator.comparing(element -> {
-                    try {
-                        return element.getNameRepresentation();
-                    } catch (InvalidXmlElementException e) {
-                        return "";
-                    }
-                }))
-                .collect(Collectors.toList());
+        final List<E> options = new ArrayList<>();
+        if (elements != null) {
+            for (E element : elements) {
+                if (element != null) {
+                    options.add(element);
+                }
+            }
+        }
+        options.sort((left, right) -> safeName(left).compareToIgnoreCase(safeName(right)));
 
         selector.setAdapter(new ElementAdapter<>(activity, options, false, clazz) {
             @Override
@@ -303,5 +303,13 @@ public class WikiFragment extends Fragment {
         }
 
         return new ArrayList<>(powersById.values());
+    }
+
+    private String safeName(Element element) {
+        try {
+            return element.getNameRepresentation();
+        } catch (InvalidXmlElementException e) {
+            return "";
+        }
     }
 }
