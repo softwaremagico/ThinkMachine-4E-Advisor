@@ -25,7 +25,17 @@ public class RandomEnumAdapter<T> extends EnumAdapter<T> {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(getContext()).inflate(R.layout.element_list, parent, false);
+            Context ctx = getContext();
+            if (ctx == null) {
+                AdvisorLog.warning(RandomEnumAdapter.class, "Context is null in getDropDownView");
+                return new View(parent.getContext());
+            }
+            listItem = LayoutInflater.from(ctx).inflate(R.layout.element_list, parent, false);
+        }
+
+        if (position < 0 || position >= getElements().size()) {
+            AdvisorLog.warning(RandomEnumAdapter.class, "Position " + position + " out of bounds for list size " + getElements().size());
+            return listItem;
         }
 
         final Object element = getElements().get(position);
@@ -34,8 +44,11 @@ public class RandomEnumAdapter<T> extends EnumAdapter<T> {
             final TextView name = listItem.findViewById(R.id.selected_item);
             if (element instanceof Enum) {
                 try {
-                    name.setText(getContext().getResources().getString(getContext().getResources().getIdentifier(getOptionTranslation((Enum) element),
-                            "string", getContext().getPackageName())));
+                    Context ctx = getContext();
+                    if (ctx != null) {
+                        name.setText(ctx.getResources().getString(ctx.getResources().getIdentifier(getOptionTranslation((Enum) element),
+                                "string", ctx.getPackageName())));
+                    }
                 } catch (Resources.NotFoundException e) {
                     AdvisorLog.warning(this.getClass().getName(), "No translation found for '" + getOptionTranslation((Enum) element) + "'.");
                 }
@@ -50,7 +63,17 @@ public class RandomEnumAdapter<T> extends EnumAdapter<T> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(getContext()).inflate(R.layout.element_list, parent, false);
+            Context ctx = getContext();
+            if (ctx == null) {
+                AdvisorLog.warning(RandomEnumAdapter.class, "Context is null in getView");
+                return new View(parent.getContext());
+            }
+            listItem = LayoutInflater.from(ctx).inflate(R.layout.element_list, parent, false);
+        }
+
+        if (position < 0 || position >= getElements().size()) {
+            AdvisorLog.warning(RandomEnumAdapter.class, "Position " + position + " out of bounds for list size " + getElements().size());
+            return listItem;
         }
 
         final Object element = getElements().get(position);
@@ -59,8 +82,11 @@ public class RandomEnumAdapter<T> extends EnumAdapter<T> {
             final TextView elementName = listItem.findViewById(R.id.selected_item);
             if (element instanceof Enum) {
                 try {
-                    elementName.setText(getContext().getResources().getString(getContext().getResources().getIdentifier(getOptionTranslation((Enum) element),
-                            "string", getContext().getPackageName())));
+                    Context ctx = getContext();
+                    if (ctx != null) {
+                        elementName.setText(ctx.getResources().getString(ctx.getResources().getIdentifier(getOptionTranslation((Enum) element),
+                                "string", ctx.getPackageName())));
+                    }
                 } catch (Resources.NotFoundException e) {
                     AdvisorLog.warning(this.getClass().getName(), "No translation found for '" + getOptionTranslation((Enum) element) + "'.");
                 }

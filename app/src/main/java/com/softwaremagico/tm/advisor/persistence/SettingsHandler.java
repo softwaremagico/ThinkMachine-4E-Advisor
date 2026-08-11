@@ -79,6 +79,13 @@ public final class SettingsHandler {
         return settingsEntity;
     }
 
+    private static SettingsEntity getOrCreateSettingsEntity() {
+        if (settingsEntity == null) {
+            settingsEntity = new SettingsEntity();
+        }
+        return settingsEntity;
+    }
+
     public static void setSettingsEntity(Context context) {
         SettingsHandler.settingsEntity = loadSettingsEntity(context);
     }
@@ -88,47 +95,48 @@ public final class SettingsHandler {
     }
 
     public static void setModulesBySettings() {
-        if (getSettingsEntity().isPlayerGuideEnabled()) {
+        final SettingsEntity currentSettings = getOrCreateSettingsEntity();
+        if (currentSettings.isPlayerGuideEnabled()) {
             ModuleManager.enableModule(ModuleManager.FADING_SUNS_PLAYER_GUIDE_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.FADING_SUNS_PLAYER_GUIDE_MODULE);
         }
-        if (getSettingsEntity().isFactionsBookEnabled()) {
+        if (currentSettings.isFactionsBookEnabled()) {
             ModuleManager.enableModule(ModuleManager.FACTION_BOOK_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.FACTION_BOOK_MODULE);
         }
-        if (getSettingsEntity().isRevisedEditionEnabled()) {
+        if (currentSettings.isRevisedEditionEnabled()) {
             ModuleManager.enableModule(ModuleManager.FADING_SUNS_REVISED_EDITION_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.FADING_SUNS_REVISED_EDITION_MODULE);
         }
-        if (getSettingsEntity().isLostWorldsBookEnabled()) {
+        if (currentSettings.isLostWorldsBookEnabled()) {
             ModuleManager.enableModule(ModuleManager.LOST_WORLDS_BOOK_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.LOST_WORLDS_BOOK_MODULE);
         }
-        if (getSettingsEntity().isImperialDossierBrotherBattleEnabled()) {
+        if (currentSettings.isImperialDossierBrotherBattleEnabled()) {
             ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_BROTHER_BATTLE_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_BROTHER_BATTLE_MODULE);
         }
-        if (getSettingsEntity().isImperialDossierCharioteersGuildEnabled()) {
+        if (currentSettings.isImperialDossierCharioteersGuildEnabled()) {
             ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_CHARIOTEERS_GUILD_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_CHARIOTEERS_GUILD_MODULE);
         }
-        if (getSettingsEntity().isImperialDossierHouseHawkwoodEnabled()) {
+        if (currentSettings.isImperialDossierHouseHawkwoodEnabled()) {
             ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_HOUSE_HAWKWOOD_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_HOUSE_HAWKWOOD_MODULE);
         }
-        if (getSettingsEntity().isImperialDossierReevesGuildEnabled()) {
+        if (currentSettings.isImperialDossierReevesGuildEnabled()) {
             ModuleManager.enableModule(ModuleManager.IMPERIAL_DOSSIER_REEVES_GUILD_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.IMPERIAL_DOSSIER_REEVES_GUILD_MODULE);
         }
-        if (getSettingsEntity().isVuldrokSpaceEnabled()) {
+        if (currentSettings.isVuldrokSpaceEnabled()) {
             ModuleManager.enableModule(ModuleManager.VULDROK_SPACE_MODULE);
         } else {
             ModuleManager.disableModule(ModuleManager.VULDROK_SPACE_MODULE);
@@ -137,8 +145,8 @@ public final class SettingsHandler {
         updateCharacterSettings();
     }
 
-    public static void updateCharacterSettings(){
-        CharacterManager.getSelectedCharacter().getSettings().copy(SettingsHandler.getSettingsEntity().get());
+    public static void updateCharacterSettings() {
+        CharacterManager.getSelectedCharacter().getSettings().copy(getOrCreateSettingsEntity().get());
         CharacterManager.updateSettings();
     }
 }

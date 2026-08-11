@@ -19,9 +19,16 @@ public class CharacterJsonManager {
     }
 
     public static CharacterPlayer fromJson(String jsonText) throws InvalidJsonException {
+        if (jsonText == null || jsonText.isBlank()) {
+            throw new InvalidJsonException("JSON content is empty.");
+        }
         try {
-            return ObjectMapperFactory.getJsonObjectMapper().readValue(jsonText, CharacterPlayer.class);
-        } catch (JsonProcessingException e) {
+            final CharacterPlayer characterPlayer = ObjectMapperFactory.getJsonObjectMapper().readValue(jsonText, CharacterPlayer.class);
+            if (characterPlayer == null) {
+                throw new InvalidJsonException("JSON content does not contain a character.");
+            }
+            return characterPlayer;
+        } catch (JsonProcessingException | IllegalArgumentException e) {
             throw new InvalidJsonException(e.getMessage());
         }
     }

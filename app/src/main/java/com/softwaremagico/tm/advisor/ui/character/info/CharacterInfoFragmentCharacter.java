@@ -278,7 +278,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (position > 0) {
-                    CharacterManager.getSelectedCharacter().getInfo().setGender(mViewModel.getAvailableGenders().get(position - 1));
+                    Gender selectedGender = getSafeElementAt(mViewModel.getAvailableGenders(), position - 1);
+                    if (selectedGender != null) {
+                        CharacterManager.getSelectedCharacter().getInfo().setGender(selectedGender);
+                    }
                 } else {
                     CharacterManager.getSelectedCharacter().getInfo().setGender(null);
                 }
@@ -327,7 +330,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                         CharacterManager.setSpecie(null);
                     } else {
                         if (position > 0) {
-                            CharacterManager.setSpecie(mViewModel.getAvailableSpecies(nonOfficial).get(position - 1));
+                            Specie selectedSpecie = getSafeElementAt(mViewModel.getAvailableSpecies(nonOfficial), position - 1);
+                            if (selectedSpecie != null) {
+                                CharacterManager.setSpecie(selectedSpecie);
+                            }
                         } else {
                             CharacterManager.setSpecie(null);
                         }
@@ -379,7 +385,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                         }
                     } else {
                         if (position > 0) {
-                            CharacterManager.setUpbringing(mViewModel.getAvailableUpbringings(nonOfficial).get(position - 1));
+                            Upbringing selectedUpbringing = getSafeElementAt(mViewModel.getAvailableUpbringings(nonOfficial), position - 1);
+                            if (selectedUpbringing != null) {
+                                CharacterManager.setUpbringing(selectedUpbringing);
+                            }
                         } else {
                             CharacterManager.setUpbringing(null);
                         }
@@ -430,7 +439,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                         }
                     } else {
                         if (position > 0) {
-                            CharacterManager.setFaction(mViewModel.getAvailableFactions(nonOfficial).get(position - 1));
+                            Faction selectedFaction = getSafeElementAt(mViewModel.getAvailableFactions(nonOfficial), position - 1);
+                            if (selectedFaction != null) {
+                                CharacterManager.setFaction(selectedFaction);
+                            }
                         } else {
                             CharacterManager.setFaction(null);
                         }
@@ -472,15 +484,23 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 try {
-                    if (position == 0
-                            || mViewModel.getAvailableCallings(nonOfficial).get(position - 1).getId() == null
-                            || mViewModel.getAvailableCallings(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                    if (position == 0) {
                         try {
                             CharacterManager.setCalling(null);
                         } catch (InvalidCallingException e) {
                             //Nothing
                         }
-                    } else {
+                    } else if (position > 0) {
+                        Calling selectedCalling = getSafeElementAt(mViewModel.getAvailableCallings(nonOfficial), position - 1);
+                        if (selectedCalling != null && selectedCalling.getId() != null && !selectedCalling.getId().equals(Element.DEFAULT_NULL_ID)) {
+                            CharacterManager.setCalling(selectedCalling);
+                        } else {
+                            try {
+                                CharacterManager.setCalling(null);
+                            } catch (InvalidCallingException e) {
+                                //Nothing
+                            }
+                        }
                         if (position > 0) {
                             CharacterManager.setCalling(mViewModel.getAvailableCallings(nonOfficial).get(position - 1));
                         } else {
@@ -537,10 +557,15 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         planetSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == 0
-                        || mViewModel.getAvailablePlanets(nonOfficial).get(position - 1).getId() == null
-                        || mViewModel.getAvailablePlanets(nonOfficial).get(position - 1).getId().equals(Element.DEFAULT_NULL_ID)) {
+                if (position == 0) {
                     CharacterManager.setPlanet(null);
+                } else if (position > 0) {
+                    Planet selectedPlanet = getSafeElementAt(mViewModel.getAvailablePlanets(nonOfficial), position - 1);
+                    if (selectedPlanet != null && selectedPlanet.getId() != null && !selectedPlanet.getId().equals(Element.DEFAULT_NULL_ID)) {
+                        CharacterManager.setPlanet(selectedPlanet);
+                    } else {
+                        CharacterManager.setPlanet(null);
+                    }
                 } else {
                     if (position > 0) {
                         CharacterManager.setPlanet(mViewModel.getAvailablePlanets(nonOfficial).get(position - 1));
@@ -599,4 +624,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
 
+    public <T> T getSafeElementAt(java.util.List<T> list, int position) {
+        if (list == null || position < 0 || position >= list.size()) {
+            return null;
+        }
+        return list.get(position);
+    }
 }

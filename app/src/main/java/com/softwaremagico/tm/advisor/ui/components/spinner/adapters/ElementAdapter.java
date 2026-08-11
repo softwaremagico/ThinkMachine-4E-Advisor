@@ -71,7 +71,12 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(getContext()).inflate(R.layout.element_list, parent, false);
+            Context ctx = getContext();
+            if (ctx == null) {
+                AdvisorLog.warning(ElementAdapter.class, "Context is null in getDropDownView for position: " + position);
+                return new View(parent.getContext());
+            }
+            listItem = LayoutInflater.from(ctx).inflate(R.layout.element_list, parent, false);
         }
 
         final E element = elements.get(position);
@@ -86,14 +91,19 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     }
 
     protected void setElementColor(TextView elementRepresentation, E element, int position) {
+        Context ctx = getContext();
+        if (ctx == null) {
+            AdvisorLog.warning(ElementAdapter.class, "Context is null in setElementColor");
+            return;
+        }
         if (isEnabled(position)) {
             if (!element.isOfficial()) {
-                elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));
+                elementRepresentation.setTextColor(ContextCompat.getColor(ctx, R.color.unofficialElement));
             } else {
-                elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorNormal));
+                elementRepresentation.setTextColor(ContextCompat.getColor(ctx, R.color.colorNormal));
             }
         } else {
-            elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDisabled));
+            elementRepresentation.setTextColor(ContextCompat.getColor(ctx, R.color.colorDisabled));
         }
     }
 

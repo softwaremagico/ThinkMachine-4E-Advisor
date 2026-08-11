@@ -66,6 +66,10 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
 
     @Override
     protected void initData() {
+        final android.content.Context context = getContext();
+        if (context == null) {
+            return;
+        }
         final LinearLayout linearLayout = root.findViewById(R.id.preferences_container);
         if (linearLayout == null) {
             return;
@@ -73,24 +77,24 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
         for (PreferenceGroup preferenceGroup : PreferenceGroup.values()) {
             try {
                 addSubSection(getResources().getString(getResources().getIdentifier(getGroupPreferenceStringResource(preferenceGroup), "string",
-                        getContext().getPackageName())), linearLayout);
+                        context.getPackageName())), linearLayout);
                 for (PreferenceOption preferenceOption : preferenceGroup.getOptions()) {
-                    final EnumSpinner optionsSelector = new EnumSpinner(getContext(), null);
+                    final EnumSpinner optionsSelector = new EnumSpinner(context, null);
                     if (preferenceOption == PreferenceOption.POWER_LEVEL) {
                         final List<Object> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
                         options.add(0, null);
                         options.add(CustomLevelOption.CUSTOM);
-                        optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
+                        optionsSelector.setAdapter((com.softwaremagico.tm.advisor.ui.components.spinner.adapters.EnumAdapter) new RandomEnumAdapter(context, android.R.layout.simple_spinner_item, options));
                     } else {
                         final List<IRandomPreference> options = new ArrayList<>(Arrays.asList(preferenceOption.getRandomPreferences()));
                         if (preferenceOption.getRandomPreferences().length == 0 || preferenceOption.getDefaultOption() == null) {
                             options.add(0, null);
                         }
-                        optionsSelector.setAdapter(new RandomEnumAdapter(getActivity(), android.R.layout.simple_spinner_item, options));
+                        optionsSelector.setAdapter((com.softwaremagico.tm.advisor.ui.components.spinner.adapters.EnumAdapter) new RandomEnumAdapter(context, android.R.layout.simple_spinner_item, options));
                     }
                     try {
                         optionsSelector.setText(getResources().getString(getResources().getIdentifier(getPreferenceStringResource(preferenceOption), "string",
-                                getContext().getPackageName())));
+                                context.getPackageName())));
                     } catch (Resources.NotFoundException e) {
                         AdvisorLog.severe(this.getClass().getName(), "Preference option '" + preferenceOption + "' has no translation '" +
                                 getPreferenceStringResource(preferenceOption) + "'.");
@@ -225,7 +229,11 @@ public class RandomPreferencesFragment extends CharacterCustomFragment {
     }
 
     private void addCustomLevelInput(LinearLayout linearLayout) {
-        customLevelInput = new TranslatedEditText(getContext(), null);
+        final android.content.Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        customLevelInput = new TranslatedEditText(context, null);
         customLevelInput.setLabel(getString(R.string.preference_option_custom));
         customLevelInput.setAsNumberEditor();
         customLevelInput.setText("");

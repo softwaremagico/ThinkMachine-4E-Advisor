@@ -1,6 +1,7 @@
 package com.softwaremagico.tm.advisor.ui.character.level;
 
 import android.os.Bundle;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,11 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
 
     private void addCallingSelector(LinearLayout rootLayout, CharacterPlayer character, LevelSelector levelSelector,
                                     int level, boolean disabled) {
-        final ElementSpinner<Calling> callingSelector = new ElementSpinner<>(requireContext());
+        final Context context = getContext();
+        if (context == null) {
+            return;
+        }
+        final ElementSpinner<Calling> callingSelector = new ElementSpinner<>(context);
         final TextView tagText = callingSelector.findViewById(R.id.translated_tag);
         if (tagText != null) {
             tagText.setText(getString(R.string.calling));
@@ -101,7 +106,7 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         final List<Calling> options = getAvailableCallings(character.getSettings().isOnlyOfficialAllowed());
         options.add(0, null);
 
-        callingSelector.setAdapter(new ElementAdapter<>(requireContext(), options, false, Calling.class) {
+        callingSelector.setAdapter(new ElementAdapter<>(context, options, false, Calling.class) {
             @Override
             public boolean isEnabled(int position) {
                 final Calling calling = getItem(position);

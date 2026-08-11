@@ -14,13 +14,13 @@ package com.softwaremagico.tm.advisor.persistence;
 
 import android.content.Context;
 
+import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CharacterHandler {
     private Map<CharacterPlayer, CharacterEntity> entities = new HashMap<>();
@@ -39,6 +39,9 @@ public class CharacterHandler {
     }
 
     public void save(Context context, CharacterPlayer characterPlayer) {
+        if (characterPlayer == null) {
+            return;
+        }
         if (entities.get(characterPlayer) == null) {
             final CharacterEntity characterEntity = new CharacterEntity(CharacterManager.getSelectedCharacter());
             AppDatabase.getInstance(context).getCharacterEntityDao().persist(characterEntity);
@@ -65,8 +68,27 @@ public class CharacterHandler {
 
     public List<CharacterEntity> load(Context context) {
         List<CharacterEntity> loadedCharacters = AppDatabase.getInstance(context).getCharacterEntityDao().getAll();
-        entities = loadedCharacters.stream().collect(Collectors.toMap(CharacterEntity::getCharacterPlayer, c -> c));
+        entities = mapEntitiesByCharacter(loadedCharacters);
         return loadedCharacters;
     }
 
+    static Map<CharacterPlayer, CharacterEntity> mapEntitiesByCharacter(List<CharacterEntity> loadedCharacters) {
+        final Map<CharacterPlayer, CharacterEntity> mappedEntities = new HashMap<>();
+        for (final CharacterEntity characterEntity : loadedCharacters) {
+            if (characterEntity == null) {
+                AdvisorLog.warning(CharacterHandler.class, "Skipping null persisted character entry.");
+                continue;
+            }
+
+            final CharacterPlayer characterPlayer = characterEntity.getCharacterPlayer();
+            if (characterPlayer == null) {
+                AdvisorLog.warning(CharacterHandler.class, "Skipping persisted character '{}' because its JSON payload is invalid.",
+                        characterEntity.getName());
+                continue;
+            }
+
+            mappedEntities.put(characterPlayer, characterEntity);
+        }
+        return mappedEntities;
+    }
 }

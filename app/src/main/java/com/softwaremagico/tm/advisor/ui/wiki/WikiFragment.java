@@ -103,12 +103,22 @@ public class WikiFragment extends Fragment {
         if (selector == null) {
             return;
         }
+        final androidx.fragment.app.FragmentActivity activity = getActivity();
+        if (activity == null || getContext() == null) {
+            return;
+        }
 
-        final List<E> options = elements.stream().filter(Objects::nonNull)
-                .sorted(Comparator.comparing(Element::getNameRepresentation))
+        final List<E> options = (elements == null ? new ArrayList<>() : elements).stream().filter(Objects::nonNull)
+                .sorted(Comparator.comparing(element -> {
+                    try {
+                        return element.getNameRepresentation();
+                    } catch (InvalidXmlElementException e) {
+                        return "";
+                    }
+                }))
                 .collect(Collectors.toList());
 
-        selector.setAdapter(new ElementAdapter<>(requireContext(), options, false, clazz) {
+        selector.setAdapter(new ElementAdapter<>(activity, options, false, clazz) {
             @Override
             public boolean isEnabled(int position) {
                 return true;
@@ -295,4 +305,3 @@ public class WikiFragment extends Fragment {
         return new ArrayList<>(powersById.values());
     }
 }
-

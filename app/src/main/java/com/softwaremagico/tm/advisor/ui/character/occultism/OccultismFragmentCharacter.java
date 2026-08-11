@@ -145,6 +145,9 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void setOccultismPathLayout(OccultismPath occultismPath, LinearLayout rootLayout) {
+        if (getContext() == null) {
+            return;
+        }
         LinearLayout occultismLayout = new LinearLayout(getContext());
         occultismLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         occultismLayout.setOrientation(LinearLayout.VERTICAL);
@@ -237,6 +240,9 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
 
     private void createOccultismInfo(LinearLayout linearLayout, OccultismType occultismType) {
         if (occultismType == null || occultismType.getId() == null) {
+            return;
+        }
+        if (getContext() == null) {
             return;
         }
         final TranslatedEditText occultismLevelText = new TranslatedEditText(getContext(), null);

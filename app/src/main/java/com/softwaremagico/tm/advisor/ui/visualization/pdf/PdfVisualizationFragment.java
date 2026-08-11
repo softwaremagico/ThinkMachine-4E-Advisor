@@ -13,6 +13,7 @@
 package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 
 import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -126,14 +127,15 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
 
 
     private void sharePdf() {
-        if (getContext() == null) {
+        final Context context = getContext();
+        if (context == null) {
             return;
         }
-        final File imagePath = new File(getContext().getCacheDir(), "pdf");
+        final File imagePath = new File(context.getCacheDir(), "pdf");
         characterSheetAsPdf = new File(imagePath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
                 CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet.pdf" :
                 "pdf_sheet.pdf");
-        final Uri contentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", characterSheetAsPdf);
+        final Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", characterSheetAsPdf);
 
         if (contentUri != null) {
             imagePath.mkdirs();
@@ -154,10 +156,10 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
                     shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body)));
 
                     final Intent chooser = Intent.createChooser(shareIntent, "Share File");
-                    final List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+                    final List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
                     for (final ResolveInfo resolveInfo : resInfoList) {
                         final String packageName = resolveInfo.activityInfo.packageName;
-                        getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        context.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     }
                     startActivity(chooser);
                 });
@@ -209,7 +211,11 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     }
 
     private byte[] generatePdfFromFile() throws IOException {
-        final File tempPdf = File.createTempFile("temp_sheet_fallback", ".pdf", requireContext().getCacheDir());
+        final Context context = getContext();
+        if (context == null) {
+            return new byte[0];
+        }
+        final File tempPdf = File.createTempFile("temp_sheet_fallback", ".pdf", context.getCacheDir());
         generatePdfFile(tempPdf.getAbsolutePath());
 
         if (!tempPdf.exists() || tempPdf.length() == 0) {
@@ -245,7 +251,11 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
     }
 
     private ParcelFileDescriptor getFileDescriptor(byte[] byteArray) throws IOException {
-        File file = File.createTempFile("temp_sheet", ".pdf", requireContext().getCacheDir());
+        final Context context = getContext();
+        if (context == null) {
+            throw new IOException("Fragment context is null");
+        }
+        File file = File.createTempFile("temp_sheet", ".pdf", context.getCacheDir());
         try (FileOutputStream output = new FileOutputStream(file, true)) {
             output.write(byteArray);
         }

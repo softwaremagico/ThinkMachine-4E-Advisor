@@ -55,10 +55,16 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
 
     @Override
     protected void initData() {
+        if (getContext() == null) {
+            return;
+        }
         populateElements(root, CharacterManager.getSelectedCharacter());
 
         nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (updatingSettings) {
+                return;
+            }
+            if (getContext() == null) {
                 return;
             }
             try {
@@ -76,6 +82,9 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
 
         restrictionsIgnored.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (updatingSettings) {
+                return;
+            }
+            if (getContext() == null) {
                 return;
             }
             try {
@@ -167,6 +176,9 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
         if (updatingSettings) {
             return;
         }
+        if (getContext() == null) {
+            return;
+        }
         updater.update();
         SettingsHandler.save(getContext());
         SettingsHandler.setModulesBySettings();
@@ -182,5 +194,3 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
         void update();
     }
 }
-
-

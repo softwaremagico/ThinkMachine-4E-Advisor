@@ -144,8 +144,9 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.settings_export_file) {
             try {
                 exportJson(parentLayout);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 AdvisorLog.errorMessage(this.getClass().getName(), e);
+                SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_saved_error).show();
             }
             return true;
         }
@@ -164,8 +165,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Select an existing character from dynamic options.
         if (itemId >= CHARACTERS_INDEX) {
-            CharacterManager.setSelectedCharacter(CharacterManager.getCharacters()
-                    .get(itemId - CHARACTERS_INDEX));
+            final List<CharacterPlayer> characters = CharacterManager.getCharacters();
+            int index = itemId - CHARACTERS_INDEX;
+            if (characters != null && index >= 0 && index < characters.size()) {
+                CharacterManager.setSelectedCharacter(characters.get(index));
+            }
             return true;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -179,12 +183,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         final List<CharacterPlayer> existingCharacters = CharacterManager.getCharacters();
         menu.removeGroup(CHARACTERS_SELECTOR_GROUP);
-        for (int i = 0; i < existingCharacters.size(); i++) {
-            String name = existingCharacters.get(i).getCompleteNameRepresentation();
-            if (name.isEmpty()) {
-                name = "<<" + getString(R.string.character_name_empty) + ">>";
+        if (existingCharacters != null) {
+            for (int i = 0; i < existingCharacters.size(); i++) {
+                if (i >= existingCharacters.size()) {
+                    break;
+                }
+                final CharacterPlayer character = existingCharacters.get(i);
+                if (character == null) {
+                    continue;
+                }
+                String name = character.getCompleteNameRepresentation();
+                if (name == null || name.isEmpty()) {
+                    name = "<<" + getString(R.string.character_name_empty) + ">>";
+                }
+                menu.add(CHARACTERS_SELECTOR_GROUP, CHARACTERS_INDEX + i, i, name);
             }
-            menu.add(CHARACTERS_SELECTOR_GROUP, CHARACTERS_INDEX + i, i, name);
         }
         return super.onPrepareOptionsMenu(menu);
     }

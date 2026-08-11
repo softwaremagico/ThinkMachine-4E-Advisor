@@ -73,7 +73,7 @@ public final class FileUtils {
      *
      * @param context the context.
      * @param uri     the URI of the file.
-     * @return a temporal file.
+     * @return a temporal file, or null if download failed.
      */
     public static File downloadFile(final Context context, final Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
@@ -81,6 +81,10 @@ public final class FileUtils {
             Cursor returnCursor =
                     contentResolver.query(uri, null, null, new String[]{
                             MimeTypeMap.getSingleton().getExtensionFromMimeType("jpg")}, null);
+            if (returnCursor == null) {
+                AdvisorLog.warning(FileUtils.class.getName(), "Cursor is null for URI: " + uri);
+                return null;
+            }
             int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
             int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
             returnCursor.moveToFirst();
@@ -88,13 +92,16 @@ public final class FileUtils {
             InputStream inputStream = contentResolver.openInputStream(uri);
             returnCursor.close();
 
+            if (inputStream == null) {
+                AdvisorLog.warning(FileUtils.class.getName(), "InputStream is null for URI: " + uri);
+                return null;
+            }
 
             File tempFile = File.createTempFile(fileName, "");
             tempFile.deleteOnExit();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } else {
-                //Copy as the old times...
                 FileOutputStream out = new FileOutputStream(tempFile);
                 byte[] buffer = new byte[102400];
                 int len;

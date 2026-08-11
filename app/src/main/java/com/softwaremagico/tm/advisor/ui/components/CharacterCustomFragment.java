@@ -45,10 +45,18 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
     protected abstract void populateElements(View root, CharacterPlayer character);
 
+    protected android.content.Context getContextSafe() {
+        android.content.Context context = getContext();
+        if (context == null) {
+            throw new IllegalStateException("Fragment context is null - fragment may be detached");
+        }
+        return context;
+    }
+
     protected TextView addSection(String title, LinearLayout linearLayout) {
         if (linearLayout != null) {
             addSpace(linearLayout, 5);
-            final TextView textView = new TextView(getContext(), null);
+            final TextView textView = new TextView(getContextSafe(), null);
             textView.setText(title);
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setTextAppearance(R.style.TextSubtitle);
@@ -64,7 +72,7 @@ public abstract class CharacterCustomFragment extends CustomFragment {
 
     protected TextView addSubSection(String title, LinearLayout linearLayout) {
         if (linearLayout != null) {
-            final TextView textView = new TextView(getContext(), null);
+            final TextView textView = new TextView(getContextSafe(), null);
             textView.setText(title);
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setTextAppearance(R.style.TextSubtitle);
@@ -77,7 +85,7 @@ public abstract class CharacterCustomFragment extends CustomFragment {
     }
 
     protected TextView noDataText() {
-        final TextView textView = new TextView(getContext(), null);
+        final TextView textView = new TextView(getContextSafe(), null);
         textView.setText(R.string.no_data);
         textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return textView;
@@ -92,7 +100,7 @@ public abstract class CharacterCustomFragment extends CustomFragment {
     }
 
     protected View addSpace(LinearLayout linearLayout, int height) {
-        final View space = new View(getContext(), null);
+        final View space = new View(getContextSafe(), null);
         space.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
         linearLayout.addView(space);
         return space;

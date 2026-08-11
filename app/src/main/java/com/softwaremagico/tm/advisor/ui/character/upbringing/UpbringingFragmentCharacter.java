@@ -78,16 +78,26 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         raisedInSpaceSelector.setText(ThinkMachineTranslator.getTranslatedText("raisedInSpace"));
+        raisedInSpaceSelector.setEnabled(mViewModel.getCharacterPlayer().getUpbringing() != null);
 
         if (mViewModel.getCharacterPlayer().getUpbringing() != null) {
             raisedInSpaceSelector.setChecked(mViewModel.getCharacterPlayer().getUpbringing().isRaisedInSpace());
         }
 
         raisedInSpaceSelector.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mViewModel.getCharacterPlayer().getUpbringing().setRaisedInSpace(isChecked);
-           updateUpbringing(mViewModel.getCharacterPlayer());
+            if (setRaisedInSpace(mViewModel.getCharacterPlayer(), isChecked)) {
+                updateUpbringing(mViewModel.getCharacterPlayer());
+            }
         });
 
         return raisedInSpaceSelector;
+    }
+
+    static boolean setRaisedInSpace(CharacterPlayer characterPlayer, boolean isChecked) {
+        if (characterPlayer == null || characterPlayer.getUpbringing() == null) {
+            return false;
+        }
+        characterPlayer.getUpbringing().setRaisedInSpace(isChecked);
+        return true;
     }
 }

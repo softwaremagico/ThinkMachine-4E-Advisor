@@ -96,6 +96,9 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     protected void initData() {
+        if (getContext() == null) {
+            return;
+        }
         final LinearLayout rootLayout = root.findViewById(R.id.root_container);
 
         addSubSection(ThinkMachineTranslator.getTranslatedText("rangedWeapons"), rootLayout);

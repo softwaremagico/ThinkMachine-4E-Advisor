@@ -81,6 +81,9 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void setCyberdevices(LinearLayout rootLayout, CharacterPlayer characterPlayer) {
+        if (getContext() == null) {
+            return;
+        }
         LinearLayout cyberdevicesLayout = new LinearLayout(getContext());
         cyberdevicesLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         cyberdevicesLayout.setOrientation(LinearLayout.VERTICAL);
@@ -92,6 +95,9 @@ public class CyberneticsFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void addCyberdeviceToLayout(Cyberdevice cyberdevice, LinearLayout cyberdevicesLayout) {
+        if (getContext() == null) {
+            return;
+        }
         final ElementTextHelp<Cyberdevice> cyberDeviceSelector = new ElementTextHelp<>(getContext(), cyberdevice);
         cyberdevicesLayout.addView(cyberDeviceSelector);
         if (!cyberDeviceList.contains(cyberDeviceSelector)) {

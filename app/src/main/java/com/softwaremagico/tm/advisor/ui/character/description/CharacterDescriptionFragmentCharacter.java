@@ -40,6 +40,9 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
 
     @Override
     protected void initData() {
+        if (getContext() == null) {
+            return;
+        }
         updateTranslatedTextField(root, R.id.character_player, value -> CharacterManager.getSelectedCharacter().getInfo().setPlayer(value));
         updateTranslatedTextField(root, R.id.character_hair, value -> CharacterManager.getSelectedCharacter().getInfo().setHair(value));
         updateTranslatedTextField(root, R.id.character_eyes, value -> CharacterManager.getSelectedCharacter().getInfo().setEyes(value));
@@ -64,7 +67,7 @@ public class CharacterDescriptionFragmentCharacter extends CharacterCustomFragme
 
     @Override
     public void populateElements(View root, CharacterPlayer character) {
-        if (getContext() != null) {
+        if (getContext() != null && root != null && character != null && character.getInfo() != null) {
             final TranslatedEditText playerTextEditor = root.findViewById(R.id.character_player);
             playerTextEditor.setText(character.getInfo().getPlayer());
             final TranslatedEditText hairTextEditor = root.findViewById(R.id.character_hair);

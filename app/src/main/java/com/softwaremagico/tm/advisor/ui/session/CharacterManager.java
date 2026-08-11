@@ -326,6 +326,7 @@ public final class CharacterManager {
     }
 
     public synchronized static void setSelectedCharacter(CharacterPlayer characterPlayer) {
+        normalizeCharacter(characterPlayer);
         if (!characters.contains(characterPlayer)) {
             characters.add(characterPlayer);
         }
@@ -339,12 +340,19 @@ public final class CharacterManager {
 
     private static CharacterPlayer createNewCharacter() {
         final CharacterPlayer characterPlayer = new CharacterPlayer();
+        normalizeCharacter(characterPlayer);
         characterPlayer.getInfo().setGender(Gender.MALE);
         if (SettingsHandler.getSettingsEntity() != null) {
             characterPlayer.getSettings().copy(SettingsHandler.getSettingsEntity().get());
         }
         characters.add(characterPlayer);
         return characterPlayer;
+    }
+
+    private static void normalizeCharacter(CharacterPlayer characterPlayer) {
+        if (characterPlayer != null && characterPlayer.getLevel() < 1) {
+            characterPlayer.addLevel();
+        }
     }
 
     public static void addNewCharacter() {
@@ -439,6 +447,9 @@ public final class CharacterManager {
     }
 
     public static void setCharacterLevel(int level) {
+        if (level < 1) {
+            level = 1;
+        }
         boolean modified = false;
         //Adding missing levels.
         for (int i = getSelectedCharacter().getLevel(); i < level; i++) {
