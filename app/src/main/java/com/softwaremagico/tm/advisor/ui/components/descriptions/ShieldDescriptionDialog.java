@@ -4,6 +4,7 @@ import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.characteristics.CharacteristicName;
 import com.softwaremagico.tm.character.equipment.shields.Shield;
 
@@ -15,10 +16,14 @@ public class ShieldDescriptionDialog extends ElementDescriptionDialog<Shield> {
 
     @Override
     protected String getDetails(Shield shield) {
-        boolean techLimited = CharacterManager.getSelectedCharacter().getTechLevel() <
-                shield.getTechLevel();
-        boolean costLimited = CharacterManager.getSelectedCharacter().getRemainingCash() < shield.getCost();
-        boolean costProhibited = CharacterManager.getSelectedCharacter().getCashMoney() < shield.getCost();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return "<b>No character selected</b>";
+        }
+        
+        boolean techLimited = selectedCharacter.getTechLevel() < shield.getTechLevel();
+        boolean costLimited = selectedCharacter.getRemainingCash() < shield.getCost();
+        boolean costProhibited = selectedCharacter.getCashMoney() < shield.getCost();
         return "<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">" +
                 "<tr>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +

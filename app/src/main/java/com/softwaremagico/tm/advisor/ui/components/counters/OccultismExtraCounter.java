@@ -30,11 +30,18 @@ public class OccultismExtraCounter extends SegmentCounter {
     @Override
     public void setCharacter(CharacterPlayer character) {
         CharacterManager.removePerkUpdatedListeners(listener);
-        listener = CharacterManager.addPerkUpdatedListeners(characterPlayer ->
-                setValue(CharacterManager.getSelectedCharacter().getOccultismPointsSpent(),
-                        CharacterManager.getSelectedCharacter().getOccultismPointsAvailable(), true));
-        setValue(CharacterManager.getSelectedCharacter().getOccultismPointsSpent(),
-                CharacterManager.getSelectedCharacter().getOccultismPointsAvailable(), true);
+        listener = CharacterManager.addPerkUpdatedListeners(characterPlayer -> {
+            final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+            if (selectedCharacter != null) {
+                setValue(selectedCharacter.getOccultismPointsSpent(),
+                        selectedCharacter.getOccultismPointsAvailable(), true);
+            }
+        });
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter != null) {
+            setValue(selectedCharacter.getOccultismPointsSpent(),
+                    selectedCharacter.getOccultismPointsAvailable(), true);
+        }
     }
 
     public int getGearColor() {

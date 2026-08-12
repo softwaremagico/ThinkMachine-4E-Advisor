@@ -154,8 +154,11 @@ public class OptionSelectorLayout<E extends Element, O extends Option<E>> extend
                 elementSelector.setSelection(options.stream().filter(o -> Objects.equals(o.getId(), selections.iterator().next().getId())).findFirst().orElse(null));
             }
         } else if (!options.isEmpty()) {
-            elementSelector.setSelection(options.get(0));
-            elementSelector.setEnabled(false);
+           O selectedOption = options.get(0);
+           if (selectedOption != null) {
+               elementSelector.setSelection(selectedOption);
+               elementSelector.setEnabled(false);
+           }
         }
 
         return elementSelector;

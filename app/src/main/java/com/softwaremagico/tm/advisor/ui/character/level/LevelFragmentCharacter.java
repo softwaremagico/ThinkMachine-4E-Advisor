@@ -61,7 +61,10 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         setCharacterDefinitionStepModel(mViewModel);
         CharacterManager.addLevelUpdatedListeners(this::updateLevels);
         CharacterManager.addCharacterCallingUpdatedListener(this::updateLevels);
-        updateLevels(CharacterManager.getSelectedCharacter());
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter != null) {
+            updateLevels(selectedCharacter);
+        }
         return root;
     }
 
@@ -76,6 +79,9 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
+        if (character == null) {
+            return;
+        }
         final LinearLayout rootLayout = root.findViewById(R.id.level_root_container);
         initData();
         updatingLevelUI = true;
@@ -110,10 +116,11 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
             @Override
             public boolean isEnabled(int position) {
                 final Calling calling = getItem(position);
-                return calling == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                        (calling.getRestrictions() != null && !calling.getRestrictions().isRestricted()
-                                && !calling.getRestrictions().isRestricted(character) && !disabled);
-            }
+            final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+            return calling == null || selectedCharacter == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
+                    (calling.getRestrictions() != null && !calling.getRestrictions().isRestricted()
+                            && !calling.getRestrictions().isRestricted(character) && !disabled);
+        }
         });
 
         final String selectedCallingId = resolveSelectedCallingId(levelSelector, character, level);

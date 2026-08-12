@@ -45,7 +45,11 @@ public class TabCharacterCreationFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        final CharacterSectionsPagerAdapter characterSectionsPagerAdapter = new CharacterSectionsPagerAdapter(getActivity());
+        final androidx.fragment.app.FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        final CharacterSectionsPagerAdapter characterSectionsPagerAdapter = new CharacterSectionsPagerAdapter(activity);
         final ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(characterSectionsPagerAdapter);
 

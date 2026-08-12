@@ -4,6 +4,7 @@ import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.characteristics.CharacteristicName;
 import com.softwaremagico.tm.character.equipment.weapons.Weapon;
 import com.softwaremagico.tm.character.equipment.weapons.WeaponDamage;
@@ -16,9 +17,14 @@ public class MeleeWeaponDescriptionDialog extends WeaponDescriptionDialog {
 
     @Override
     protected String getDetails(Weapon weapon) {
-        boolean techLimited = CharacterManager.getSelectedCharacter().getTechLevel() < weapon.getTechLevel();
-        boolean costLimited = CharacterManager.getSelectedCharacter().getRemainingCash() < weapon.getCost();
-        boolean costProhibited = CharacterManager.getSelectedCharacter().getCashMoney() < weapon.getCost();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return "<b>No character selected</b>";
+        }
+        
+        boolean techLimited = selectedCharacter.getTechLevel() < weapon.getTechLevel();
+        boolean costLimited = selectedCharacter.getRemainingCash() < weapon.getCost();
+        boolean costProhibited = selectedCharacter.getCashMoney() < weapon.getCost();
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">");
         stringBuilder.append("<tr>");
         if (weapon.getWeaponDamages().size() > 1) {
@@ -32,7 +38,7 @@ public class MeleeWeaponDescriptionDialog extends WeaponDescriptionDialog {
                 "</tr>");
         for (WeaponDamage weaponDamage : weapon.getWeaponDamages()) {
             boolean techDamageLimited = weaponDamage.getDamageTechLevel() != null &&
-                    CharacterManager.getSelectedCharacter().getTechLevel() < weaponDamage.getDamageTechLevel();
+                    selectedCharacter.getTechLevel() < weaponDamage.getDamageTechLevel();
             stringBuilder.append("<tr>");
             if (weapon.getWeaponDamages().size() > 1) {
                 stringBuilder.append("<td style=\"text-align:center\">" + (weaponDamage.getName() != null && weaponDamage.getName().getTranslatedText() != null

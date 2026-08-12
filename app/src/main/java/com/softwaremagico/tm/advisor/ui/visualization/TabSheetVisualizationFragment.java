@@ -41,7 +41,11 @@ public class TabSheetVisualizationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.character_visualization_fragment, container, false);
-        final VisualizationSectionsPagerAdapter characterSheetsPagerAdapter = new VisualizationSectionsPagerAdapter(getActivity());
+        final androidx.fragment.app.FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return view;
+        }
+        final VisualizationSectionsPagerAdapter characterSheetsPagerAdapter = new VisualizationSectionsPagerAdapter(activity);
         final ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(characterSheetsPagerAdapter);
 

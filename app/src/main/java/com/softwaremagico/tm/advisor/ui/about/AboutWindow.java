@@ -23,11 +23,14 @@ public class AboutWindow extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.about_window, container, false);
 
-        if (getDialog() != null) {
+        if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
             //Set version number at the bottom.
             TextView versionText = view.findViewById(R.id.app_version);
+            if (getContext() == null) {
+                return view;
+            }
             try {
                 String versionName = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
                 versionText.setText(versionName);
@@ -43,7 +46,11 @@ public class AboutWindow extends DialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        AboutPagerAdapter aboutPagerAdapter = new AboutPagerAdapter(getActivity());
+        final androidx.fragment.app.FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        AboutPagerAdapter aboutPagerAdapter = new AboutPagerAdapter(activity);
         ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(aboutPagerAdapter);
         viewPager.setOffscreenPageLimit(aboutPagerAdapter.getItemCount());

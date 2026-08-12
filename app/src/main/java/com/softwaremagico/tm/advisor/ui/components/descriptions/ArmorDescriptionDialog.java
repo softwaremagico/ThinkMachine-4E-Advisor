@@ -4,6 +4,7 @@ import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.ui.character.Numbers;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.ThinkMachineTranslator;
+import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.equipment.DamageType;
 import com.softwaremagico.tm.character.equipment.DamageTypeFactory;
 import com.softwaremagico.tm.character.equipment.armors.Armor;
@@ -21,10 +22,14 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
 
     @Override
     protected String getDetails(Armor armor) {
-        boolean techLimited = CharacterManager.getSelectedCharacter().getTechLevel() <
-                armor.getTechLevel();
-        boolean costLimited = CharacterManager.getSelectedCharacter().getCashMoney() < armor.getCost();
-        boolean costProhibited = CharacterManager.getSelectedCharacter().getRemainingCash() < armor.getCost();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return "<b>No character selected</b>";
+        }
+        
+        boolean techLimited = selectedCharacter.getTechLevel() < armor.getTechLevel();
+        boolean costLimited = selectedCharacter.getCashMoney() < armor.getCost();
+        boolean costProhibited = selectedCharacter.getRemainingCash() < armor.getCost();
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">" +
                 "<tr>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +
@@ -60,9 +65,11 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             String separator = "";
             for (String shieldName : armor.getAllowedShields()) {
                 final Shield shield = ShieldFactory.getInstance().getElement(shieldName);
-                stringBuilder.append(separator);
-                stringBuilder.append(shield.getName().getTranslatedText());
-                separator = ", ";
+                if (shield != null) {
+                    stringBuilder.append(separator);
+                    stringBuilder.append(shield.getName().getTranslatedText());
+                    separator = ", ";
+                }
             }
         }
         if (!armor.getSpecifications().isEmpty()) {
@@ -70,12 +77,14 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             String separator = "";
             for (String specificationName : armor.getSpecifications()) {
                 final ArmorSpecification armourSpecification = ArmorSpecificationFactory.getInstance().getElement(specificationName);
-                stringBuilder.append(separator);
-                stringBuilder.append(armourSpecification.getName().getTranslatedText());
-                if (armourSpecification.getDescription() != null && !armourSpecification.getDescription().getTranslatedText().isEmpty()) {
-                    stringBuilder.append(" (").append(armourSpecification.getDescription().getTranslatedText()).append(")");
+                if (armourSpecification != null) {
+                    stringBuilder.append(separator);
+                    stringBuilder.append(armourSpecification.getName().getTranslatedText());
+                    if (armourSpecification.getDescription() != null && !armourSpecification.getDescription().getTranslatedText().isEmpty()) {
+                        stringBuilder.append(" (").append(armourSpecification.getDescription().getTranslatedText()).append(")");
+                    }
+                    separator = ", ";
                 }
-                separator = ", ";
             }
         }
         if (!armor.getDamageTypes().isEmpty()) {
@@ -83,9 +92,11 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
             String separator = "";
             for (String damageTypeName : armor.getDamageTypes()) {
                 final DamageType damageType = DamageTypeFactory.getInstance().getElement(damageTypeName);
-                stringBuilder.append(separator);
-                stringBuilder.append(damageType.getName().getTranslatedText());
-                separator = ", ";
+                if (damageType != null) {
+                    stringBuilder.append(separator);
+                    stringBuilder.append(damageType.getName().getTranslatedText());
+                    separator = ", ";
+                }
             }
         }
         stringBuilder.append("<br><b>").append(getString(R.string.cost)).append("</b> ").append(costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :

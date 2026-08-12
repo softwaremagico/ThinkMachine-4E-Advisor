@@ -184,8 +184,9 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
                 }
                 updateVisibility();
             });
-            if (selectors.get(occultismPath) != null) {
-                selectors.get(occultismPath).add(occultismPowerSelector);
+            Set<ElementSelector<OccultismPower>> pathSelectors = selectors.get(occultismPath);
+            if (pathSelectors != null) {
+                pathSelectors.add(occultismPowerSelector);
             }
         });
         addSpace(occultismLayout);

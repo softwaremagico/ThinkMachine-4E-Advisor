@@ -196,10 +196,13 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
                 } catch (InvalidShieldException | UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
-            } else {
+            } else if (!shields.isEmpty()) {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedShield(shields.get(0), true);
-                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    Shield selectedShield = shields.get(0);
+                    if (selectedShield != null) {
+                        CharacterManager.getSelectedCharacter().setPurchasedShield(selectedShield, true);
+                        firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    }
                 } catch (InvalidShieldException e) {
                     SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
                 } catch (UnofficialElementNotAllowedException e) {
@@ -262,10 +265,13 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
                 } catch (InvalidArmorException | UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
-            } else {
+            } else if (!armors.isEmpty()) {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedArmor(armors.get(0), true);
-                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    Armor selectedArmor = armors.get(0);
+                    if (selectedArmor != null) {
+                        CharacterManager.getSelectedCharacter().setPurchasedArmor(selectedArmor, true);
+                        firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    }
                 } catch (InvalidArmorException e) {
                     SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
                 } catch (UnofficialElementNotAllowedException e) {
@@ -319,10 +325,13 @@ public class EquipmentFragmentCharacter extends CharacterCustomFragment {
                 } catch (InvalidArmorException | UnofficialElementNotAllowedException e) {
                     AdvisorLog.errorMessage(this.getClass().getName(), e);
                 }
-            } else {
+            } else if (!handheldShield.isEmpty()) {
                 try {
-                    CharacterManager.getSelectedCharacter().setPurchasedHandheldShield(handheldShield.get(0), true);
-                    firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    HandheldShield selectedHandheld = handheldShield.get(0);
+                    if (selectedHandheld != null) {
+                        CharacterManager.getSelectedCharacter().setPurchasedHandheldShield(selectedHandheld, true);
+                        firebirdsCounter.setValue((int) CharacterManager.getSelectedCharacter().getRemainingCash(), false);
+                    }
                 } catch (InvalidArmorException e) {
                     SnackbarGenerator.getErrorMessage(this, R.string.message_invalid_shield_armor_combination).show();
                 } catch (UnofficialElementNotAllowedException e) {

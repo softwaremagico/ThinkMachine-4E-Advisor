@@ -50,6 +50,9 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
 
     @Override
     protected void populateElements(View root, CharacterPlayer character) {
+        if (character == null) {
+            return;
+        }
         initData();
         populateElements(root, UpbringingFactory.getInstance().getElement(character.getUpbringing()),
                 mViewModel.getCharacterPlayer().getUpbringing(),
@@ -63,8 +66,14 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
 
     @Override
     protected void initData(Upbringing step) {
+        if (getContext() == null) {
+            return;
+        }
         final SwitchCompat raisedInSpace = createRaisedInSpaceSelector();
         final LinearLayout rootLayout = getLayoutContainer();
+        if (raisedInSpace == null || rootLayout == null) {
+            return;
+        }
 
         rootLayout.addView(raisedInSpace);
         elements.add(raisedInSpace);
@@ -73,7 +82,10 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
     }
 
     private SwitchCompat createRaisedInSpaceSelector() {
-        SwitchCompat raisedInSpaceSelector = new SwitchCompat(requireContext());
+        if (getContext() == null) {
+            return null;
+        }
+        SwitchCompat raisedInSpaceSelector = new SwitchCompat(getContext());
         raisedInSpaceSelector.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));

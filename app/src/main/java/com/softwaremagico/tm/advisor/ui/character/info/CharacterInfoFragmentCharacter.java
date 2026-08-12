@@ -12,6 +12,7 @@
 
 package com.softwaremagico.tm.advisor.ui.character.info;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,44 +88,48 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     protected void initData() {
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
         updateTranslatedTextField(root, R.id.character_name, value -> {
             if (!updatingCharacter) {
-                CharacterManager.getSelectedCharacter().getInfo().setNames(value);
+                selectedCharacter.getInfo().setNames(value);
             }
         });
         updateTranslatedTextField(root, R.id.character_surname, value -> {
             if (!updatingCharacter) {
-                CharacterManager.getSelectedCharacter().getInfo().setSurname(value);
+                selectedCharacter.getInfo().setSurname(value);
             }
         });
         updateTranslatedTextField(root, R.id.character_age, value -> {
             try {
-                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-                if (selectedCharacter == null) {
+                final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                if (currentCharacter == null) {
                     return;
                 }
-                if (!Objects.equals(selectedCharacter.getInfo().getAge() + "", value)) {
-                    selectedCharacter.getInfo().setAge(Integer.parseInt(value));
+                if (!Objects.equals(currentCharacter.getInfo().getAge() + "", value)) {
+                    currentCharacter.getInfo().setAge(Integer.parseInt(value));
                     //Force to update all costs.
                     if (!updatingCharacter) {
-                        CharacterManager.launchCharacterAgeUpdatedListeners(selectedCharacter);
+                        CharacterManager.launchCharacterAgeUpdatedListeners(currentCharacter);
                     }
                 }
             } catch (NumberFormatException e) {
-                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-                if (selectedCharacter != null) {
-                    selectedCharacter.getInfo().setAge(null);
-                    CharacterManager.launchCharacterAgeUpdatedListeners(selectedCharacter);
+                final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                if (currentCharacter != null) {
+                    currentCharacter.getInfo().setAge(null);
+                    CharacterManager.launchCharacterAgeUpdatedListeners(currentCharacter);
                 }
             }
         });
         updateTranslatedTextField(root, R.id.character_level, value -> {
             try {
-                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-                if (selectedCharacter == null) {
+                final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                if (currentCharacter == null) {
                     return;
                 }
-                if (!Objects.equals(selectedCharacter.getLevel() + "", value)) {
+                if (!Objects.equals(currentCharacter.getLevel() + "", value)) {
                     try {
                         CharacterManager.setCharacterLevel(Integer.parseInt(value));
                         //Force to update all costs.
@@ -141,10 +146,10 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                     }
                 }
             } catch (NumberFormatException e) {
-                final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-                if (selectedCharacter != null) {
-                    levelTextEditor.setText(selectedCharacter.getLevel() + "");
-                    CharacterManager.launchLevelUpdatedListeners(selectedCharacter);
+                final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                if (currentCharacter != null) {
+                    levelTextEditor.setText(currentCharacter.getLevel() + "");
+                    CharacterManager.launchLevelUpdatedListeners(currentCharacter);
                 }
             }
         });
@@ -153,19 +158,19 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
         createGenderSpinner(root);
 
-        populateElements(root, CharacterManager.getSelectedCharacter());
+        populateElements(root, selectedCharacter);
 
         ImageView randomNameButton = root.findViewById(R.id.button_random_name);
         if (randomNameButton != null) {
             randomNameButton.setOnClickListener(v -> {
                 updatingCharacter = true;
-                CharacterManager.getSelectedCharacter().getInfo().setNames(new ArrayList<>());
+                selectedCharacter.getInfo().setNames(new ArrayList<>());
                 final RandomName randomName;
                 try {
-                    randomName = new RandomName(CharacterManager.getSelectedCharacter(), null);
+                    randomName = new RandomName(selectedCharacter, null);
                     randomName.assign();
                     final TranslatedEditText nameTextEditor = root.findViewById(R.id.character_name);
-                    nameTextEditor.setText(CharacterManager.getSelectedCharacter().getInfo().getNameRepresentation());
+                    nameTextEditor.setText(selectedCharacter.getInfo().getNameRepresentation());
                 } catch (InvalidXmlElementException | InvalidRandomElementSelectedException e) {
                     SnackbarGenerator.getErrorMessage(root, R.string.selectFactionAndMore).show();
                 }
@@ -177,14 +182,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         if (randomSurnameButton != null) {
             randomSurnameButton.setOnClickListener(v -> {
                 updatingCharacter = true;
-                CharacterManager.getSelectedCharacter().getInfo().setSurname((Surname) null);
+                selectedCharacter.getInfo().setSurname((Surname) null);
                 final RandomSurname randomSurname;
                 try {
-                    randomSurname = new RandomSurname(CharacterManager.getSelectedCharacter(), null);
+                    randomSurname = new RandomSurname(selectedCharacter, null);
                     randomSurname.assign();
                     final TranslatedEditText surnameTextEditor = root.findViewById(R.id.character_surname);
-                    if (CharacterManager.getSelectedCharacter().getInfo().getSurname() != null) {
-                        surnameTextEditor.setText(CharacterManager.getSelectedCharacter().getInfo().getSurname().getNameRepresentation());
+                    if (selectedCharacter.getInfo().getSurname() != null) {
+                        surnameTextEditor.setText(selectedCharacter.getInfo().getSurname().getNameRepresentation());
                     } else {
                         surnameTextEditor.setText("");
                     }
@@ -220,7 +225,7 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     protected void updateSettings(CharacterPlayer characterPlayer) {
-        if (getContext() != null) {
+        if (getContext() != null && characterPlayer != null) {
             //Avoid to set a different value when changing the ElementAdapter.
             specieSelector.setOnItemSelectedListener(null);
             upbringingSelector.setOnItemSelectedListener(null);
@@ -253,11 +258,14 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
     @Override
     public void populateElements(View root, CharacterPlayer character) {
+        if (character == null) {
+            return;
+        }
         updatingCharacter = true;
         final TranslatedEditText nameTextEditor = root.findViewById(R.id.character_name);
         nameTextEditor.setText(character.getInfo().getNameRepresentation());
         final TranslatedEditText surnameTextEditor = root.findViewById(R.id.character_surname);
-        if (CharacterManager.getSelectedCharacter().getInfo().getSurname() != null) {
+        if (character.getInfo().getSurname() != null) {
             surnameTextEditor.setText(character.getInfo().getSurname().getNameRepresentation());
         } else {
             surnameTextEditor.setText("");
@@ -266,19 +274,19 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         genderSelector.setSelection(character.getInfo().getGender());
         final TranslatedEditText ageTextEditor = root.findViewById(R.id.character_age);
         ageTextEditor.setAsNumberEditor();
-        if (CharacterManager.getSelectedCharacter().getInfo().getAge() != null) {
-            ageTextEditor.setText(CharacterManager.getSelectedCharacter().getInfo().getAge().toString());
+        if (character.getInfo().getAge() != null) {
+            ageTextEditor.setText(character.getInfo().getAge().toString());
         } else {
             ageTextEditor.setText("");
         }
 
 
-        specieSelector.setSelection(SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()));
-        upbringingSelector.setSelection(UpbringingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getUpbringing()));
-        factionsSelector.setSelection(FactionFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getFaction()));
-        callingSelector.setSelection(CallingFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getCalling()));
-        planetSelector.setSelection(PlanetFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getInfo().getPlanet()));
-        levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+        specieSelector.setSelection(SpecieFactory.getInstance().getElement(character.getSpecie()));
+        upbringingSelector.setSelection(UpbringingFactory.getInstance().getElement(character.getUpbringing()));
+        factionsSelector.setSelection(FactionFactory.getInstance().getElement(character.getFaction()));
+        callingSelector.setSelection(CallingFactory.getInstance().getElement(character.getCalling()));
+        planetSelector.setSelection(PlanetFactory.getInstance().getElement(character.getInfo().getPlanet()));
+        levelTextEditor.setText(character.getLevel() + "");
 
         updateSettings(character);
 
@@ -288,19 +296,24 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
     private void createGenderSpinner(View root) {
         final EnumSpinner genderSelector = root.findViewById(R.id.character_gender);
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Gender> options = new ArrayList<>(mViewModel.getAvailableGenders());
         options.add(0, null);
-        genderSelector.setAdapter(new EnumAdapter<>(getActivity(), android.R.layout.simple_spinner_item, options));
+        genderSelector.setAdapter(new EnumAdapter<>(activity, android.R.layout.simple_spinner_item, options));
         genderSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (position > 0) {
                     Gender selectedGender = getSafeElementAt(mViewModel.getAvailableGenders(), position - 1);
                     if (selectedGender != null) {
-                        CharacterManager.getSelectedCharacter().getInfo().setGender(selectedGender);
+                        selectedCharacter.getInfo().setGender(selectedGender);
                     }
                 } else {
-                    CharacterManager.getSelectedCharacter().getInfo().setGender(null);
+                    selectedCharacter.getInfo().setGender(null);
                 }
             }
 
@@ -312,30 +325,27 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void updateSpinnersStatus() {
+        if (specieSelector == null || upbringingSelector == null || factionsSelector == null || callingSelector == null) {
+            return;
+        }
         upbringingSelector.setEnabled(specieSelector.getSelection() != null);
-        if (specieSelector == null) {
-            upbringingSelector.setSelection(null);
-        }
-
         factionsSelector.setEnabled(upbringingSelector.getSelection() != null);
-        if (upbringingSelector == null) {
-            factionsSelector.setSelection(null);
-        }
-
         callingSelector.setEnabled(factionsSelector.getSelection() != null);
-        if (factionsSelector == null) {
-            callingSelector.setSelection(null);
-        }
     }
 
     private void createSpecieSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Specie> options = new ArrayList<>(mViewModel.getAvailableSpecies(nonOfficial));
         options.add(0, null);
-        specieSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Specie.class) {
+        specieSelector.setAdapter(new ElementAdapter<>(activity, options, false, Specie.class) {
             @Override
             public boolean isEnabled(int position) {
                 //Faction limitations
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                return getItem(position) == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
                         !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
@@ -381,12 +391,17 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void createUpbringingSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Upbringing> options = new ArrayList<>(mViewModel.getAvailableUpbringings(nonOfficial));
         options.add(0, null);
-        upbringingSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Upbringing.class) {
+        upbringingSelector.setAdapter(new ElementAdapter<>(activity, options, false, Upbringing.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                return getItem(position) == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
                         !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
@@ -435,12 +450,17 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
 
 
     private void createFactionSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Faction> options = new ArrayList<>(mViewModel.getAvailableFactions(nonOfficial));
         options.add(0, null);
-        factionsSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Faction.class) {
+        factionsSelector.setAdapter(new ElementAdapter<>(activity, options, false, Faction.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                return getItem(position) == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
                         !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
@@ -488,12 +508,17 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void createCallingSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Calling> options = new ArrayList<>(mViewModel.getAvailableCallings(nonOfficial));
         options.add(0, null);
-        callingSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Calling.class) {
+        callingSelector.setAdapter(new ElementAdapter<>(activity, options, false, Calling.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
+                return getItem(position) == null || !selectedCharacter.getSettings().isRestrictionsChecked() ||
                         !(getItem(position).getRestrictions().isRestricted() || getItem(position).getRestrictions().isRestricted(characterPlayer));
             }
         });
@@ -517,11 +542,6 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
                             } catch (InvalidCallingException e) {
                                 //Nothing
                             }
-                        }
-                        if (position > 0) {
-                            CharacterManager.setCalling(mViewModel.getAvailableCallings(nonOfficial).get(position - 1));
-                        } else {
-                            CharacterManager.setCalling(null);
                         }
                     }
                 } catch (InvalidCallingException | RestrictedElementException e) {
@@ -548,23 +568,34 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void createPlanetSpinner(CharacterPlayer characterPlayer, boolean nonOfficial) {
+        final Activity activity = getActivity();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (activity == null || selectedCharacter == null) {
+            return;
+        }
         List<Planet> options = new ArrayList<>(mViewModel.getAvailablePlanets(nonOfficial));
         options.add(0, null);
-        planetSelector.setAdapter(new ElementAdapter<>(getActivity(), options, false, Planet.class) {
+        planetSelector.setAdapter(new ElementAdapter<>(activity, options, false, Planet.class) {
             @Override
             public boolean isEnabled(int position) {
-                return getItem(position) == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked()
-                        || CharacterManager.getSelectedCharacter().getSpecie() == null
-                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets() == null
-                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().isEmpty()
-                        || SpecieFactory.getInstance().getElement(CharacterManager.getSelectedCharacter().getSpecie()).getPlanets().contains(getItem(position).getId());
+                if (getItem(position) == null || !selectedCharacter.getSettings().isRestrictionsChecked()
+                        || selectedCharacter.getSpecie() == null) {
+                    return true;
+                }
+                
+                Specie specie = SpecieFactory.getInstance().getElement(selectedCharacter.getSpecie());
+                if (specie == null || specie.getPlanets() == null || specie.getPlanets().isEmpty()) {
+                    return true;
+                }
+                
+                return specie.getPlanets().contains(getItem(position).getId());
             }
 
             @Override
             protected void setElementColor(TextView elementRepresentation, Planet planet, int position) {
-                if (CharacterManager.getSelectedCharacter().getSpecie() != null && planet.getSpecies().contains(CharacterManager.getSelectedCharacter().getSpecie().getId())) {
+                if (selectedCharacter.getSpecie() != null && planet.getSpecies().contains(selectedCharacter.getSpecie().getId())) {
                     elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorHighlyRecommended));
-                } else if (CharacterManager.getSelectedCharacter().getFaction() != null && planet.getFactions().contains(CharacterManager.getSelectedCharacter().getFaction().getId())) {
+                } else if (selectedCharacter.getFaction() != null && planet.getFactions().contains(selectedCharacter.getFaction().getId())) {
                     elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorRecommended));
                 } else {
                     elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));
@@ -607,13 +638,22 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         if (addLevelButton != null) {
             addLevelButton.setOnClickListener(v -> {
                 try {
+                    final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                    if (selectedCharacter == null) {
+                        return;
+                    }
                     updatingCharacter = true;
                     CharacterManager.addCharacterLevel();
-                    removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+                    if (removeLevelButton != null) {
+                        removeLevelButton.setEnabled(selectedCharacter.getLevel() > 1);
+                    }
                     updatingCharacter = false;
                 } catch (InvalidLevelException e) {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
-                    levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                    final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                    if (selectedCharacter != null) {
+                        levelTextEditor.setText(selectedCharacter.getLevel() + "");
+                    }
                     AdvisorLog.errorMessage(this.getClass(), e);
                 }
             });
@@ -622,21 +662,31 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         if (removeLevelButton != null) {
             removeLevelButton.setOnClickListener(v -> {
                 try {
-                    if (CharacterManager.getSelectedCharacter().getLevel() > 1) {
+                    final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                    if (selectedCharacter != null && selectedCharacter.getLevel() > 1) {
                         updatingCharacter = true;
                         CharacterManager.removeCharacterLevel();
-                        removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+                        final CharacterPlayer updatedCharacter = CharacterManager.getSelectedCharacter();
+                        if (updatedCharacter != null) {
+                            removeLevelButton.setEnabled(updatedCharacter.getLevel() > 1);
+                        }
                         updatingCharacter = false;
                     } else {
                         SnackbarGenerator.getWarningMessage(root, R.string.message_minimum_level_zero);
                     }
                 } catch (InvalidLevelException e) {
                     SnackbarGenerator.getErrorMessage(root, R.string.message_incomplete_level).show();
-                    levelTextEditor.setText(CharacterManager.getSelectedCharacter().getLevel() + "");
+                    final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                    if (selectedCharacter != null) {
+                        levelTextEditor.setText(selectedCharacter.getLevel() + "");
+                    }
                     AdvisorLog.errorMessage(this.getClass(), e);
                 }
             });
-            removeLevelButton.setEnabled(CharacterManager.getSelectedCharacter().getLevel() > 1);
+            final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+            if (selectedCharacter != null) {
+                removeLevelButton.setEnabled(selectedCharacter.getLevel() > 1);
+            }
         }
     }
 

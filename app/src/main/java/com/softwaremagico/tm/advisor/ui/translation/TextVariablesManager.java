@@ -22,6 +22,13 @@ public final class TextVariablesManager {
     }
 
     public static String replace(String input) {
-        return input.replace(CHARACTER_NAME, CharacterManager.getSelectedCharacter().getCompleteNameRepresentation());
+        if (input == null) {
+            return "";
+        }
+        final var selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return input.replace(CHARACTER_NAME, "");
+        }
+        return input.replace(CHARACTER_NAME, selectedCharacter.getCompleteNameRepresentation());
     }
 }

@@ -25,10 +25,15 @@ public class EquipmentAdapter<Q extends Equipment> extends ElementAdapter<Q> {
 
     @Override
     protected void setElementColor(TextView elementRepresentation, Q element, int position) {
+        final com.softwaremagico.tm.character.CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null || element == null) {
+            elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.colorDisabled));
+            return;
+        }
         if (isEnabled(position)) {
-            if (CharacterManager.getSelectedCharacter().getCashMoney() < element.getCost()) {
+            if (selectedCharacter.getCashMoney() < element.getCost()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unaffordableMoney));
-            } else if (CharacterManager.getSelectedCharacter().getRemainingCash() < element.getCost()) {
+            } else if (selectedCharacter.getRemainingCash() < element.getCost()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.insufficientMoney));
             } else if (!element.isOfficial()) {
                 elementRepresentation.setTextColor(ContextCompat.getColor(getContext(), R.color.unofficialElement));

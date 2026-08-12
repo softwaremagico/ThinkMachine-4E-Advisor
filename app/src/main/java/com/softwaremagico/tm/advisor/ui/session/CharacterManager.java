@@ -362,7 +362,12 @@ public final class CharacterManager {
     public static void removeSelectedCharacter() {
         characters.remove(getSelectedCharacter());
         if (!characters.isEmpty()) {
-            setSelectedCharacter(characters.get(0));
+            CharacterPlayer firstCharacter = characters.get(0);
+            if (firstCharacter != null) {
+                setSelectedCharacter(firstCharacter);
+            } else {
+                addNewCharacter();
+            }
         } else {
             addNewCharacter();
         }

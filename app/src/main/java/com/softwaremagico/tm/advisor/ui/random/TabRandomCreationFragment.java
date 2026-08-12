@@ -39,7 +39,11 @@ public class TabRandomCreationFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        final RandomSectionsPagerAdapter randomSectionsPagerAdapter = new RandomSectionsPagerAdapter(getActivity());
+        final androidx.fragment.app.FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        final RandomSectionsPagerAdapter randomSectionsPagerAdapter = new RandomSectionsPagerAdapter(activity);
         final ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(randomSectionsPagerAdapter);
 

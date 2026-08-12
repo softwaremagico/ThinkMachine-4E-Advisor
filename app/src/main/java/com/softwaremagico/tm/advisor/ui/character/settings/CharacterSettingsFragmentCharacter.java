@@ -58,7 +58,11 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
         if (getContext() == null) {
             return;
         }
-        populateElements(root, CharacterManager.getSelectedCharacter());
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            return;
+        }
+        populateElements(root, selectedCharacter);
 
         nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (updatingSettings) {
@@ -69,7 +73,11 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
             }
             try {
                 if (!isChecked) {
-                    CharacterManager.getSelectedCharacter().checkIsOfficial();
+                    final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                    if (currentCharacter == null) {
+                        return;
+                    }
+                    currentCharacter.checkIsOfficial();
                 }
                 SettingsHandler.getSettingsEntity().setOnlyOfficialAllowed(!isChecked);
                 SettingsHandler.save(getContext());
@@ -89,7 +97,11 @@ public class CharacterSettingsFragmentCharacter extends CharacterCustomFragment 
             }
             try {
                 if (!isChecked) {
-                    CharacterManager.getSelectedCharacter().checkIsNotRestricted();
+                    final CharacterPlayer currentCharacter = CharacterManager.getSelectedCharacter();
+                    if (currentCharacter == null) {
+                        return;
+                    }
+                    currentCharacter.checkIsNotRestricted();
                 }
                 SettingsHandler.getSettingsEntity().setRestrictionsChecked(!isChecked);
                 SettingsHandler.save(getContext());
