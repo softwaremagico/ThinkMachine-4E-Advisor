@@ -234,11 +234,21 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     }
 
     protected String translateAgora(Agora agora) {
-        return "agora_" + agora.name().toLowerCase();
+        if (agora == null) {
+            return "";
+        }
+        return getStringResourceOrFallback("agora_" + agora.name().toLowerCase(), agora.name());
     }
 
     protected String translateAgoraGroup(AgoraGroup agoraGroup) {
+        if (agoraGroup == null) {
+            return "";
+        }
         final String id = agoraGroup.name().toLowerCase();
+        final String translatedGroup = getStringResourceOrFallback("agora_group_" + id, null);
+        if (translatedGroup != null && !translatedGroup.isBlank()) {
+            return translatedGroup;
+        }
         //It is a faction
         try {
             final Faction faction = FactionFactory.getInstance().getElement(id);
@@ -259,6 +269,20 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
             final Specie specie = SpecieFactory.getInstance().getElement(id);
             if (specie != null) return specie.getNameRepresentation();
         } catch (Exception ignored) { }
-        return id;
+        return getStringResourceOrFallback("agora_group_" + id, id);
+    }
+
+    private String getStringResourceOrFallback(String resourceName, String fallback) {
+        if (resourceName == null || resourceName.isBlank()) {
+            return fallback == null ? "" : fallback;
+        }
+        if (getContext() == null) {
+            return fallback == null ? resourceName : fallback;
+        }
+        final int resourceId = getResources().getIdentifier(resourceName, "string", requireContext().getPackageName());
+        if (resourceId != 0) {
+            return getString(resourceId);
+        }
+        return fallback == null ? resourceName : fallback;
     }
 }
