@@ -39,16 +39,19 @@ public class CharacterHandler {
     }
 
     public void save(Context context, CharacterPlayer characterPlayer) {
-        if (characterPlayer == null) {
+        if (characterPlayer == null || context == null) {
             return;
         }
         if (entities.get(characterPlayer) == null) {
-            final CharacterEntity characterEntity = new CharacterEntity(CharacterManager.getSelectedCharacter());
+            final CharacterEntity characterEntity = new CharacterEntity(characterPlayer);
             AppDatabase.getInstance(context).getCharacterEntityDao().persist(characterEntity);
             entities.put(characterPlayer, characterEntity);
         } else {
-            entities.get(characterPlayer).setCharacterPlayer(characterPlayer);
-            AppDatabase.getInstance(context).getCharacterEntityDao().update(entities.get(characterPlayer));
+            final CharacterEntity characterEntity = entities.get(characterPlayer);
+            if (characterEntity != null) {
+                characterEntity.setCharacterPlayer(characterPlayer);
+                AppDatabase.getInstance(context).getCharacterEntityDao().update(characterEntity);
+            }
         }
     }
 

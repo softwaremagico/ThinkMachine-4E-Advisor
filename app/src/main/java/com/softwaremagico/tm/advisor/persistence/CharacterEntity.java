@@ -56,16 +56,31 @@ public class CharacterEntity extends BaseEntity {
     }
 
     public final void setCharacterPlayer(CharacterPlayer characterPlayer) {
+        if (characterPlayer == null) {
+            return;
+        }
         updateTime = new Timestamp(new Date().getTime());
         setJson(CharacterJsonManager.toJson(characterPlayer));
         setName(characterPlayer.getCompleteNameRepresentation());
         if (characterPlayer.getSpecie() != null) {
-            setSpecie(SpecieFactory.getInstance().getElement(characterPlayer.getSpecie()).getNameRepresentation());
+            final com.softwaremagico.tm.character.specie.Specie specie = SpecieFactory.getInstance().getElement(characterPlayer.getSpecie());
+            if (specie != null && specie.getNameRepresentation() != null) {
+                setSpecie(specie.getNameRepresentation());
+            } else {
+                setSpecie(String.valueOf(characterPlayer.getSpecie()));
+            }
         }
         if (characterPlayer.getFaction() != null) {
-            setFaction(characterPlayer.getFaction().getNameRepresentation());
+            final com.softwaremagico.tm.character.factions.Faction faction = com.softwaremagico.tm.character.factions.FactionFactory.getInstance().getElement(characterPlayer.getFaction());
+            if (faction != null && faction.getNameRepresentation() != null) {
+                setFaction(faction.getNameRepresentation());
+            } else {
+                setFaction(String.valueOf(characterPlayer.getFaction()));
+            }
         }
-        setPlayer(characterPlayer.getInfo().getPlayer());
+        if (characterPlayer.getInfo() != null) {
+            setPlayer(characterPlayer.getInfo().getPlayer());
+        }
     }
 
     public CharacterPlayer getCharacterPlayer() {

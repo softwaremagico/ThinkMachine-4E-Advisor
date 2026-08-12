@@ -12,6 +12,8 @@
 
 package com.softwaremagico.tm.advisor.ui.translation;
 
+import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
+import com.softwaremagico.tm.txt.Text;
 import com.softwaremagico.tm.txt.TextFactory;
 
 public final class ThinkMachineTranslator {
@@ -22,12 +24,36 @@ public final class ThinkMachineTranslator {
 
 
     public static String getTranslatedText(String tag) {
-        return TextFactory.getInstance().getElement(tag).getNameRepresentation();
+        if (tag == null || tag.isEmpty()) {
+            return "";
+        }
+        try {
+            final Text text = TextFactory.getInstance().getElement(tag);
+            if (text == null) {
+                return tag;
+            }
+            final String translated = text.getNameRepresentation();
+            return translated == null ? tag : translated;
+        } catch (InvalidXmlElementException e) {
+            return tag;
+        }
     }
 
 
     public static String getDescriptionText(String tag) {
-        return TextFactory.getInstance().getElement(tag).getDescriptionRepresentation();
+        if (tag == null || tag.isEmpty()) {
+            return "";
+        }
+        try {
+            final Text text = TextFactory.getInstance().getElement(tag);
+            if (text == null) {
+                return "";
+            }
+            final String description = text.getDescriptionRepresentation();
+            return description == null ? "" : description;
+        } catch (InvalidXmlElementException e) {
+            return "";
+        }
     }
 
 }

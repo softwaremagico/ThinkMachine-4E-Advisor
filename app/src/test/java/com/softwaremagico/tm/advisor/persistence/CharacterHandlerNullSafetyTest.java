@@ -44,14 +44,25 @@ public class CharacterHandlerNullSafetyTest {
         CharacterHandler handler = CharacterHandler.getInstance();
         Context mockContext = null;
         CharacterEntity nullEntity = null;
-        
-        // This should not throw an exception
+
         try {
             handler.save(mockContext, nullEntity);
         } catch (NullPointerException e) {
-            // Expected if context is null, but method should check entity first
+            fail("save() should short-circuit before dereferencing null values");
         } catch (Exception e) {
-            // Other exceptions are acceptable for this test
+            // other exceptions are acceptable for this test when context is null; method should not crash on null entity
+        }
+    }
+
+    @Test
+    public void characterEntity_setNullCharacter_shouldNotThrow() {
+        CharacterEntity entity = new CharacterEntity();
+
+        try {
+            entity.setCharacterPlayer(null);
+            assertNull("Null character should leave entity data untouched", entity.getJson());
+        } catch (Exception e) {
+            fail("Null character should be ignored without throwing: " + e.getMessage());
         }
     }
 }
