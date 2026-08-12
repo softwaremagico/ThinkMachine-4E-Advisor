@@ -5,6 +5,7 @@ import com.softwaremagico.tm.character.CharacterPlayer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CharacterManagerTest {
 
@@ -35,5 +36,26 @@ public class CharacterManagerTest {
         CharacterManager.setCharacterLevel(0);
 
         assertEquals(1, CharacterManager.getSelectedCharacter().getLevel());
+    }
+
+    @Test
+    public void setSelectedCharacter_withNull_keepsSelectedCharacterValid() {
+        CharacterManager.getCharacters().clear();
+        CharacterManager.addNewCharacter();
+
+        CharacterManager.setSelectedCharacter(null);
+
+        assertNotNull(CharacterManager.getSelectedCharacter());
+    }
+
+    @Test
+    public void getSelectedCharacter_recoversWhenSelectedCharacterWasCleared() {
+        CharacterManager.getCharacters().clear();
+        CharacterManager.getCharacters().add(null);
+        CharacterManager.getCharacters().add(new CharacterPlayer());
+
+        CharacterManager.setSelectedCharacter(null);
+
+        assertNotNull(CharacterManager.getSelectedCharacter());
     }
 }
