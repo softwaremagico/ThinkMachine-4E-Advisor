@@ -16,9 +16,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.softwaremagico.tm.Element;
@@ -103,6 +105,7 @@ public class WikiFragment extends Fragment {
         if (selector == null) {
             return;
         }
+        selector.setContextualStylesEnabled(false);
         final androidx.fragment.app.FragmentActivity activity = getActivity();
         if (activity == null || getContext() == null) {
             return;
@@ -119,6 +122,11 @@ public class WikiFragment extends Fragment {
         options.sort((left, right) -> safeName(left).compareToIgnoreCase(safeName(right)));
 
         selector.setAdapter(new ElementAdapter<>(activity, options, false, clazz) {
+            @Override
+            protected void setElementColor(TextView elementRepresentation, E element, int position) {
+                elementRepresentation.setTextColor(ContextCompat.getColor(activity, R.color.colorNormal));
+            }
+
             @Override
             public boolean isEnabled(int position) {
                 return true;

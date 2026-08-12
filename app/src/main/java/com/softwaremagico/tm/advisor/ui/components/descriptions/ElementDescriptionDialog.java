@@ -47,10 +47,16 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     protected static final String TABLE_STYLE = "border:1px solid;border-color:" + R.color.md_theme_onPrimaryContainer + ";margin-left:auto;margin-right:auto;font-size:70%";
     protected static final int TABLE_PADDING = 2;
     private final T element;
+    private boolean contextualStylesEnabled = true;
 
     public ElementDescriptionDialog(T element) {
         super();
         this.element = element;
+    }
+
+    public ElementDescriptionDialog<T> setContextualStylesEnabled(boolean contextualStylesEnabled) {
+        this.contextualStylesEnabled = contextualStylesEnabled;
+        return this;
     }
 
     @Override
@@ -174,8 +180,15 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
             restrictions.append("<p>").append(getString(R.string.raised_in_space)).append("</p>");
         }
         if (element.getRestrictions().isRestricted()) {
-            restrictions.append("<p><b><font color=\"").append(getColor(R.color.restricted)).append("\">").append(getString(R.string.restricted))
-                    .append("</font></b></p>");
+            restrictions.append("<p><b>");
+            if (contextualStylesEnabled) {
+                restrictions.append("<font color=\"").append(getColor(R.color.restricted)).append("\">");
+            }
+            restrictions.append(getString(R.string.restricted));
+            if (contextualStylesEnabled) {
+                restrictions.append("</font>");
+            }
+            restrictions.append("</b></p>");
         }
         return restrictions.toString();
     }
@@ -195,6 +208,17 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
     protected String getDetails(T element) {
          return "";
      }
+
+    protected boolean areContextualStylesEnabled() {
+        return contextualStylesEnabled;
+    }
+
+    protected String wrapWithColorIfEnabled(String content, boolean shouldHighlight, int colorRes) {
+        if (!contextualStylesEnabled || !shouldHighlight) {
+            return content;
+        }
+        return "<font color=\"" + getColor(colorRes) + "\">" + content + "</font>";
+    }
 
      protected String getModule(T element) {
         try {

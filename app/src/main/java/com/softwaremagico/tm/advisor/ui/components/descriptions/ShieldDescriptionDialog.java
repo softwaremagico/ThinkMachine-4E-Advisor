@@ -17,13 +17,13 @@ public class ShieldDescriptionDialog extends ElementDescriptionDialog<Shield> {
     @Override
     protected String getDetails(Shield shield) {
         final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-        if (selectedCharacter == null) {
+        if (selectedCharacter == null && areContextualStylesEnabled()) {
             return "<b>No character selected</b>";
         }
-        
-        boolean techLimited = selectedCharacter.getTechLevel() < shield.getTechLevel();
-        boolean costLimited = selectedCharacter.getRemainingCash() < shield.getCost();
-        boolean costProhibited = selectedCharacter.getCashMoney() < shield.getCost();
+
+        boolean techLimited = selectedCharacter != null && selectedCharacter.getTechLevel() < shield.getTechLevel();
+        boolean costLimited = selectedCharacter != null && selectedCharacter.getRemainingCash() < shield.getCost();
+        boolean costProhibited = selectedCharacter != null && selectedCharacter.getCashMoney() < shield.getCost();
         return "<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">" +
                 "<tr>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +
@@ -33,11 +33,7 @@ public class ShieldDescriptionDialog extends ElementDescriptionDialog<Shield> {
                 "<th>" + ThinkMachineTranslator.getTranslatedText("distortion") + "</th>" +
                 "</tr>" +
                 "<tr>" +
-                "<td style=\"text-align:center\">" +
-                (techLimited ? "<font color=\"" + getColor(R.color.insufficientTechnology) + "\">" : "") +
-                shield.getTechLevel() +
-                (techLimited ? "</font>" : "") +
-                "</td>" +
+                "<td style=\"text-align:center\">" + wrapWithColorIfEnabled(String.valueOf(shield.getTechLevel()), techLimited, R.color.insufficientTechnology) + "</td>" +
                 "<td style=\"text-align:center\">" + shield.getImpact() + "/" + shield.getForce() + "</td>" +
                 "<td style=\"text-align:center\" >" + shield.getHits() + "</td>" +
                 "<td style=\"text-align:center\" >" + shield.getBurnOut() + "</td>" +
@@ -45,10 +41,8 @@ public class ShieldDescriptionDialog extends ElementDescriptionDialog<Shield> {
                 "</tr>" +
                 "</table>" +
                 "<br><b>" + getString(R.string.cost) + "</b> " +
-                (costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
-                        (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : "")) +
-                Numbers.PRICE_FORMAT.format(shield.getCost()) +
-                (costLimited || costProhibited ? "</font>" : "") +
+                wrapWithColorIfEnabled(Numbers.PRICE_FORMAT.format(shield.getCost()), costLimited || costProhibited,
+                        costProhibited ? R.color.unaffordableMoney : R.color.insufficientMoney) +
                 " " + ThinkMachineTranslator.getTranslatedText("firebirds");
     }
 }

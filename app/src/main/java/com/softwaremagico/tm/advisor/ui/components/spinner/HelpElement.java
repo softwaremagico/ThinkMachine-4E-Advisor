@@ -41,6 +41,7 @@ import com.softwaremagico.tm.character.upbringing.Upbringing;
 
 public abstract class HelpElement<E extends Element> extends ElementComponent<E> {
     private ImageView helpButton;
+    private boolean contextualStylesEnabled = true;
 
     public HelpElement(Context context) {
         this(context, null);
@@ -86,40 +87,46 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
 
     public abstract E getSelection();
 
+    public void setContextualStylesEnabled(boolean contextualStylesEnabled) {
+        this.contextualStylesEnabled = contextualStylesEnabled;
+    }
+
     protected void openDescriptionWindow(E element) {
         if (element == null) return;
         final androidx.fragment.app.FragmentManager fm = ((FragmentActivity) getContext()).getSupportFragmentManager();
+        createDescriptionDialog(element).setContextualStylesEnabled(contextualStylesEnabled).show(fm, "");
+    }
 
+    protected ElementDescriptionDialog<?> createDescriptionDialog(E element) {
         if (element instanceof Shield) {
-            new ShieldDescriptionDialog((Shield) element).show(fm, "");
+            return new ShieldDescriptionDialog((Shield) element);
         } else if (element instanceof Armor) {
-            new ArmorDescriptionDialog((Armor) element).show(fm, "");
+            return new ArmorDescriptionDialog((Armor) element);
         } else if (element instanceof HandheldShield) {
-            new HandheldShieldDescriptionDialog((HandheldShield) element).show(fm, "");
+            return new HandheldShieldDescriptionDialog((HandheldShield) element);
         } else if (element instanceof Weapon) {
             if (((Weapon) element).isRangedWeapon()) {
-                new RangeWeaponDescriptionDialog((Weapon) element).show(fm, "");
+                return new RangeWeaponDescriptionDialog((Weapon) element);
             } else {
-                new MeleeWeaponDescriptionDialog((Weapon) element).show(fm, "");
+                return new MeleeWeaponDescriptionDialog((Weapon) element);
             }
         } else if (element instanceof Cyberdevice) {
-            new CyberdeviceDescriptionDialog((Cyberdevice) element).show(fm, "");
+            return new CyberdeviceDescriptionDialog((Cyberdevice) element);
         } else if (element instanceof OccultismPower) {
-            new OccultismPowerDescriptionDialog((OccultismPower) element).show(fm, "");
+            return new OccultismPowerDescriptionDialog((OccultismPower) element);
         } else if (element instanceof OccultismPath) {
-            new OccultismPathDescriptionDialog((OccultismPath) element).show(fm, "");
+            return new OccultismPathDescriptionDialog((OccultismPath) element);
         } else if (element instanceof Specie) {
-            new SpecieDescriptionDialog((Specie) element).show(fm, "");
+            return new SpecieDescriptionDialog((Specie) element);
         } else if (element instanceof Upbringing) {
-            new UpbringingDescriptionDialog((Upbringing) element).show(fm, "");
+            return new UpbringingDescriptionDialog((Upbringing) element);
         } else if (element instanceof Faction) {
-            new FactionDescriptionDialog((Faction) element).show(fm, "");
+            return new FactionDescriptionDialog((Faction) element);
         } else if (element instanceof Calling) {
-            new CallingDescriptionDialog((Calling) element).show(fm, "");
+            return new CallingDescriptionDialog((Calling) element);
         } else if (element instanceof Perk) {
-            new PerkDescriptionDialog((Perk) element).show(fm, "");
-        } else {
-            new ElementDescriptionDialog<>(element).show(fm, "");
+            return new PerkDescriptionDialog((Perk) element);
         }
+        return new ElementDescriptionDialog<>(element);
     }
 }

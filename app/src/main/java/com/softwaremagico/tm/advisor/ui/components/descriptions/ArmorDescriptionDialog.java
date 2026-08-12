@@ -23,13 +23,13 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
     @Override
     protected String getDetails(Armor armor) {
         final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
-        if (selectedCharacter == null) {
+        if (selectedCharacter == null && areContextualStylesEnabled()) {
             return "<b>No character selected</b>";
         }
-        
-        boolean techLimited = selectedCharacter.getTechLevel() < armor.getTechLevel();
-        boolean costLimited = selectedCharacter.getCashMoney() < armor.getCost();
-        boolean costProhibited = selectedCharacter.getRemainingCash() < armor.getCost();
+
+        boolean techLimited = selectedCharacter != null && selectedCharacter.getTechLevel() < armor.getTechLevel();
+        boolean costLimited = selectedCharacter != null && selectedCharacter.getCashMoney() < armor.getCost();
+        boolean costProhibited = selectedCharacter != null && selectedCharacter.getRemainingCash() < armor.getCost();
         StringBuilder stringBuilder = new StringBuilder("<table cellpadding=\"" + TABLE_PADDING + "\" style=\"" + TABLE_STYLE + "\">" +
                 "<tr>" +
                 "<th>" + ThinkMachineTranslator.getTranslatedText("techLevel") + "</th>" +
@@ -40,11 +40,7 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
                 "<th>" + ThinkMachineTranslator.getTranslatedText("endurance") + "</th>" +
                 "</tr>" +
                 "<tr>" +
-                "<td style=\"text-align:center\">" +
-                (techLimited ? "<font color=\"" + getColor(R.color.insufficientTechnology) + "\">" : "") +
-                armor.getTechLevel() +
-                (techLimited ? "</font>" : "") +
-                "</td>" +
+                "<td style=\"text-align:center\">" + wrapWithColorIfEnabled(String.valueOf(armor.getTechLevel()), techLimited, R.color.insufficientTechnology) + "</td>" +
                 "<td style=\"text-align:center\">" + armor.getResistanceValue(ResistanceType.BODY) + "</td>" +
                 "<td style=\"text-align:center\">" + (armor.getStandardPenalization() != null ? armor.getStandardPenalization().getDexterityModification() : "")
                 + (armor.getSpecialPenalization() != null && armor.getSpecialPenalization().getDexterityModification() != 0 ? "/" +
@@ -99,9 +95,10 @@ public class ArmorDescriptionDialog extends ElementDescriptionDialog<Armor> {
                 }
             }
         }
-        stringBuilder.append("<br><b>").append(getString(R.string.cost)).append("</b> ").append(costProhibited ? "<font color=\"" + getColor(R.color.unaffordableMoney) + "\">" :
-                        (costLimited ? "<font color=\"" + getColor(R.color.insufficientMoney) + "\">" : ""))
-                .append(Numbers.PRICE_FORMAT.format(armor.getCost())).append(costLimited || costProhibited ? "</font>" : "").append(" ").append(ThinkMachineTranslator.getTranslatedText("firebirds"));
+        final int costColor = costProhibited ? R.color.unaffordableMoney : R.color.insufficientMoney;
+        stringBuilder.append("<br><b>").append(getString(R.string.cost)).append("</b> ")
+                .append(wrapWithColorIfEnabled(Numbers.PRICE_FORMAT.format(armor.getCost()), costLimited || costProhibited, costColor))
+                .append(" ").append(ThinkMachineTranslator.getTranslatedText("firebirds"));
         return stringBuilder.toString();
     }
 }
