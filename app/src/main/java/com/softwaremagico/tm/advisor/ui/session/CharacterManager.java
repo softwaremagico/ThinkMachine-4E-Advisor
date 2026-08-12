@@ -319,15 +319,33 @@ public final class CharacterManager {
 
 
     public synchronized static CharacterPlayer getSelectedCharacter() {
-        if (characters.isEmpty()) {
-            addNewCharacter();
+        if (selectedCharacter != null) {
+            return selectedCharacter;
         }
+        for (final CharacterPlayer characterPlayer : characters) {
+            if (characterPlayer != null) {
+                selectedCharacter = characterPlayer;
+                return selectedCharacter;
+            }
+        }
+        addNewCharacter();
         return selectedCharacter;
     }
 
     public synchronized static void setSelectedCharacter(CharacterPlayer characterPlayer) {
+        if (characterPlayer == null) {
+            for (final CharacterPlayer fallbackCharacter : characters) {
+                if (fallbackCharacter != null) {
+                    selectedCharacter(fallbackCharacter);
+                    return;
+                }
+            }
+            addNewCharacter();
+            return;
+        }
         normalizeCharacter(characterPlayer);
         if (!characters.contains(characterPlayer)) {
+            characters.removeIf(Objects::isNull);
             characters.add(characterPlayer);
         }
         selectedCharacter(characterPlayer);

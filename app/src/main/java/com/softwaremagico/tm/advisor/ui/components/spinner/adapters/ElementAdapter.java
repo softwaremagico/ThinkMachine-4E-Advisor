@@ -188,7 +188,8 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
 
             if (originalElements == null) {
                 synchronized (this) {
-                    if (CharacterManager.getSelectedCharacter().getSettings().isOnlyOfficialAllowed()) {
+                    final com.softwaremagico.tm.character.CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+                    if (selectedCharacter != null && selectedCharacter.getSettings() != null && selectedCharacter.getSettings().isOnlyOfficialAllowed()) {
                         originalElements = elements.stream().filter(e -> e == null || e.isOfficial()).collect(Collectors.toList());
                     } else {
                         originalElements = new ArrayList<>(elements);
@@ -264,9 +265,14 @@ public class ElementAdapter<E extends Element> extends ArrayAdapter<E> {
     public boolean isEnabled(int position) {
         if (positionEnabled.get(position) == null) {
             final E element = getSafeItem(position);
-            positionEnabled.put(position, element == null || !CharacterManager.getSelectedCharacter().getSettings().isRestrictionsChecked() ||
-                    (element.getRestrictions() == null
-                            || !element.getRestrictions().isRestricted(CharacterManager.getSelectedCharacter())));
+            final com.softwaremagico.tm.character.CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+            final boolean enabled = element == null
+                    || selectedCharacter == null
+                    || selectedCharacter.getSettings() == null
+                    || !selectedCharacter.getSettings().isRestrictionsChecked()
+                    || element.getRestrictions() == null
+                    || !element.getRestrictions().isRestricted(selectedCharacter);
+            positionEnabled.put(position, enabled);
         }
         return positionEnabled.get(position);
     }
