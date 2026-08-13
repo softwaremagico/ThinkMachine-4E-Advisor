@@ -12,6 +12,9 @@ public class CharacterSheetPdfGenerationSessionStateTest {
 
     @Test
     public void generate_currentSelectedCharacterSession_returnsNonEmptyPdf() throws Exception {
+        CharacterManager.getCharacters().clear();
+        CharacterManager.addNewCharacter();
+
         final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
         final byte[] pdfContent = characterSheet.generate();
 

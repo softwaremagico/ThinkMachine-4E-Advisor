@@ -57,6 +57,8 @@
     <string name="settings_save">Save</string>
     <string name="settings_import">Import</string>
     <string name="settings_export">Export</string>
+    <string name="settings_export_qr">Export to QR</string>
+    <string name="settings_import_qr">Import QR</string>
     <string name="settings_global">Global Settings</string>
     <string name="settings_title">Settings</string>
     <string name="message_character_saved_successfully">Character saved.</string>
@@ -86,7 +88,10 @@
     <string name="character_threat">Threat Level:</string>
     <string name="settings_new">New</string>
     <string name="export_body">File for importing \'${CHARACTER_NAME}\'  character.</string>
+    <string name="export_qr_body">QR image for importing \'${CHARACTER_NAME}\' character.</string>
     <string name="invalid_json_file">The selected file is invalid!</string>
+    <string name="invalid_qr_file">The selected QR code is invalid!</string>
+    <string name="camera_permission_required">Camera permission is required for QR import.</string>
     <string name="error_duplicating_character">Character cannot be duplicated. Unknown error.</string>
     <string name="message_duplication_ok">Character duplicated correctly!</string>
     <string name="character_deleted_correctly">Character deleted!</string>
@@ -388,4 +393,3 @@
     <string name="module_vuldrok_space">Vuldrok Space</string>
     <string name="book">Book</string>
 </resources>
-

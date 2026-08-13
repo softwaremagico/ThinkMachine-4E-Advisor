@@ -12,6 +12,7 @@
 
 package com.softwaremagico.tm.advisor.ui.main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,8 +24,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.MenuCompat;
@@ -37,6 +41,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 import com.softwaremagico.tm.advisor.BuildConfig;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
@@ -53,6 +60,8 @@ import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.exceptions.InvalidJsonException;
 import com.softwaremagico.tm.language.Translator;
 import com.softwaremagico.tm.log.MachineLog;
+import com.softwaremagico.tm.qr.CharacterQrCodec;
+import com.softwaremagico.tm.qr.CharacterQrPngWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -66,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int CHARACTERS_SELECTOR_GROUP = 10;
     private static final int CHARACTERS_INDEX = 1000;
     private final java.util.concurrent.ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
+    private ActivityResultLauncher<String> requestCameraPermissionLauncher;
+    private ActivityResultLauncher<ScanOptions> qrScannerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +88,22 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        requestCameraPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        launchQrScanner();
+                    } else {
+                        final View parentLayout = findViewById(android.R.id.content);
+                        SnackbarGenerator.getErrorMessage(parentLayout, R.string.camera_permission_required).show();
+                    }
+                });
+        qrScannerLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result == null || result.getContents() == null || result.getContents().isBlank()) {
+                return;
+            }
+            importQrPayload(result.getContents());
+        });
 
         setContentView(R.layout.activity_main);
 
@@ -154,6 +181,19 @@ public class MainActivity extends AppCompatActivity {
             importJson();
             return true;
         }
+        if (itemId == R.id.settings_export_qr) {
+            try {
+                exportQr(parentLayout);
+            } catch (Exception e) {
+                AdvisorLog.errorMessage(this.getClass().getName(), e);
+                SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_saved_error).show();
+            }
+            return true;
+        }
+        if (itemId == R.id.settings_import_qr) {
+            importQr();
+            return true;
+        }
         if (itemId == R.id.settings_remove_character) {
             removeSelectedCharacter(parentLayout);
             return true;
@@ -211,6 +251,36 @@ public class MainActivity extends AppCompatActivity {
         chooseFile.setType("*/*");
         intent = Intent.createChooser(chooseFile, "Choose a file");
         startActivityForResult(intent, PICK_TMA_FILE);
+    }
+
+    private void importQr() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            launchQrScanner();
+            return;
+        }
+        requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+    }
+
+    private void launchQrScanner() {
+        final ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        options.setPrompt(getString(R.string.settings_import_qr));
+        options.setBeepEnabled(false);
+        options.setOrientationLocked(false);
+        qrScannerLauncher.launch(options);
+    }
+
+    private void importQrPayload(String payload) {
+        final View parentLayout = findViewById(android.R.id.content);
+        backgroundExecutor.execute(() -> {
+            try {
+                final CharacterPlayer character = CharacterQrCodec.decode(payload);
+                runOnUiThread(() -> CharacterManager.setSelectedCharacter(character));
+            } catch (IOException | IllegalArgumentException e) {
+                AdvisorLog.errorMessage(this.getClass().getName(), e);
+                runOnUiThread(() -> SnackbarGenerator.getErrorMessage(parentLayout, R.string.invalid_qr_file).show());
+            }
+        });
     }
 
     @Override
@@ -273,6 +343,45 @@ public class MainActivity extends AppCompatActivity {
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
                     ": " + selectedCharacter.getCompleteNameRepresentation() : ""));
             shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_body)));
+
+            final Intent chooser = Intent.createChooser(shareIntent, "Share File");
+            final List<ResolveInfo> resInfoList = view.getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+            for (final ResolveInfo resolveInfo : resInfoList) {
+                final String packageName = resolveInfo.activityInfo.packageName;
+                view.getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+            startActivity(chooser);
+        }
+    }
+
+    private void exportQr(View view) throws IOException, WriterException {
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (selectedCharacter == null) {
+            SnackbarGenerator.getErrorMessage(view, R.string.message_character_saved_error).show();
+            return;
+        }
+        final File exportsPath = new File(view.getContext().getCacheDir(), "export");
+        File qrExport = new File(exportsPath, !selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
+                selectedCharacter.getCompleteNameRepresentation() + "_sheet_qr.png" :
+                "export_sheet_qr.png");
+        final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", qrExport);
+
+        if (contentUri != null) {
+            if (exportsPath.mkdir()) {
+                MachineLog.debug(this.getClass().getName(), "Default folder '{}' created.", exportsPath);
+            }
+            try (FileOutputStream stream = new FileOutputStream(qrExport)) {
+                CharacterQrPngWriter.writePng(selectedCharacter, stream);
+            }
+
+            final Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setType("image/png");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
+                    ": " + selectedCharacter.getCompleteNameRepresentation() : ""));
+            shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_qr_body)));
 
             final Intent chooser = Intent.createChooser(shareIntent, "Share File");
             final List<ResolveInfo> resInfoList = view.getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);

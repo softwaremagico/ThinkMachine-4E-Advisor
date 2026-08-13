@@ -33,6 +33,8 @@
     <string name="settings_save">Guardar</string>
     <string name="settings_import">Importar</string>
     <string name="settings_export">Exportar</string>
+    <string name="settings_export_qr">Exportar a QR</string>
+    <string name="settings_import_qr">Importar QR</string>
     <string name="settings_title">Ajustes</string>
     <string name="message_character_saved_successfully">Personaje guardado.</string>
     <string name="message_character_saved_error">¡Error guardando el personaje!</string>
@@ -53,7 +55,10 @@
     <string name="character_threat">Nivel de Amenaza:</string>
     <string name="settings_new">Nuevo</string>
     <string name="export_body">Fichero para importar el personaje \'${CHARACTER_NAME}\' .</string>
+    <string name="export_qr_body">Imagen QR para importar el personaje \'${CHARACTER_NAME}\'.</string>
     <string name="invalid_json_file">¡El fichero seleccionado es inválido!</string>
+    <string name="invalid_qr_file">¡El código QR seleccionado es inválido!</string>
+    <string name="camera_permission_required">Se necesita permiso de cámara para importar QR.</string>
     <string name="error_duplicating_character">El personaje no ha se ha podido duplicar. Error desconocido.</string>
     <string name="message_duplication_ok">Personaje duplicado correctamente.</string>
     <string name="character_deleted_correctly">¡Personaje eliminado!</string>

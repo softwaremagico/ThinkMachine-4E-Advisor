@@ -319,15 +319,23 @@ public final class CharacterManager {
 
 
     public synchronized static CharacterPlayer getSelectedCharacter() {
-        if (selectedCharacter != null) {
+        characters.removeIf(Objects::isNull);
+
+        if (selectedCharacter != null && characters.contains(selectedCharacter)) {
             return selectedCharacter;
         }
+
+        if (selectedCharacter != null && !characters.contains(selectedCharacter)) {
+            selectedCharacter = null;
+        }
+
         for (final CharacterPlayer characterPlayer : characters) {
             if (characterPlayer != null) {
                 selectedCharacter = characterPlayer;
                 return selectedCharacter;
             }
         }
+
         addNewCharacter();
         return selectedCharacter;
     }

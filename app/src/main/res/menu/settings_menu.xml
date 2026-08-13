@@ -39,9 +39,21 @@
             app:showAsAction="never" />
 
         <item
+            android:id="@+id/settings_export_qr"
+            android:icon="@drawable/ic_character_icon"
+            android:title="@string/settings_export_qr"
+            app:showAsAction="never" />
+
+        <item
             android:id="@+id/settings_import_file"
             android:icon="@drawable/ic_character_icon"
             android:title="@string/settings_import"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/settings_import_qr"
+            android:icon="@drawable/ic_character_icon"
+            android:title="@string/settings_import_qr"
             app:showAsAction="never" />
 
         <item

@@ -15,6 +15,7 @@ staxApi = "1.0-2"
 thinkMachine = { strictly = "[4.0.0,)", prefer = "latest.integration" }
 cardview = "1.0.0"
 androidAwt = "1.0.0"
+zxingAndroidEmbedded = "4.3.0"
 
 [libraries]
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
@@ -34,6 +35,8 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRunti
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
 think-machine-pdf = { module = "com.softwaremagico:think-machine-4e-pdf", version.ref = "thinkMachine" }
 think-machine-random = { module = "com.softwaremagico:think-machine-4e-random", version.ref = "thinkMachine" }
+think-machine-qr = { module = "com.softwaremagico:think-machine-4e-qr", version.ref = "thinkMachine" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 android-awt = { module = "com.github.andob:android-awt", version.ref = "androidAwt" }
 
