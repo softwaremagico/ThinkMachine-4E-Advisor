@@ -36,6 +36,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softwaremagico.tm.advisor.BuildConfig;
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.core.CharacterExportUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
@@ -131,15 +132,19 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
         if (context == null) {
             return;
         }
+
+        final var selectedCharacter = CharacterManager.getSelectedCharacter();
+        final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
         final File imagePath = new File(context.getCacheDir(), "pdf");
-        characterSheetAsPdf = new File(imagePath, !CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
-                CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() + "_sheet.pdf" :
-                "pdf_sheet.pdf");
+        if (!imagePath.exists() && !imagePath.mkdirs()) {
+            AdvisorLog.warning(this.getClass(), "Unable to create PDF export folder '{}'.", imagePath);
+            return;
+        }
+
+        characterSheetAsPdf = new File(imagePath, characterName.isEmpty() ? "pdf_sheet.pdf" : characterName + "_sheet.pdf");
         final Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", characterSheetAsPdf);
 
         if (contentUri != null) {
-            imagePath.mkdirs();
-            characterSheetAsPdf.getParentFile().mkdirs();
             backgroundExecutor.execute(() -> {
                 generatePdfFile(characterSheetAsPdf.getAbsolutePath());
                 root.post(() -> {
@@ -151,8 +156,8 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
                     shareIntent.setType(getActivity().getContentResolver().getType(contentUri));
                     shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().length() > 0 ?
-                            ": " + CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() : ""));
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
+                            ": " + characterName : ""));
                     shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body)));
 
                     final Intent chooser = Intent.createChooser(shareIntent, "Share File");

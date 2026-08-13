@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.core.CharacterExportUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
@@ -77,13 +78,16 @@ public class TextVisualizationFragment extends Fragment implements Visualization
     }
 
     protected void shareText() throws IOException {
+        final var selectedCharacter = CharacterManager.getSelectedCharacter();
+        final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
+
         final Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!CharacterManager.getSelectedCharacter().getCompleteNameRepresentation().isEmpty() ?
-                ": " + CharacterManager.getSelectedCharacter().getCompleteNameRepresentation() : ""));
-        final CharacterSheet characterSheet = new CharacterSheet(CharacterManager.getSelectedCharacter());
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
+                ": " + characterName : ""));
+        final CharacterSheet characterSheet = new CharacterSheet(selectedCharacter);
         shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body) + "\n\n" + characterSheet));
         //final Intent chooser = Intent.createChooser(shareIntent, "Share File");
         startActivity(shareIntent);

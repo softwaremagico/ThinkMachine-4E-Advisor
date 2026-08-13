@@ -46,6 +46,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.softwaremagico.tm.advisor.BuildConfig;
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.core.CharacterExportUtils;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.advisor.core.FileUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
@@ -320,16 +321,19 @@ public class MainActivity extends AppCompatActivity {
             SnackbarGenerator.getErrorMessage(view, R.string.message_character_saved_error).show();
             return;
         }
+
+        final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
         final File exportsPath = new File(view.getContext().getCacheDir(), "export");
-        File characterExport = new File(exportsPath, !selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
-                selectedCharacter.getCompleteNameRepresentation() + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
-                "export_sheet." + FileUtils.CHARACTER_FILE_EXTENSION);
+        if (!exportsPath.exists() && !exportsPath.mkdirs()) {
+            MachineLog.warning(this.getClass().getName(), "Unable to create export folder '{}'.", exportsPath);
+        }
+
+        final File characterExport = new File(exportsPath, characterName.isEmpty() ?
+                "export_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
+                characterName + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION);
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", characterExport);
 
         if (contentUri != null) {
-            if (exportsPath.mkdir()) {
-                MachineLog.debug(this.getClass().getName(), "Default folder '{}' created.", exportsPath);
-            }
             String jsonContent = CharacterJsonManager.toJson(selectedCharacter);
             try (FileOutputStream stream = new FileOutputStream(characterExport)) {
                 stream.write(jsonContent.getBytes());
@@ -340,8 +344,8 @@ public class MainActivity extends AppCompatActivity {
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.setType(this.getContentResolver().getType(contentUri));
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
-                    ": " + selectedCharacter.getCompleteNameRepresentation() : ""));
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
+                    ": " + characterName : ""));
             shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_body)));
 
             final Intent chooser = Intent.createChooser(shareIntent, "Share File");
@@ -360,16 +364,19 @@ public class MainActivity extends AppCompatActivity {
             SnackbarGenerator.getErrorMessage(view, R.string.message_character_saved_error).show();
             return;
         }
+
+        final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
         final File exportsPath = new File(view.getContext().getCacheDir(), "export");
-        File qrExport = new File(exportsPath, !selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
-                selectedCharacter.getCompleteNameRepresentation() + "_sheet_qr.png" :
-                "export_sheet_qr.png");
+        if (!exportsPath.exists() && !exportsPath.mkdirs()) {
+            MachineLog.warning(this.getClass().getName(), "Unable to create export folder '{}'.", exportsPath);
+        }
+
+        final File qrExport = new File(exportsPath, characterName.isEmpty() ?
+                "export_sheet_qr.png" :
+                characterName + "_sheet_qr.png");
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", qrExport);
 
         if (contentUri != null) {
-            if (exportsPath.mkdir()) {
-                MachineLog.debug(this.getClass().getName(), "Default folder '{}' created.", exportsPath);
-            }
             try (FileOutputStream stream = new FileOutputStream(qrExport)) {
                 CharacterQrPngWriter.writePng(selectedCharacter, stream);
             }
@@ -379,8 +386,8 @@ public class MainActivity extends AppCompatActivity {
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             shareIntent.setType("image/png");
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!selectedCharacter.getCompleteNameRepresentation().isEmpty() ?
-                    ": " + selectedCharacter.getCompleteNameRepresentation() : ""));
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
+                    ": " + characterName : ""));
             shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_qr_body)));
 
             final Intent chooser = Intent.createChooser(shareIntent, "Share File");
