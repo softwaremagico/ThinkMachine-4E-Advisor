@@ -12,7 +12,7 @@ navigationFragment = "2.9.8"
 recyclerview = "1.4.0"
 roomRuntime = "2.8.4"
 staxApi = "1.0-2"
-thinkMachine = { strictly = "4.4.1-SNAPSHOT"}
+thinkMachine = { strictly = "[4.0.0,)", prefer = "latest.integration" }
 cardview = "1.0.0"
 androidAwt = "1.0.0"
 
@@ -39,4 +39,3 @@ android-awt = { module = "com.github.andob:android-awt", version.ref = "androidA
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
