@@ -17,8 +17,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -64,12 +62,11 @@ import com.softwaremagico.tm.exceptions.InvalidJsonException;
 import com.softwaremagico.tm.language.Translator;
 import com.softwaremagico.tm.log.MachineLog;
 import com.softwaremagico.tm.qr.CharacterQrCodec;
-import com.softwaremagico.tm.qr.CharacterQrLogoPngWriter;
+import com.softwaremagico.tm.qr.CharacterQrPngWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -361,22 +358,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private BufferedImage loadAppLogo() {
-        final Bitmap logoBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        if (logoBitmap == null) {
-            return null;
-        }
-
-        final int width = logoBitmap.getWidth();
-        final int height = logoBitmap.getHeight();
-        final int[] pixels = new int[width * height];
-        logoBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
-        final BufferedImage logoImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        logoImage.setRGB(0, 0, width, height, pixels, 0, width);
-        return logoImage;
-    }
-
     private void exportQr(View view) throws IOException, WriterException {
         final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
         if (selectedCharacter == null) {
@@ -397,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (contentUri != null) {
             try (FileOutputStream stream = new FileOutputStream(qrExport)) {
-                CharacterQrLogoPngWriter.writePng(selectedCharacter, stream, loadAppLogo());
+                CharacterQrPngWriter.writePng(selectedCharacter, stream);
             }
 
             final Intent shareIntent = new Intent();

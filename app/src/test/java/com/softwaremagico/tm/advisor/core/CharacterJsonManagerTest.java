@@ -38,4 +38,5 @@ public class CharacterJsonManagerTest {
             assertNotNull(e.getMessage());
         }
     }
+
 }

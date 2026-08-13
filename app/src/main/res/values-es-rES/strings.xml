@@ -37,7 +37,7 @@
     <string name="settings_import_qr">Importar QR</string>
     <string name="settings_title">Ajustes</string>
     <string name="message_character_saved_successfully">Personaje guardado.</string>
-    <string name="message_character_saved_error">¡Error guardando el personaje!</string>
+    <string name="message_character_saved_error">¡Error al exportar el personaje!</string>
     <string name="message_incomplete_level">Por favor, finaliza o corrige el nivel anterior primero.</string>
     <string name="message_minimum_level_zero">El nivel mínimo es de uno.</string>
     <string name="loading">Cargando ...</string>
