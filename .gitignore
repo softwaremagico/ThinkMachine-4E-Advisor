@@ -20,3 +20,4 @@ local.properties
 *.orig
 */mapping.txt
 /app/DATA_DIR_IS_UNDEFINED/cache/advisor.log
+/app/release/*

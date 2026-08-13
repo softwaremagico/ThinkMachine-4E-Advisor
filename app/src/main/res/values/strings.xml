@@ -62,7 +62,7 @@
     <string name="settings_global">Global Settings</string>
     <string name="settings_title">Settings</string>
     <string name="message_character_saved_successfully">Character saved.</string>
-    <string name="message_character_saved_error">Character save error!</string>
+    <string name="message_character_saved_error">Character export failed!</string>
     <string name="message_random_character_success">Character finished randomly.</string>
     <string name="message_random_character_already_started">Character has been started already. All changes will be lost.</string>
     <string name="message_random_character_already_finished">Character is already finished.</string>
