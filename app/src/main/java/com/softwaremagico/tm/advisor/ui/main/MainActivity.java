@@ -15,9 +15,16 @@ package com.softwaremagico.tm.advisor.ui.main;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,6 +36,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
@@ -43,6 +51,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.softwaremagico.tm.advisor.BuildConfig;
@@ -64,11 +73,12 @@ import com.softwaremagico.tm.exceptions.InvalidJsonException;
 import com.softwaremagico.tm.language.Translator;
 import com.softwaremagico.tm.log.MachineLog;
 import com.softwaremagico.tm.qr.CharacterQrCodec;
-import com.softwaremagico.tm.qr.CharacterQrPngWriter;
+import com.softwaremagico.tm.qr.CharacterQrMatrix;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -363,13 +373,64 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try (FileOutputStream stream = new FileOutputStream(qrExport)) {
-            CharacterQrPngWriter.writePng(selectedCharacter, stream);
+            writeQrPngWithLogo(selectedCharacter, stream, this);
         }
 
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", qrExport);
         shareExport(view, contentUri, "image/png",
                 getString(R.string.app_name) + (!characterName.isEmpty() ? ": " + characterName : ""),
                 TextVariablesManager.replace(getString(R.string.export_qr_body)));
+    }
+
+    private static void writeQrPngWithLogo(CharacterPlayer selectedCharacter, OutputStream outputStream, Context context)
+            throws IOException, WriterException {
+        final String payload = CharacterQrCodec.encode(selectedCharacter);
+        final BitMatrix matrix = CharacterQrMatrix.encodeForLogo(payload, CharacterQrMatrix.DEFAULT_SIZE);
+        final Bitmap qrBitmap = Bitmap.createBitmap(matrix.getWidth(), matrix.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(qrBitmap);
+        canvas.drawColor(Color.WHITE);
+
+        final Paint modulePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        modulePaint.setStyle(Paint.Style.FILL);
+        modulePaint.setColor(Color.BLACK);
+
+        for (int y = 0; y < matrix.getHeight(); y++) {
+            for (int x = 0; x < matrix.getWidth(); x++) {
+                if (matrix.get(x, y)) {
+                    canvas.drawRect(x, y, x + 1f, y + 1f, modulePaint);
+                }
+            }
+        }
+
+        drawCenteredLogo(canvas, matrix.getWidth(), context);
+
+        if (!qrBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+            throw new IOException("Unable to write QR PNG with logo.");
+        }
+    }
+
+    private static void drawCenteredLogo(Canvas canvas, int qrSize, Context context) {
+        final Drawable logoDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_launcher_foreground);
+        if (logoDrawable == null) {
+            return;
+        }
+
+        final int logoSide = Math.max(1, (int) (qrSize * 0.20f));
+        final int margin = Math.max(1, logoSide / 10);
+        final int left = (qrSize - logoSide) / 2;
+        final int top = (qrSize - logoSide) / 2;
+
+        final Paint badgePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        badgePaint.setStyle(Paint.Style.FILL);
+        badgePaint.setColor(Color.WHITE);
+        canvas.drawRoundRect(new RectF(left - margin, top - margin,
+                        left + logoSide + margin, top + logoSide + margin), 24f, 24f, badgePaint);
+
+        final Bitmap logoBitmap = Bitmap.createBitmap(logoSide, logoSide, Bitmap.Config.ARGB_8888);
+        final Canvas logoCanvas = new Canvas(logoBitmap);
+        logoDrawable.setBounds(0, 0, logoSide, logoSide);
+        logoDrawable.draw(logoCanvas);
+        canvas.drawBitmap(logoBitmap, left, top, null);
     }
 
     private File getExportsPath(View view) throws IOException {
