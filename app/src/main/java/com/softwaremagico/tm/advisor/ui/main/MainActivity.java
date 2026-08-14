@@ -415,22 +415,40 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        final int logoSide = Math.max(1, (int) (qrSize * 0.20f));
-        final int margin = Math.max(1, logoSide / 10);
-        final int left = (qrSize - logoSide) / 2;
-        final int top = (qrSize - logoSide) / 2;
+        final int logoSide = Math.max(1, (int) (qrSize * 0.22f));
+        final int badgePadding = Math.max(2, logoSide / 12);
+        final int badgeSide = logoSide + (badgePadding * 2);
+        final int left = (qrSize - badgeSide) / 2;
+        final int top = (qrSize - badgeSide) / 2;
+
+        final RectF badgeRect = new RectF(left, top, left + badgeSide, top + badgeSide);
+        final float cornerRadius = badgeSide * 0.22f;
+
+        final Paint shadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setColor(Color.argb(35, 0, 0, 0));
+        canvas.drawRoundRect(new RectF(left + 4f, top + 6f,
+                        left + badgeSide - 4f, top + badgeSide - 4f), cornerRadius, cornerRadius, shadowPaint);
 
         final Paint badgePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         badgePaint.setStyle(Paint.Style.FILL);
         badgePaint.setColor(Color.WHITE);
-        canvas.drawRoundRect(new RectF(left - margin, top - margin,
-                        left + logoSide + margin, top + logoSide + margin), 24f, 24f, badgePaint);
+        canvas.drawRoundRect(badgeRect, cornerRadius, cornerRadius, badgePaint);
+
+        final Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setStrokeWidth(3f);
+        borderPaint.setColor(Color.argb(255, 219, 219, 219));
+        canvas.drawRoundRect(badgeRect, cornerRadius, cornerRadius, borderPaint);
 
         final Bitmap logoBitmap = Bitmap.createBitmap(logoSide, logoSide, Bitmap.Config.ARGB_8888);
         final Canvas logoCanvas = new Canvas(logoBitmap);
         logoDrawable.setBounds(0, 0, logoSide, logoSide);
         logoDrawable.draw(logoCanvas);
-        canvas.drawBitmap(logoBitmap, left, top, null);
+
+        final float logoLeft = left + badgePadding;
+        final float logoTop = top + badgePadding;
+        canvas.drawBitmap(logoBitmap, logoLeft, logoTop, null);
     }
 
     private File getExportsPath(View view) throws IOException {
