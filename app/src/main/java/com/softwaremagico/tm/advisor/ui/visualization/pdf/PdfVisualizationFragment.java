@@ -12,8 +12,9 @@
 
 package com.softwaremagico.tm.advisor.ui.visualization.pdf;
 
-import android.content.Intent;
 import android.content.Context;
+import android.content.ClipData;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -154,6 +155,7 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
                     final Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+                    shareIntent.setClipData(ClipData.newUri(getActivity().getContentResolver(), characterSheetAsPdf.getName(), contentUri));
                     shareIntent.setType(getActivity().getContentResolver().getType(contentUri));
                     shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
@@ -161,7 +163,7 @@ public abstract class PdfVisualizationFragment extends Fragment implements Visua
                     shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.share_body)));
 
                     final Intent chooser = Intent.createChooser(shareIntent, "Share File");
-                    final List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+                    final List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(shareIntent, PackageManager.MATCH_DEFAULT_ONLY);
                     for (final ResolveInfo resolveInfo : resInfoList) {
                         final String packageName = resolveInfo.activityInfo.packageName;
                         context.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);

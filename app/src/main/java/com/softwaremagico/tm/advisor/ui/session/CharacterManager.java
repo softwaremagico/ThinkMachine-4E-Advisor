@@ -407,7 +407,7 @@ public final class CharacterManager {
         if (specie != null) {
             getSelectedCharacter().setSpecie(specie.getId());
         } else {
-            getSelectedCharacter().setSpecie(null);
+            getSelectedCharacter().setSpecie((String) null);
         }
         launchCharacterSpecieUpdatedListeners(getSelectedCharacter());
         launchCharacterUpdatedListeners(getSelectedCharacter());

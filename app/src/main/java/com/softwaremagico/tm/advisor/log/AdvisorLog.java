@@ -16,13 +16,17 @@ import com.softwaremagico.tm.log.BasicLogger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 
 public final class AdvisorLog extends BasicLogger {
+    private static final String LOG_TAG = "AdvisorLog";
+    private static final String LOG_CLASS = "android.util.Log";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdvisorLog.class);
 
@@ -35,6 +39,7 @@ public final class AdvisorLog extends BasicLogger {
      * @param arguments       parameters to fill up the template
      */
     public static void info(String className, String messageTemplate, Object... arguments) {
+        logToAndroidInfo(className, messageTemplate, arguments);
         info(LOGGER, className, messageTemplate, arguments);
     }
 
@@ -51,6 +56,7 @@ public final class AdvisorLog extends BasicLogger {
      * @param arguments       parameters to fill up the template
      */
     public static void warning(String className, String messageTemplate, Object... arguments) {
+        logToAndroidWarn(className, messageTemplate, arguments);
         warning(LOGGER, className, messageTemplate, arguments);
     }
 
@@ -67,6 +73,7 @@ public final class AdvisorLog extends BasicLogger {
      * @param arguments       parameters to fill up the template
      */
     public static void debug(String className, String messageTemplate, Object... arguments) {
+        logToAndroidDebug(className, messageTemplate, arguments);
         debug(LOGGER, className, messageTemplate, arguments);
     }
 
@@ -82,6 +89,7 @@ public final class AdvisorLog extends BasicLogger {
      * @param arguments       parameters to fill up the template
      */
     public static void severe(String className, String messageTemplate, Object... arguments) {
+        logToAndroidError(className, messageTemplate, arguments);
         severe(LOGGER, className, messageTemplate, arguments);
     }
 
@@ -90,6 +98,7 @@ public final class AdvisorLog extends BasicLogger {
     }
 
     public static void errorMessage(Class<?> clazz, Throwable throwable) {
+        logToAndroidThrowable(clazz.getName(), throwable);
         errorMessageNotification(LOGGER, clazz.getName(), throwable);
     }
 
@@ -102,14 +111,61 @@ public final class AdvisorLog extends BasicLogger {
      * @param arguments       parameters to fill up the template
      */
     public static void errorMessage(String className, String messageTemplate, Object... arguments) {
+        logToAndroidError(className, messageTemplate, arguments);
         errorMessageNotification(LOGGER, className, messageTemplate, arguments);
     }
 
     public static void errorMessage(Object object, Throwable throwable) {
+        logToAndroidThrowable(object.getClass().getName(), throwable);
         errorMessageNotification(LOGGER, object.getClass().getName(), throwable);
     }
 
     public static boolean isDebugEnabled() {
         return LOGGER.isDebugEnabled();
+    }
+
+    private static void logToAndroidInfo(String className, String messageTemplate, Object... arguments) {
+        logToAndroid("i", className, formatMessage(className, messageTemplate, arguments), null);
+    }
+
+    private static void logToAndroidWarn(String className, String messageTemplate, Object... arguments) {
+        logToAndroid("w", className, formatMessage(className, messageTemplate, arguments), null);
+    }
+
+    private static void logToAndroidDebug(String className, String messageTemplate, Object... arguments) {
+        logToAndroid("d", className, formatMessage(className, messageTemplate, arguments), null);
+    }
+
+    private static void logToAndroidError(String className, String messageTemplate, Object... arguments) {
+        logToAndroid("e", className, formatMessage(className, messageTemplate, arguments), null);
+    }
+
+    private static void logToAndroidThrowable(String className, Throwable throwable) {
+        logToAndroid("e", className, "Exception on class " + className, throwable);
+    }
+
+    private static String formatMessage(String className, String messageTemplate, Object... arguments) {
+        final String message = MessageFormatter.arrayFormat(messageTemplate, arguments).getMessage();
+        return className + ": " + message;
+    }
+
+    private static void logToAndroid(String methodName, String className, String message, Throwable throwable) {
+        try {
+            final Class<?> logClass = Class.forName(LOG_CLASS);
+            final String tag = buildTag(className);
+            if (throwable == null) {
+                final Method method = logClass.getMethod(methodName, String.class, String.class);
+                method.invoke(null, tag, message);
+            } else {
+                final Method method = logClass.getMethod(methodName, String.class, String.class, Throwable.class);
+                method.invoke(null, tag, message, throwable);
+            }
+        } catch (ReflectiveOperationException ignored) {
+            // Android Log is not available in JVM unit tests.
+        }
+    }
+
+    private static String buildTag(String className) {
+        return LOG_TAG;
     }
 }

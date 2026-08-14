@@ -14,6 +14,7 @@ package com.softwaremagico.tm.advisor.ui.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -48,6 +49,7 @@ import com.softwaremagico.tm.advisor.BuildConfig;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.core.CharacterExportUtils;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
+import com.softwaremagico.tm.advisor.core.CharacterQrExportSanitizer;
 import com.softwaremagico.tm.advisor.core.FileUtils;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.persistence.CharacterHandler;
@@ -185,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.settings_export_qr) {
             try {
                 exportQr(parentLayout);
+            } catch (WriterException e) {
+                AdvisorLog.errorMessage(this.getClass().getName(), e);
+                SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_qr_export_error).show();
             } catch (Exception e) {
                 AdvisorLog.errorMessage(this.getClass().getName(), e);
                 SnackbarGenerator.getErrorMessage(parentLayout, R.string.message_character_saved_error).show();
@@ -323,39 +328,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
-        final File exportsPath = new File(view.getContext().getCacheDir(), "export");
-        if (!exportsPath.exists() && !exportsPath.mkdirs()) {
-            MachineLog.warning(this.getClass().getName(), "Unable to create export folder '{}'.", exportsPath);
+        final File exportsPath = getExportsPath(view);
+
+        final File characterExport = new File(exportsPath,
+                CharacterExportUtils.buildExportFileName(selectedCharacter, "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION));
+
+        String jsonContent = CharacterJsonManager.toJson(selectedCharacter);
+        try (FileOutputStream stream = new FileOutputStream(characterExport)) {
+            stream.write(jsonContent.getBytes());
         }
 
-        final File characterExport = new File(exportsPath, characterName.isEmpty() ?
-                "export_sheet." + FileUtils.CHARACTER_FILE_EXTENSION :
-                characterName + "_sheet." + FileUtils.CHARACTER_FILE_EXTENSION);
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", characterExport);
-
-        if (contentUri != null) {
-            String jsonContent = CharacterJsonManager.toJson(selectedCharacter);
-            try (FileOutputStream stream = new FileOutputStream(characterExport)) {
-                stream.write(jsonContent.getBytes());
-            }
-
-            final Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            shareIntent.setType(this.getContentResolver().getType(contentUri));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
-                    ": " + characterName : ""));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_body)));
-
-            final Intent chooser = Intent.createChooser(shareIntent, "Share File");
-            final List<ResolveInfo> resInfoList = view.getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
-            for (final ResolveInfo resolveInfo : resInfoList) {
-                final String packageName = resolveInfo.activityInfo.packageName;
-                view.getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            startActivity(chooser);
-        }
+        shareExport(view, contentUri, this.getContentResolver().getType(contentUri),
+                getString(R.string.app_name) + (!characterName.isEmpty() ? ": " + characterName : ""),
+                TextVariablesManager.replace(getString(R.string.export_body)));
     }
 
     private void exportQr(View view) throws IOException, WriterException {
@@ -366,38 +352,54 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final String characterName = CharacterExportUtils.getSafeCharacterName(selectedCharacter);
-        final File exportsPath = new File(view.getContext().getCacheDir(), "export");
-        if (!exportsPath.exists() && !exportsPath.mkdirs()) {
-            MachineLog.warning(this.getClass().getName(), "Unable to create export folder '{}'.", exportsPath);
+        final File exportsPath = getExportsPath(view);
+
+        final File qrExport = new File(exportsPath, CharacterExportUtils.buildExportFileName(selectedCharacter, "_sheet_qr.png"));
+
+        final int removedEquipment = CharacterQrExportSanitizer.removeNullPurchasedEquipment(selectedCharacter);
+        if (removedEquipment > 0) {
+            AdvisorLog.warning(this.getClass().getName(),
+                    "Removed '{}' null purchased equipment entries before QR export.", removedEquipment);
         }
 
-        final File qrExport = new File(exportsPath, characterName.isEmpty() ?
-                "export_sheet_qr.png" :
-                characterName + "_sheet_qr.png");
+        try (FileOutputStream stream = new FileOutputStream(qrExport)) {
+            CharacterQrPngWriter.writePng(selectedCharacter, stream);
+        }
+
         final Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", qrExport);
+        shareExport(view, contentUri, "image/png",
+                getString(R.string.app_name) + (!characterName.isEmpty() ? ": " + characterName : ""),
+                TextVariablesManager.replace(getString(R.string.export_qr_body)));
+    }
 
-        if (contentUri != null) {
-            try (FileOutputStream stream = new FileOutputStream(qrExport)) {
-                CharacterQrPngWriter.writePng(selectedCharacter, stream);
-            }
-
-            final Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            shareIntent.setType("image/png");
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + (!characterName.isEmpty() ?
-                    ": " + characterName : ""));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, TextVariablesManager.replace(getString(R.string.export_qr_body)));
-
-            final Intent chooser = Intent.createChooser(shareIntent, "Share File");
-            final List<ResolveInfo> resInfoList = view.getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
-            for (final ResolveInfo resolveInfo : resInfoList) {
-                final String packageName = resolveInfo.activityInfo.packageName;
-                view.getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
-            startActivity(chooser);
+    private File getExportsPath(View view) throws IOException {
+        final File exportsPath = new File(view.getContext().getCacheDir(), "export");
+        if (exportsPath.exists() && !exportsPath.isDirectory()) {
+            throw new IOException("Export path exists and is not a directory: " + exportsPath.getAbsolutePath());
         }
+        if (!exportsPath.exists() && !exportsPath.mkdirs()) {
+            throw new IOException("Unable to create export folder '" + exportsPath.getAbsolutePath() + "'.");
+        }
+        return exportsPath;
+    }
+
+    private void shareExport(View view, Uri contentUri, String mimeType, String subject, String body) {
+        final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setClipData(ClipData.newUri(getContentResolver(), subject, contentUri));
+        shareIntent.setType(mimeType);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        final List<ResolveInfo> resInfoList = view.getContext().getPackageManager()
+                .queryIntentActivities(shareIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (final ResolveInfo resolveInfo : resInfoList) {
+            final String packageName = resolveInfo.activityInfo.packageName;
+            view.getContext().grantUriPermission(packageName, contentUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share File"));
     }
 
     private void saveCurrentCharacter(View parentLayout) {
