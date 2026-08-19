@@ -37,6 +37,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
@@ -410,13 +411,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static void drawCenteredLogo(Canvas canvas, int qrSize, Context context) {
-        final Drawable logoDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_launcher_foreground);
-        if (logoDrawable == null) {
+        final Drawable sourceLogoDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_logo);
+        if (sourceLogoDrawable == null) {
             return;
         }
+        final Drawable logoDrawable = DrawableCompat.wrap(sourceLogoDrawable.mutate());
+        DrawableCompat.setTint(logoDrawable, Color.BLACK);
 
         final int logoSide = Math.max(1, (int) (qrSize * 0.22f));
-        final int badgePadding = Math.max(2, logoSide / 12);
+        final int badgePadding = Math.max(2, (int) ((logoSide / 12f)));
         final int badgeSide = logoSide + (badgePadding * 2);
         final int left = (qrSize - badgeSide) / 2;
         final int top = (qrSize - badgeSide) / 2;
