@@ -13,6 +13,7 @@
 package com.softwaremagico.tm.advisor.ui.session;
 
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
+import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
 import com.softwaremagico.tm.character.Gender;
 import com.softwaremagico.tm.character.callings.Calling;
@@ -383,6 +384,14 @@ public final class CharacterManager {
 
     public static void addNewCharacter() {
         setSelectedCharacter(createNewCharacter());
+    }
+
+    public static CharacterPlayer cloneSelectedCharacter() throws com.softwaremagico.tm.exceptions.InvalidJsonException {
+        final CharacterPlayer original = getSelectedCharacter();
+        final String json = CharacterJsonManager.toJson(original);
+        final CharacterPlayer clone = CharacterJsonManager.fromJson(json);
+        setSelectedCharacter(clone);
+        return clone;
     }
 
     public static void removeSelectedCharacter() {

@@ -33,6 +33,12 @@
             app:showAsAction="ifRoom" />
 
         <item
+            android:id="@+id/settings_clone"
+            android:icon="@drawable/character_clone"
+            android:title="@string/settings_clone"
+            app:showAsAction="never" />
+
+        <item
             android:id="@+id/settings_export_file"
             android:icon="@drawable/ic_character_icon"
             android:title="@string/settings_export"

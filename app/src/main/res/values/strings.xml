@@ -54,6 +54,7 @@
     <string name="message_restricted_element">This element is restricted for your character.</string>
     <string name="message_missing_required_skills">Some skills are required before assigning ranks to this skill.</string>
     <string name="settings_load">Load</string>
+    <string name="settings_clone">Clone</string>
     <string name="settings_save">Save</string>
     <string name="settings_import">Import</string>
     <string name="settings_export">Export</string>

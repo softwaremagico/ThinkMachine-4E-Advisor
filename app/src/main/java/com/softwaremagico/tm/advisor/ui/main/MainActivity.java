@@ -170,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
             showDialog();
             return true;
         }
+        if (itemId == R.id.settings_clone) {
+            cloneCurrentCharacter(parentLayout);
+            return true;
+        }
         if (itemId == R.id.settings_save) {
             saveCurrentCharacter(parentLayout);
             return true;
@@ -503,6 +507,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void newCharacter() {
         CharacterManager.addNewCharacter();
+    }
+
+    private void cloneCurrentCharacter(View parentLayout) {
+        try {
+            CharacterManager.cloneSelectedCharacter();
+            SnackbarGenerator.getInfoMessage(parentLayout, R.string.message_duplication_ok).show();
+        } catch (Exception e) {
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
+            SnackbarGenerator.getErrorMessage(parentLayout, R.string.error_duplicating_character).show();
+        }
     }
 
     private void removeSelectedCharacter(View parentLayout) {
