@@ -52,8 +52,8 @@ android {
         applicationId "com.softwaremagico.tm"
         minSdk 31
         targetSdk 37
-        versionCode 17
-        versionName "4.6.3"
+        versionCode 18
+        versionName "4.6.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
