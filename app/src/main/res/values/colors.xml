@@ -185,4 +185,20 @@
     <color name="counterOccultismText">@color/md_theme_onPrimary</color>
     <color name="counterCybernetics">#554b6b</color>
     <color name="counterCyberneticsText">@color/md_theme_onPrimary</color>
+
+    <!-- Character load card status colors -->
+    <color name="statusDraft">#9E9E9E</color>
+    <color name="statusNotStarted">#757575</color>
+    <color name="statusInProgress">#F9A825</color>
+    <color name="statusFinished">#2E7D32</color>
+    <color name="statusExtended">#1565C0</color>
+    <color name="statusEquipped">#6A1B9A</color>
+    <color name="statusUndefined">#424242</color>
+
+    <!-- Character load card threat level colors -->
+    <color name="threatPeace">#2E7D32</color>
+    <color name="threatLow">#9E9D24</color>
+    <color name="threatMedium">#F9A825</color>
+    <color name="threatHigh">#EF6C00</color>
+    <color name="threatExtreme">#C62828</color>
 </resources>

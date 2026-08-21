@@ -45,6 +45,7 @@ import androidx.core.view.MenuCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -67,6 +68,7 @@ import com.softwaremagico.tm.advisor.persistence.SettingsEntity;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
 import com.softwaremagico.tm.advisor.ui.about.AboutWindow;
 import com.softwaremagico.tm.advisor.ui.about.SettingsWindow;
+import com.softwaremagico.tm.advisor.ui.load.LoadCharacter;
 import com.softwaremagico.tm.advisor.ui.session.CharacterManager;
 import com.softwaremagico.tm.advisor.ui.translation.TextVariablesManager;
 import com.softwaremagico.tm.character.CharacterPlayer;
@@ -528,23 +530,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDialog() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-//        final LoadCharacter loadCharacter = new LoadCharacter();
-//
-//        final boolean isLargeLayout = true;
-//
-//        if (isLargeLayout) {
-//            // The device is using a large layout, so show the fragment as a dialog
-//            loadCharacter.show(fragmentManager, "dialog");
-//        } else {
-//            // The device is smaller, so show the fragment fullscreen
-//            final FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            // For a little polish, specify a transition animation
-//            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//            // To make it fullscreen, use the 'content' root view as the container
-//            // for the fragment, which is always the root view for the activity
-//            transaction.add(android.R.id.content, loadCharacter)
-//                    .addToBackStack(null).commit();
-//        }
+        final LoadCharacter loadCharacter = new LoadCharacter();
+
+        final boolean isLargeLayout = true;
+
+        if (isLargeLayout) {
+            // The device is using a large layout, so show the fragment as a dialog
+            loadCharacter.show(fragmentManager, "dialog");
+        } else {
+            // The device is smaller, so show the fragment fullscreen
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, loadCharacter)
+                    .addToBackStack(null).commit();
+        }
     }
 
     private void globalSettings() {
