@@ -4,6 +4,15 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# ===== VERBOSE ProGuard LOGGING (for debugging R8 issues) =====
+# Uncomment below to enable detailed logging of what ProGuard is doing
+# (Note: -dump is not supported by R8, but -printseeds, -printusage, -printmapping work)
+# -verbose
+# -printseeds seeds.txt
+# -printusage unused.txt
+# -printmapping proguard_map.txt
+# ===== END VERBOSE LOGGING =====
+
 ##---------------Begin: proguard configuration common for all Android apps ----------
 -optimizationpasses 5
 -dontusemixedcaseclassnames
@@ -80,9 +89,85 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 # Software Magico
-# Keep rules should be as specific as possible to let R8 shrink effectively.
--keep class com.itextpdf.*.** { *; }
--keep class com.lowagie.*.** { *; }
+# Keep rules optimized for R8: aggressive shrinking with targeted preservation
+
+# ===== PROTECTED LIBRARIES =====
+-keep class com.itextpdf.**.** { *; }
+-keep class com.lowagie.**.** { *; }
+
+# StAX/Woodstox providers are resolved dynamically via javax.xml.stream.* factories.
+# Keep full names and members to avoid "Provider ... not found" in minified builds.
+-keep class com.bea.xml.stream.** { *; }
+-keep class com.ctc.wstx.** { *; }
+-keep class org.codehaus.stax2.** { *; }
+
+# ===== CORE APPLICATION CLASSES =====
+# Keep all Activities, Services, BroadcastReceivers, ContentProviders
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+
+# Keep Fragments
+-keep public class * extends androidx.fragment.app.Fragment
+-keep public class * extends android.app.Fragment
+
+# ===== FACTORY PATTERN =====
+-keepclassmembers class **Factory {
+    public static ** getInstance*();
+    public <methods>;
+}
+
+# ===== ENUMS =====
+-keepclassmembers enum com.softwaremagico.tm.** { *; }
+-keepclassmembers enum com.softwaremagico.tm.advisor.** { *; }
+
+# ===== INTERFACES & CALLBACKS =====
+-keep interface com.softwaremagico.tm.**.** { *; }
+-keep interface com.softwaremagico.tm.advisor.**.** { *; }
+
+# ===== XML INFLATION & CUSTOM VIEWS =====
+# Keep constructors required for XML inflation
+-keepclasseswithmembers class com.softwaremagico.tm.advisor.ui.** {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+# ===== UI PACKAGES (REDUCED KEEP) =====
+# Preserve public methods only (R8 will optimize private/internal)
+-keep class com.softwaremagico.tm.advisor.ui.** {
+    public <methods>;
+    public <fields>;
+}
+
+# ===== CORE PACKAGES =====
+-keep class com.softwaremagico.tm.advisor.core.** { public *; }
+-keep class com.softwaremagico.tm.advisor.persistence.** { public *; }
+-keep class com.softwaremagico.tm.advisor.log.** { public *; }
+
+# ===== CHARACTER CORE CLASSES =====
+# Keep all character-related classes (essential to app)
+-keep class com.softwaremagico.tm.character.** { *; }
+-keep class com.softwaremagico.tm.restrictions.** { *; }
+
+# ===== SERIALIZATION / MODULE DEFINITIONS =====
+# Prevent obfuscation issues in XML/JSON polymorphic deserialization.
+-keep class com.softwaremagico.tm.file.** { *; }
+-keep class com.softwaremagico.tm.txt.** { *; }
+-keep class com.softwaremagico.tm.language.** { *; }
+
+# ===== SERIALIZABLE / PARCELABLE =====
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
 
 
 ## ---- Missing classes in v 8.0
