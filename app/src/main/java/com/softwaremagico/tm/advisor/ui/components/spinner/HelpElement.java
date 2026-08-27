@@ -73,16 +73,7 @@ public abstract class HelpElement<E extends Element> extends ElementComponent<E>
     }
 
     private String resolveTagText(String tag) {
-        try {
-            return ThinkMachineTranslator.getTranslatedText(tag);
-        } catch (Exception ignored) {
-            // Fallback for wiki labels backed by Android strings instead of TextFactory keys.
-            final int stringId = getContext().getResources().getIdentifier(tag, "string", getContext().getPackageName());
-            if (stringId != 0) {
-                return getContext().getString(stringId);
-            }
-            return tag;
-        }
+        return ThinkMachineTranslator.getTranslatedText(getContext(), tag);
     }
 
     public abstract E getSelection();

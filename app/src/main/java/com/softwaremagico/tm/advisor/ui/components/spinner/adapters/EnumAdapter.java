@@ -47,7 +47,7 @@ public class EnumAdapter<T> extends ArrayAdapter<T> {
         if (element != null) {
             final TextView name = listItem.findViewById(R.id.selected_item);
             if (element instanceof Enum) {
-                name.setText(ThinkMachineTranslator.getTranslatedText(((Enum<?>) element).name().toLowerCase(Locale.getDefault())));
+                name.setText(ThinkMachineTranslator.getTranslatedText(getContext(), ((Enum<?>) element).name().toLowerCase(Locale.getDefault())));
             }
         }
 
@@ -70,7 +70,7 @@ public class EnumAdapter<T> extends ArrayAdapter<T> {
         if (element != null) {
             final TextView elementName = listItem.findViewById(R.id.selected_item);
             if (element instanceof Enum) {
-                elementName.setText(ThinkMachineTranslator.getTranslatedText(((Enum<?>) element).name().toLowerCase(Locale.getDefault())));
+                elementName.setText(ThinkMachineTranslator.getTranslatedText(getContext(), ((Enum<?>) element).name().toLowerCase(Locale.getDefault())));
             }
         }
 

@@ -58,7 +58,7 @@ public class TranslatedNumberPicker<T extends Element> extends ElementComponent<
                 R.styleable.TranslatedEditText, 0, 0);
         final String tag = attributes.getString(R.styleable.TranslatedEditText_translation);
         if (tag != null) {
-            tagText.setText(ThinkMachineTranslator.getTranslatedText(tag) + " ");
+            tagText.setText(ThinkMachineTranslator.getTranslatedText(getContext(), tag) + " ");
         }
         tagText.setTextAppearance(R.style.CharacterInfo);
         picker = findViewById(R.id.picker);

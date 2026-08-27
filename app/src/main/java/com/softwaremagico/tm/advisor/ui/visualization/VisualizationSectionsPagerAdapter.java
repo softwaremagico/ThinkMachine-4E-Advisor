@@ -33,8 +33,8 @@ import java.util.List;
 public class VisualizationSectionsPagerAdapter extends FragmentStateAdapter {
 
     @StringRes
-    public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf, R.string.tab_visualization_pdf_small};
-    //public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf};
+    //public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf, R.string.tab_visualization_pdf_small};
+    public static final int[] TAB_TITLES = new int[]{R.string.tab_visualization_txt, R.string.tab_visualization_pdf};
     private static List<Fragment> fragments = new ArrayList<>();
 
     public VisualizationSectionsPagerAdapter(FragmentActivity fa) {

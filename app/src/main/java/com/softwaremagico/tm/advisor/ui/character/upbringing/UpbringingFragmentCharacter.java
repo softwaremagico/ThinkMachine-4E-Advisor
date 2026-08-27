@@ -89,7 +89,7 @@ public class UpbringingFragmentCharacter extends CharacterDefinitionFragment<Upb
         raisedInSpaceSelector.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        raisedInSpaceSelector.setText(ThinkMachineTranslator.getTranslatedText("raisedInSpace"));
+        raisedInSpaceSelector.setText(ThinkMachineTranslator.getTranslatedText(getContext(), "raisedInSpace"));
         raisedInSpaceSelector.setEnabled(mViewModel.getCharacterPlayer().getUpbringing() != null);
 
         if (mViewModel.getCharacterPlayer().getUpbringing() != null) {

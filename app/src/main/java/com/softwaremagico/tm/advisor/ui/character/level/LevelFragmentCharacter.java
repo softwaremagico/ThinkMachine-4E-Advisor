@@ -86,7 +86,7 @@ public class LevelFragmentCharacter extends CharacterDefinitionFragment<Level> {
         initData();
         updatingLevelUI = true;
         for (int i = 2; i <= character.getLevel(); i++) {
-            addSection(ThinkMachineTranslator.getTranslatedText("level") + " " + i, rootLayout);
+            addSection(ThinkMachineTranslator.getTranslatedText(getContext(), "level") + " " + i, rootLayout);
             final LevelSelector levelSelector = mViewModel.getCharacterPlayer().getLevel(i - 1);
             addCallingSelector(rootLayout, character, levelSelector, i, character.getLevel() != i);
             addSpace(rootLayout);

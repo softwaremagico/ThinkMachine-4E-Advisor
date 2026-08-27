@@ -12,6 +12,8 @@
 
 package com.softwaremagico.tm.advisor.ui.translation;
 
+import android.content.Context;
+
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
 import com.softwaremagico.tm.txt.Text;
 import com.softwaremagico.tm.txt.TextFactory;
@@ -37,6 +39,19 @@ public final class ThinkMachineTranslator {
         } catch (InvalidXmlElementException e) {
             return tag;
         }
+    }
+
+    public static String getTranslatedText(Context context, String tag) {
+        final String translated = getTranslatedText(tag);
+        if (translated == null || translated.isEmpty() || !translated.equals(tag) || context == null) {
+            return translated;
+        }
+
+        final int stringId = context.getResources().getIdentifier(tag, "string", context.getPackageName());
+        if (stringId != 0) {
+            return context.getString(stringId);
+        }
+        return translated;
     }
 
 

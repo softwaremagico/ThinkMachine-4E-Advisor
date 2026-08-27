@@ -42,7 +42,7 @@ public class EnumSpinner extends Component {
         final String tag = attributes.getString(R.styleable.TranslatedEditText_translation);
         //Specific translation property on xml.
         if (tag != null) {
-            tagText.setText(ThinkMachineTranslator.getTranslatedText(tag) + " ");
+            tagText.setText(ThinkMachineTranslator.getTranslatedText(getContext(), tag) + " ");
         }
         tagText.setTextAppearance(R.style.CharacterInfo);
         attributes.recycle();

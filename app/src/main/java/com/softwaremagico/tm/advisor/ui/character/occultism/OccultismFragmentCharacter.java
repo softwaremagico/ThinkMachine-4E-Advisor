@@ -123,7 +123,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
     }
 
     private void addContent(LinearLayout rootLayout, CharacterPlayer characterPlayer) {
-        addSubSection(ThinkMachineTranslator.getTranslatedText("occultism"), rootLayout);
+        addSubSection(ThinkMachineTranslator.getTranslatedText(getContext(), "occultism"), rootLayout);
         createOccultismInfo(rootLayout, OccultismTypeFactory.getPsi());
         createOccultismInfo(rootLayout, OccultismTypeFactory.getTheurgy());
 
@@ -268,7 +268,7 @@ public class OccultismFragmentCharacter extends CharacterCustomFragment {
         final TranslatedEditText occultismLevelText = new TranslatedEditText(getContext(), null);
         occultismLevelFields.put(occultismType, occultismLevelText);
 
-        occultismLevelText.setLabel(ThinkMachineTranslator.getTranslatedText(occultismType.getId()));
+        occultismLevelText.setLabel(ThinkMachineTranslator.getTranslatedText(getContext(), occultismType.getId()));
         occultismLevelText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         occultismLevelText.setPadding(50, 20, 20, 20);
 
