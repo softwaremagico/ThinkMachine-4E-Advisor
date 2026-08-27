@@ -106,78 +106,83 @@ public class ElementDescriptionDialog<T extends Element> extends DialogFragment 
 
     private String getRestrictions(T element) {
         StringBuilder restrictions = new StringBuilder();
+        StringBuilder restrictionsList = new StringBuilder();
         if (element.getRestrictions().getRestrictedToSpecies() != null && !element.getRestrictions().getRestrictedToSpecies().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_species)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_species)).append("</b> ")
                     .append(SpecieFactory.getInstance().getElements(element.getRestrictions().getRestrictedToSpecies())
                             .stream().map(Specie::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToUpbringing() != null && !element.getRestrictions().getRestrictedToUpbringing().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.upbringing)).append(":</b> ")
                     .append(UpbringingFactory.getInstance().getElements(element.getRestrictions().getRestrictedToUpbringing())
                             .stream().map(Upbringing::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToFactions() != null && !element.getRestrictions().getRestrictedToFactions().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_factions)).append("</b> ")
                     .append(FactionFactory.getInstance().getElements(element.getRestrictions().getRestrictedToFactions())
                             .stream().map(Faction::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToFactionGroups() != null && !element.getRestrictions().getRestrictedToFactionGroups().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_factions)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_factions)).append("</b> ")
                     .append(FactionFactory.getInstance().getByFactionGroups(element.getRestrictions().getRestrictedToFactionGroups())
                             .stream().map(Faction::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToCallings() != null && !element.getRestrictions().getRestrictedToCallings().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_callings)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_callings)).append("</b> ")
                     .append(CallingFactory.getInstance().getElements(element.getRestrictions().getRestrictedToCallings())
                             .stream().map(Calling::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToCapabilities() != null && !element.getRestrictions().getRestrictedToCapabilities().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
                     .append(element.getRestrictions().getRestrictedToCapabilities()
                             .stream().map(RestrictedCapability::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedPerks() != null && !element.getRestrictions().getRestrictedPerks().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_perks)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_perks)).append("</b> ")
                     .append(PerkFactory.getInstance().getElements(element.getRestrictions().getRestrictedPerks())
                             .stream().map(Perk::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToPerksGroups() != null && !element.getRestrictions().getRestrictedToPerksGroups().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_perks)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_perks)).append("</b> ")
                     .append(PerkFactory.getInstance().getElementsByGroup(element.getRestrictions().getRestrictedToPerksGroups())
                             .stream().map(Perk::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedToCapabilitiesGroups() != null && !element.getRestrictions().getRestrictedToCapabilitiesGroups().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_capabilities)).append("</b> ")
                     .append(CapabilityFactory.getInstance().getElementsByGroup(element.getRestrictions().getRestrictedToCapabilitiesGroups())
                             .stream().map(Capability::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedCharacteristics() != null && !element.getRestrictions().getRestrictedCharacteristics().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_characteristics)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_characteristics)).append("</b> ")
                     .append(element.getRestrictions().getRestrictedCharacteristics()
                             .stream().map(RestrictedCharacteristic::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedSkills() != null && !element.getRestrictions().getRestrictedSkills().isEmpty()) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_skills)).append("</b> ")
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_skills)).append("</b> ")
                     .append(element.getRestrictions().getRestrictedSkills()
                             .stream().map(RestrictedSkill::getNameRepresentation)
-                            .collect(Collectors.joining(", "))).append("</p>");
+                            .collect(Collectors.joining(", "))).append("</li>");
         }
         if (element.getRestrictions().getRestrictedLevel() != null) {
-            restrictions.append("<p><b>").append(getString(R.string.restricted_levels)).append("</b> ")
-                    .append(element.getRestrictions().getRestrictedLevel()).append("</p>");
+            restrictionsList.append("<li><b>").append(getString(R.string.restricted_levels)).append("</b> ")
+                    .append(element.getRestrictions().getRestrictedLevel()).append("</li>");
         }
         if (element.getRestrictions().isRaisedInSpace()) {
-            restrictions.append("<p>").append(getString(R.string.raised_in_space)).append("</p>");
+            restrictionsList.append("<li>").append(getString(R.string.raised_in_space)).append("</li>");
+        }
+        if (!restrictionsList.isEmpty()) {
+            restrictions.append("<p><b>").append(getString(R.string.restrictions)).append("</b></p>");
+            restrictions.append("<ul>").append(restrictionsList).append("</ul>");
         }
         if (element.getRestrictions().isRestricted()) {
             restrictions.append("<p><b>");

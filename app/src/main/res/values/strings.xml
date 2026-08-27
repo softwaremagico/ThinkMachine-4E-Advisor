@@ -321,6 +321,7 @@
     <string name="action_new">Create new.</string>
     <string name="default_version" translatable="false">v0.0.0</string>
     <string name="restricted">Restricted</string>
+    <string name="restrictions">Restrictions:</string>
     <string name="restricted_species">Restricted to species:</string>
     <string name="restricted_factions">Restricted to factions:</string>
     <string name="restricted_callings">Restricted to callings:</string>
