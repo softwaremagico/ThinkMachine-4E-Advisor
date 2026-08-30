@@ -147,7 +147,16 @@
 # ===== CHARACTER CORE CLASSES =====
 # Keep all character-related classes (essential to app)
 -keep class com.softwaremagico.tm.character.** { *; }
+-keep class com.softwaremagico.tm.random.** { *; }
 -keep class com.softwaremagico.tm.restrictions.** { *; }
+
+# android.util.Log is invoked via reflection in AdvisorLog.
+-keep class android.util.Log {
+    public static *** d(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
 
 # ===== SERIALIZATION / MODULE DEFINITIONS =====
 # Prevent obfuscation issues in XML/JSON polymorphic deserialization.

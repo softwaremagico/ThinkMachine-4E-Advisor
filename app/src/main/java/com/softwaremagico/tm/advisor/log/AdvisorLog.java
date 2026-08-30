@@ -12,16 +12,13 @@
 
 package com.softwaremagico.tm.advisor.log;
 
+import com.softwaremagico.tm.advisor.ui.main.DebugExceptionReporter;
 import com.softwaremagico.tm.log.BasicLogger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.MessageFormatter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.Method;
 
 public final class AdvisorLog extends BasicLogger {
@@ -98,8 +95,13 @@ public final class AdvisorLog extends BasicLogger {
     }
 
     public static void errorMessage(Class<?> clazz, Throwable throwable) {
-        logToAndroidThrowable(clazz.getName(), throwable);
-        errorMessageNotification(LOGGER, clazz.getName(), throwable);
+        errorMessage(clazz.getName(), throwable);
+    }
+
+    public static void errorMessage(String className, Throwable throwable) {
+        logToAndroidThrowable(className, throwable);
+        errorMessageNotification(LOGGER, className, throwable);
+        DebugExceptionReporter.reportIfEnabled(className, throwable);
     }
 
     /**
@@ -116,8 +118,7 @@ public final class AdvisorLog extends BasicLogger {
     }
 
     public static void errorMessage(Object object, Throwable throwable) {
-        logToAndroidThrowable(object.getClass().getName(), throwable);
-        errorMessageNotification(LOGGER, object.getClass().getName(), throwable);
+        errorMessage(object.getClass().getName(), throwable);
     }
 
     public static boolean isDebugEnabled() {

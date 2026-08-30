@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.advisor.R;
+import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.components.ElementSpinner;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 import com.softwaremagico.tm.character.callings.Calling;
@@ -57,7 +58,6 @@ import com.softwaremagico.tm.character.specie.SpecieFactory;
 import com.softwaremagico.tm.character.upbringing.Upbringing;
 import com.softwaremagico.tm.character.upbringing.UpbringingFactory;
 import com.softwaremagico.tm.exceptions.InvalidXmlElementException;
-import com.softwaremagico.tm.log.MachineLog;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -138,7 +138,7 @@ public class WikiFragment extends Fragment {
         try {
             return SpecieFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -147,7 +147,7 @@ public class WikiFragment extends Fragment {
         try {
             return UpbringingFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -156,7 +156,7 @@ public class WikiFragment extends Fragment {
         try {
             return FactionFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -165,7 +165,7 @@ public class WikiFragment extends Fragment {
         try {
             return CallingFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -174,7 +174,7 @@ public class WikiFragment extends Fragment {
         try {
             return PlanetFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -183,7 +183,7 @@ public class WikiFragment extends Fragment {
         try {
             return PerkFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -192,7 +192,7 @@ public class WikiFragment extends Fragment {
         try {
             return CapabilityFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -201,7 +201,7 @@ public class WikiFragment extends Fragment {
         try {
             return CharacteristicsDefinitionFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -210,7 +210,7 @@ public class WikiFragment extends Fragment {
         try {
             return SkillFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -220,7 +220,7 @@ public class WikiFragment extends Fragment {
             return WeaponFactory.getInstance().getSelectableElements().stream().filter(Objects::nonNull)
                     .filter(Weapon::isMeleeWeapon).collect(Collectors.toList());
         } catch (NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -230,7 +230,7 @@ public class WikiFragment extends Fragment {
             return WeaponFactory.getInstance().getSelectableElements().stream().filter(Objects::nonNull)
                     .filter(Weapon::isRangedWeapon).collect(Collectors.toList());
         } catch (NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -239,7 +239,7 @@ public class WikiFragment extends Fragment {
         try {
             return ArmorFactory.getInstance().getSelectableElements();
         } catch (NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -248,7 +248,7 @@ public class WikiFragment extends Fragment {
         try {
             return HandheldShieldFactory.getInstance().getSelectableElements();
         } catch (NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -257,7 +257,7 @@ public class WikiFragment extends Fragment {
         try {
             return ShieldFactory.getInstance().getSelectableElements();
         } catch (NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -270,7 +270,7 @@ public class WikiFragment extends Fragment {
                     .sorted(Comparator.comparing(Perk::getNameRepresentation))
                     .collect(Collectors.toList());
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }
@@ -290,7 +290,7 @@ public class WikiFragment extends Fragment {
         try {
             return OccultismPathFactory.getInstance().getSelectableElements();
         } catch (InvalidXmlElementException | NullPointerException e) {
-            MachineLog.errorMessage(this.getClass().getName(), e);
+            AdvisorLog.errorMessage(this.getClass().getName(), e);
             return new ArrayList<>();
         }
     }

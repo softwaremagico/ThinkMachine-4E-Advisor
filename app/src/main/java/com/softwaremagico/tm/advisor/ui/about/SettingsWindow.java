@@ -23,6 +23,7 @@ public class SettingsWindow extends DialogFragment {
     private SwitchCompat imperialDossierHouseHawkwoodModule;
     private SwitchCompat imperialDossierReevesGuildModule;
     private SwitchCompat vuldrokSpaceModule;
+    private SwitchCompat debugModeEnabled;
 
 
     @Override
@@ -40,6 +41,7 @@ public class SettingsWindow extends DialogFragment {
         imperialDossierHouseHawkwoodModule = root.findViewById(R.id.module_imperial_dossier_house_hawkwood);
         imperialDossierReevesGuildModule = root.findViewById(R.id.module_imperial_dossier_reeves_guild);
         vuldrokSpaceModule = root.findViewById(R.id.module_vuldrok_space);
+        debugModeEnabled = root.findViewById(R.id.debug_mode_selector);
 
         nonOfficialEnabled.setChecked(!SettingsHandler.getSettingsEntity().onlyOfficialAllowed);
         restrictionsIgnored.setChecked(!SettingsHandler.getSettingsEntity().restrictionsChecked);
@@ -53,6 +55,7 @@ public class SettingsWindow extends DialogFragment {
         imperialDossierHouseHawkwoodModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierHouseHawkwoodEnabled());
         imperialDossierReevesGuildModule.setChecked(SettingsHandler.getSettingsEntity().isImperialDossierReevesGuildEnabled());
         vuldrokSpaceModule.setChecked(SettingsHandler.getSettingsEntity().isVuldrokSpaceEnabled());
+        debugModeEnabled.setChecked(SettingsHandler.getSettingsEntity().isDebugModeEnabled());
 
         nonOfficialEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setOnlyOfficialAllowed(!isChecked);
@@ -118,6 +121,11 @@ public class SettingsWindow extends DialogFragment {
             SettingsHandler.getSettingsEntity().setVuldrokSpaceEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+        });
+
+        debugModeEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SettingsHandler.getSettingsEntity().setDebugModeEnabled(isChecked);
+            SettingsHandler.save(getContext());
         });
 
 

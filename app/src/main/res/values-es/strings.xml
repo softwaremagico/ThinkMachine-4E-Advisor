@@ -12,5 +12,8 @@
     <string name="wiki_occultism_paths">Caminos de ocultismo</string>
     <string name="wiki_occultism_powers">Poderes de ocultismo</string>
     <string name="book">Libro</string>
+    <string name="debug_mode">Debug</string>
+    <string name="setting_title_debug">Debug</string>
+    <string name="debug_exception_title">Excepción capturada</string>
 </resources>
 

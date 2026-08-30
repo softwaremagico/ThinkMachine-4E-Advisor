@@ -45,6 +45,9 @@ public class SettingsEntity extends BaseEntity {
     @ColumnInfo(name = "vuldrok_space_module", defaultValue = "1")
     public boolean vuldrokSpaceEnabled = true;
 
+    @ColumnInfo(name = "debug_mode_enabled", defaultValue = "0")
+    public boolean debugModeEnabled = false;
+
     public SettingsEntity() {
         super();
         creationTime = new Timestamp(new Date().getTime());
@@ -158,5 +161,13 @@ public class SettingsEntity extends BaseEntity {
 
     public void setVuldrokSpaceEnabled(boolean vuldrokSpaceEnabled) {
         this.vuldrokSpaceEnabled = vuldrokSpaceEnabled;
+    }
+
+    public boolean isDebugModeEnabled() {
+        return debugModeEnabled;
+    }
+
+    public void setDebugModeEnabled(boolean debugModeEnabled) {
+        this.debugModeEnabled = debugModeEnabled;
     }
 }

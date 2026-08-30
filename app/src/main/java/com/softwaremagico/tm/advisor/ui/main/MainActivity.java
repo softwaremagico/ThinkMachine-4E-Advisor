@@ -157,6 +157,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        DebugExceptionReporter.registerForegroundActivity(this);
+    }
+
+    @Override
+    protected void onPause() {
+        DebugExceptionReporter.unregisterForegroundActivity(this);
+        super.onPause();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);

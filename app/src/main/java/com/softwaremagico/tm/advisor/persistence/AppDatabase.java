@@ -21,7 +21,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 5, exportSchema = false)
+@Database(entities = {CharacterEntity.class, SettingsEntity.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "ThinkMachine Database";
 
@@ -40,7 +40,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             .addMigrations(MIGRATION_1_2)
                             .addMigrations(MIGRATION_2_3)
                             .addMigrations(MIGRATION_3_4)
-                            .addMigrations(MIGRATION_4_5).build();
+                            .addMigrations(MIGRATION_4_5)
+                            .addMigrations(MIGRATION_5_6).build();
                 }
             }
         }
@@ -91,6 +92,19 @@ public abstract class AppDatabase extends RoomDatabase {
                     + "ADD COLUMN `imperial_dossier_reeves_guild_module` INTEGER NOT NULL DEFAULT 1");
             database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
                     + "ADD COLUMN `vuldrok_space_module` INTEGER NOT NULL DEFAULT 1");
+        }
+    };
+
+    private static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "ADD COLUMN `debug_mode_enabled` INTEGER NOT NULL DEFAULT 0");
+            // Old upgrades could leave nullable booleans as NULL. Restore safe defaults.
+            database.execSQL("UPDATE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "SET `player_guide_module` = 1 WHERE `player_guide_module` IS NULL");
+            database.execSQL("UPDATE " + SettingsEntity.SETTINGS_TABLE + " "
+                    + "SET `faction_book_module` = 1 WHERE `faction_book_module` IS NULL");
         }
     };
 }

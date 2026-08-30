@@ -74,6 +74,10 @@ public final class SettingsHandler {
         SettingsEntity settingsEntity = AppDatabase.getInstance(context).getSettingsEntityDao().get();
         if (settingsEntity == null) {
             settingsEntity = new SettingsEntity();
+        } else if (!settingsEntity.isPlayerGuideEnabled()) {
+            // This toggle is not user-editable; false typically comes from old nullable migrations.
+            settingsEntity.setPlayerGuideEnabled(true);
+            save(context, settingsEntity);
         }
         return settingsEntity;
     }
