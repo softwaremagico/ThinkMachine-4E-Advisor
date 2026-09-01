@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.persistence.SettingsHandler;
+import com.softwaremagico.tm.advisor.ui.main.MainActivity;
 
 public class SettingsWindow extends DialogFragment {
     private SwitchCompat nonOfficialEnabled;
@@ -73,54 +74,63 @@ public class SettingsWindow extends DialogFragment {
             SettingsHandler.getSettingsEntity().setPlayerGuideEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         factionBookModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setFactionsBookEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         revisedEditionModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setRevisedEditionEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         lostWorldsBookModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setLostWorldsBookEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         imperialDossierBrotherBattleModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setImperialDossierBrotherBattleEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         imperialDossierCharioteersGuildModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setImperialDossierCharioteersGuildEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         imperialDossierHouseHawkwoodModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setImperialDossierHouseHawkwoodEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         imperialDossierReevesGuildModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setImperialDossierReevesGuildEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         vuldrokSpaceModule.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SettingsHandler.getSettingsEntity().setVuldrokSpaceEnabled(isChecked);
             SettingsHandler.save(getContext());
             SettingsHandler.setModulesBySettings();
+            refreshFactoryBackedUi();
         });
 
         debugModeEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -130,5 +140,12 @@ public class SettingsWindow extends DialogFragment {
 
 
         return root;
+    }
+
+    private void refreshFactoryBackedUi() {
+        if (!(getActivity() instanceof MainActivity)) {
+            return;
+        }
+        ((MainActivity) getActivity()).reloadThinkMachineContent();
     }
 }

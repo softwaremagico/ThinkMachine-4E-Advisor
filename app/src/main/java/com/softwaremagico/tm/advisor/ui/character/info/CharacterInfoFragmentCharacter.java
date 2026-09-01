@@ -33,6 +33,7 @@ import com.softwaremagico.tm.advisor.ui.components.CharacterCustomFragment;
 import com.softwaremagico.tm.advisor.ui.components.ElementSpinner;
 import com.softwaremagico.tm.advisor.ui.components.EnumSpinner;
 import com.softwaremagico.tm.advisor.ui.components.TranslatedEditText;
+import com.softwaremagico.tm.advisor.ui.main.BookContentRefreshable;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.EnumAdapter;
 import com.softwaremagico.tm.advisor.ui.main.SnackbarGenerator;
@@ -67,7 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
+public class CharacterInfoFragmentCharacter extends CharacterCustomFragment implements BookContentRefreshable {
     private CharacterInfoViewModel mViewModel;
     private View root;
     private ElementSpinner<Specie> specieSelector;
@@ -291,6 +292,15 @@ public class CharacterInfoFragmentCharacter extends CharacterCustomFragment {
         updateSettings(character);
 
         updatingCharacter = false;
+    }
+
+    @Override
+    public void refreshBookContent() {
+        final View view = getView();
+        final CharacterPlayer selectedCharacter = CharacterManager.getSelectedCharacter();
+        if (view != null && selectedCharacter != null && isAdded()) {
+            populateElements(view, selectedCharacter);
+        }
     }
 
 

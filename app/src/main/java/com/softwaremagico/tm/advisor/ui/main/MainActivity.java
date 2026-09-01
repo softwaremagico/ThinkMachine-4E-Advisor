@@ -62,6 +62,7 @@ import com.softwaremagico.tm.advisor.core.CharacterExportUtils;
 import com.softwaremagico.tm.advisor.core.CharacterJsonManager;
 import com.softwaremagico.tm.advisor.core.CharacterQrExportSanitizer;
 import com.softwaremagico.tm.advisor.core.FileUtils;
+import com.softwaremagico.tm.advisor.core.ThinkMachineContentPreloader;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.persistence.CharacterHandler;
 import com.softwaremagico.tm.advisor.persistence.SettingsEntity;
@@ -77,6 +78,7 @@ import com.softwaremagico.tm.language.Translator;
 import com.softwaremagico.tm.log.MachineLog;
 import com.softwaremagico.tm.qr.CharacterQrCodec;
 import com.softwaremagico.tm.qr.CharacterQrMatrix;
+import com.softwaremagico.tm.xml.XmlFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -84,6 +86,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
@@ -91,6 +95,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int CHARACTERS_SELECTOR_GROUP = 10;
     private static final int CHARACTERS_INDEX = 1000;
     private final java.util.concurrent.ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
+    private final Set<Class<?>> loadedThinkMachineFactories = ConcurrentHashMap.newKeySet();
+    private final XmlFactory.ElementsLoadedListener thinkMachineContentLoadedListener = (factory, elements) -> {
+        if (factory == null) {
+            return;
+        }
+        if (loadedThinkMachineFactories.add(factory.getClass())
+                && loadedThinkMachineFactories.size() >= ThinkMachineContentPreloader.getFactoryCount()) {
+            runOnUiThread(() -> {
+                if (!isFinishing() && !isDestroyed()) {
+                    BookContentUiRefresher.refresh(getSupportFragmentManager());
+                }
+            });
+        }
+    };
     private ActivityResultLauncher<String> requestCameraPermissionLauncher;
     private ActivityResultLauncher<ScanOptions> qrScannerLauncher;
 
@@ -121,15 +139,14 @@ public class MainActivity extends AppCompatActivity {
             importQrPayload(result.getContents());
         });
 
-        setContentView(R.layout.activity_main);
+        // Must happen before inflating the navigation host because the start destination eagerly creates
+        // character fragments that query ThinkMachine factories during view setup.
+        final SettingsEntity loadedSettings = SettingsHandler.loadSettingsEntity(getBaseContext());
+        SettingsHandler.setSettingsEntity(loadedSettings);
+        SettingsHandler.setModulesBySettings();
+        ThinkMachineContentPreloader.addElementsLoadedListener(thinkMachineContentLoadedListener);
 
-        backgroundExecutor.execute(() -> {
-            final SettingsEntity loadedSettings = SettingsHandler.loadSettingsEntity(getBaseContext());
-            runOnUiThread(() -> {
-                SettingsHandler.setSettingsEntity(loadedSettings);
-                SettingsHandler.setModulesBySettings();
-            });
-        });
+        setContentView(R.layout.activity_main);
 
         final BottomNavigationView navView = findViewById(R.id.nav_view);
         final View navHostFragment = findViewById(R.id.nav_host_fragment);
@@ -154,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+
+        preloadThinkMachineContent(false);
     }
 
     @Override
@@ -344,8 +363,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        ThinkMachineContentPreloader.removeElementsLoadedListener(thinkMachineContentLoadedListener);
         super.onDestroy();
         backgroundExecutor.shutdownNow();
+    }
+
+    public void reloadThinkMachineContent() {
+        preloadThinkMachineContent(true);
+    }
+
+    private void preloadThinkMachineContent(boolean resetLoadedFactories) {
+        if (resetLoadedFactories) {
+            loadedThinkMachineFactories.clear();
+        }
+        backgroundExecutor.execute(ThinkMachineContentPreloader::preloadAll);
     }
 
 

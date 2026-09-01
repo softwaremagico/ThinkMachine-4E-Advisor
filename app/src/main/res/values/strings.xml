@@ -335,6 +335,8 @@
     <string name="debug_mode">Debug</string>
     <string name="setting_title_debug">Debug</string>
     <string name="debug_exception_title">Captured exception</string>
+    <string name="copy">Copy</string>
+    <string name="debug_exception_copied">Stack trace copied.</string>
     <string name="setting_title_new_characters">New Characters</string>
     <string name="remove_character_warning">Are you sure you want to delete the selected character?</string>
     <string name="accept">Accept</string>

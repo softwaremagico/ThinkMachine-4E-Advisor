@@ -15,5 +15,7 @@
     <string name="debug_mode">Debug</string>
     <string name="setting_title_debug">Debug</string>
     <string name="debug_exception_title">Excepción capturada</string>
+    <string name="copy">Copiar</string>
+    <string name="debug_exception_copied">Traza copiada.</string>
 </resources>
 

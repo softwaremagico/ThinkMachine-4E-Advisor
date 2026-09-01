@@ -27,6 +27,7 @@ import com.softwaremagico.tm.Element;
 import com.softwaremagico.tm.advisor.R;
 import com.softwaremagico.tm.advisor.log.AdvisorLog;
 import com.softwaremagico.tm.advisor.ui.components.ElementSpinner;
+import com.softwaremagico.tm.advisor.ui.main.BookContentRefreshable;
 import com.softwaremagico.tm.advisor.ui.components.spinner.adapters.ElementAdapter;
 import com.softwaremagico.tm.character.callings.Calling;
 import com.softwaremagico.tm.character.callings.CallingFactory;
@@ -67,7 +68,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class WikiFragment extends Fragment {
+public class WikiFragment extends Fragment implements BookContentRefreshable {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -78,6 +79,19 @@ public class WikiFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        bindWikiElements(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final View view = getView();
+        if (view != null) {
+            bindWikiElements(view);
+        }
+    }
+
+    private void bindWikiElements(@NonNull View view) {
         setupSpinner(view, R.id.wiki_specie, loadSpecies(), Specie.class);
         setupSpinner(view, R.id.wiki_upbringing, loadUpbringings(), Upbringing.class);
         setupSpinner(view, R.id.wiki_faction, loadFactions(), Faction.class);
@@ -98,6 +112,14 @@ public class WikiFragment extends Fragment {
 
         setupSpinner(view, R.id.wiki_occultism_path, loadOccultismPaths(), OccultismPath.class);
         setupSpinner(view, R.id.wiki_occultism_power, loadOccultismPowers(), OccultismPower.class);
+    }
+
+    @Override
+    public void refreshBookContent() {
+        final View view = getView();
+        if (view != null && isAdded()) {
+            bindWikiElements(view);
+        }
     }
 
     private <E extends Element> void setupSpinner(View view, int id, List<E> elements, Class<E> clazz) {

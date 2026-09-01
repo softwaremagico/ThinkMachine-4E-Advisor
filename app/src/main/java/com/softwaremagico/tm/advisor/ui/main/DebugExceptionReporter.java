@@ -1,9 +1,13 @@
 package com.softwaremagico.tm.advisor.ui.main;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -49,6 +53,7 @@ public final class DebugExceptionReporter {
                 return;
             }
 
+            final String readableTrace = buildReadableTrace(sourceClass, throwable);
             final ScrollView scrollView = new ScrollView(activity);
             final int padding = dpToPx(activity, 12);
             scrollView.setPadding(padding, padding, padding, padding);
@@ -57,14 +62,18 @@ public final class DebugExceptionReporter {
             textView.setTextIsSelectable(true);
             textView.setTextSize(12);
             textView.setLineSpacing(0f, 1.2f);
-            textView.setText(buildReadableTrace(sourceClass, throwable));
+            textView.setText(readableTrace);
             scrollView.addView(textView);
 
-            new AlertDialog.Builder(activity)
+            final AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setTitle(R.string.debug_exception_title)
                     .setView(scrollView)
+                    .setNeutralButton(R.string.copy, null)
                     .setPositiveButton(android.R.string.ok, null)
-                    .show();
+                    .create();
+            dialog.setOnShowListener(dialogInterface -> dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+                    .setOnClickListener(view -> copyTraceToClipboard(activity, readableTrace)));
+            dialog.show();
         });
     }
 
@@ -81,6 +90,16 @@ public final class DebugExceptionReporter {
         throwable.printStackTrace(printWriter);
         printWriter.flush();
         return stringWriter.toString();
+    }
+
+    private static void copyTraceToClipboard(Activity activity, String readableTrace) {
+        final ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardManager == null) {
+            return;
+        }
+        final ClipData clipData = ClipData.newPlainText(activity.getString(R.string.debug_exception_title), readableTrace);
+        clipboardManager.setPrimaryClip(clipData);
+        Toast.makeText(activity, R.string.debug_exception_copied, Toast.LENGTH_SHORT).show();
     }
 
     private static int dpToPx(Activity activity, int dp) {
