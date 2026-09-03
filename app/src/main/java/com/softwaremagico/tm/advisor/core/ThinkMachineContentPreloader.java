@@ -65,12 +65,122 @@ public final class ThinkMachineContentPreloader {
         }
     }
 
+    /**
+     * Preloads all ThinkMachine character factories in strict dependency order.
+     *
+     * <p><b>PURPOSE:</b> Ensures that factories with XML/JSON cross-references are loaded
+     * after their dependency factories, so Jackson can resolve abstract types correctly
+     * during deserialization.
+     *
+     * <p><b>FACTORY LOAD ORDER &amp; DEPENDENCIES:</b></p>
+     *
+     * <p><b>TIER 1 — Root Entities (no dependencies):</b>
+     * <ul>
+     *   <li>SpecieFactory</li>
+     *   <li>UpbringingFactory</li>
+     *   <li>FactionFactory</li>
+     *   <li>PlanetFactory</li>
+     * </ul>
+     * These are independent core character creation elements.
+     * </p>
+     *
+     * <p><b>TIER 2 — Base Attributes &amp; Abilities:</b>
+     * <ul>
+     *   <li>CharacteristicsDefinitionFactory (must load first)</li>
+     *   <li>CapabilityFactory (depends on Characteristics)</li>
+     *   <li>SkillFactory</li>
+     * </ul>
+     * These define character attributes. CharacteristicsDefinitionFactory must precede
+     * CapabilityFactory because Capability XML references characteristic types.
+     * </p>
+     *
+     * <p><b>TIER 3 — Complex Entities (depends on TIER 2):</b>
+     * <ul>
+     *   <li><b style="color:red">CallingFactory</b> — <b>CRITICAL:</b> must load AFTER CapabilityFactory</li>
+     * </ul>
+     *
+     * <p><b>Why Calling needs Capability first:</b>
+     * <ul>
+     *   <li>Calling XML contains {@code CapabilityOptions} objects (Jackson sees them as abstract)</li>
+     *   <li>CapabilityOptions has multiple concrete subtypes (e.g., LogicalCapabilityOption, SelectCapabilityOption)</li>
+     *   <li>If CapabilityFactory hasn't loaded, Jackson doesn't know these subtypes exist</li>
+     *   <li>Result: {@code "Cannot construct instance of CapabilityOptions (no Creators, like default constructor, exist)"}</li>
+     *   <li>Solution: Load CapabilityFactory.getSelectableElements() BEFORE CallingFactory.getSelectableElements()</li>
+     * </ul>
+     * </p>
+     *
+     * <p><b>TIER 4 — Equipment &amp; Specializations:</b>
+     * <ul>
+     *   <li>PerkFactory</li>
+     *   <li>WeaponFactory, ArmorFactory, HandheldShieldFactory, ShieldFactory</li>
+     *   <li>OccultismPathFactory</li>
+     * </ul>
+     * These are mostly independent; can load in any order after TIER 3.
+     * </p>
+     *
+     * <p><b>TECHNICAL BACKGROUND:</b>
+     * ThinkMachine uses Jackson to deserialize character elements from XML files.
+     * When an element's XML tree references abstract types defined in OTHER factories,
+     * Jackson needs those factories' type information registered first. Violating this order
+     * causes Jackson to fail when instantiating abstract types without a registered concrete implementation.
+     * </p>
+     *
+     * <p><b>FAILURE SCENARIO (if order is wrong):</b>
+     * <pre>
+     * Calling XML (excerpt):
+     *   {
+     *     "capabilities": [
+     *       {
+     *         "options": [
+     *           { "@type": "LogicalCapabilityOption", ... }
+     *         ]
+     *       }
+     *     ]
+     *   }
+     *
+     * If CapabilityFactory NOT yet loaded:
+     *   Jackson: "What is LogicalCapabilityOption? I don't know..."
+     *   Result: RuntimeException about abstract types
+     * </pre>
+     * </p>
+     */
     public static void preloadAll() {
-        for (XmlFactory<?> factory : getFactories()) {
+        // Load factories in strict dependency order to avoid deserialization issues
+        List<XmlFactory<?>> prioritized = Arrays.asList(
+                // ============ TIER 1: No dependencies ============
+                SpecieFactory.getInstance(),
+                UpbringingFactory.getInstance(),
+                FactionFactory.getInstance(),
+                PlanetFactory.getInstance(),
+
+                // ============ TIER 2: Base definitions ============
+                // Load Characteristics BEFORE Capabilities (Capability needs CharacteristicDefinition)
+                CharacteristicsDefinitionFactory.getInstance(),
+                CapabilityFactory.getInstance(),
+                SkillFactory.getInstance(),
+
+                // ============ TIER 3: Depends on TIER 2 ============
+                // CRITICAL: Load AFTER CapabilityFactory
+                // Calling contains CapabilityOptions which Jackson needs to resolve
+                CallingFactory.getInstance(),
+
+                // ============ TIER 4: Equipment & special ============
+                // These can load in any order now that TIER 3 is ready
+                PerkFactory.getInstance(),
+                WeaponFactory.getInstance(),
+                ArmorFactory.getInstance(),
+                HandheldShieldFactory.getInstance(),
+                ShieldFactory.getInstance(),
+                OccultismPathFactory.getInstance()
+        );
+
+        for (XmlFactory<?> factory : prioritized) {
             try {
                 factory.getSelectableElements();
             } catch (RuntimeException e) {
-                AdvisorLog.errorMessage(ThinkMachineContentPreloader.class.getName(), e);
+                AdvisorLog.errorMessage(ThinkMachineContentPreloader.class.getName(),
+                        "Failed to preload " + factory.getClass().getSimpleName() +
+                        " (check dependency order in ThinkMachineContentPreloader)", e);
             }
         }
     }

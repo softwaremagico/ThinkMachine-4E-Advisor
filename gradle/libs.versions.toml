@@ -1,5 +1,5 @@
 [versions]
-agp = "9.3.2"
+agp = "9.4.0"
 coreSplashscreen = "1.2.0"
 desugar_jdk_libs = "2.1.5"
 fragmentTesting = "1.8.9"
