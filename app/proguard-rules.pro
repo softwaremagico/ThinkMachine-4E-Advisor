@@ -108,6 +108,10 @@
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 
+# Keep the root ThinkMachine model/runtime classes used by the XML factories.
+# These live in com.softwaremagico.tm.* (not the app subpackages) and are loaded reflectively.
+-keep class com.softwaremagico.tm.* { *; }
+
 # Keep Fragments
 -keep public class * extends androidx.fragment.app.Fragment
 -keep public class * extends android.app.Fragment
